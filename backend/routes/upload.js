@@ -1,7 +1,7 @@
 const path = require("path");
 const express = require("express");
 const multer = require("multer");
-const cloudinary = require("../config/cloudinary");
+const cloudinary = require("../config/cloudinary.config");
 const config = require("../config/index")
 const fs = require('fs');
 

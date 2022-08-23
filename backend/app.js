@@ -1,8 +1,12 @@
 const morgan = require("morgan");
 const path = require("path");
 const express = require("express");
+const cors = require("cors");
 
-const config = require("./config/index")
+const config = require("./config/index");
+const corsConfig = require("./config/cors.config");
+const connectDB = require("./config/mongo.config");
+
 const { notFound, errorHandler } = require("./middlewares/errorHandlers");
 
 const productRoutes = require("./routes/product");
@@ -11,18 +15,19 @@ const orderRoutes = require("./routes/order");
 const uploadRoutes = require("./routes/upload");
 const requestRoutes = require("./routes/request");
 
-const connectDB = require("./db/index");
-connectDB();
-
 const app = express();
 
-//Use morgan to detect http request
+// Use morgan to detect http request
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-//Parse json data
+// Connect mongodb with mongoose
+connectDB();
+
+// Config
 app.use(express.json());
+app.use(cors(corsConfig));
 
 // Main Routes
 app.use("/api/products", productRoutes);

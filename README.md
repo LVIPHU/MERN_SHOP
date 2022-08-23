@@ -200,13 +200,13 @@ You can open the file _coverage/lcov-report/index.html_ to have better visualiza
 
 
 ## Roles
-1. Van Nguyen Nguyen - front end developer
+<!-- 1. Van Nguyen Nguyen - front end developer
 2. Sujith Bellam - front end developer
 3. Sepehr Torfeh Nejad - back end developer
 4. Canh Thanh Nguyen - back end developer
 5. Communications and collaboration:\
    i. The team had weekly meetings to discuss features to implement, and go over presentation for sprints\
-   ii. Pull requests are reviewed by at least 1 other team member. Merge conflicts are promptly resolved.
+   ii. Pull requests are reviewed by at least 1 other team member. Merge conflicts are promptly resolved. -->
 ## Deployment
 - [Deployment document](https://github.com/MQCOMP3120-2021/group-web-project-group-a/blob/development/DEPLOYMENT.md)
 

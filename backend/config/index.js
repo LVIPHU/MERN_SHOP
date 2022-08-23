@@ -21,7 +21,7 @@ const configs = {
     dbURL: `mongodb+srv://${USER}:${DB_PASSWORD}@alpine.yk3hqf3.mongodb.net/${APP_NAME}?retryWrites=true&w=majority`,
     secretToken: "000000_BI_MAT_DONG_TROI_00000",
     email: {
-      address: "N18DCCN150@student.ptithcm.edu.vn",
+      address: "shopology.lvp@gmail.com",
       password: "phu357159",
     },
     cloudinary: { 

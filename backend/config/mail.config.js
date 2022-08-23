@@ -1,5 +1,5 @@
-// main.js
 const nodemailer = require('nodemailer');
+const config = require('../config/index');
 
 // configure option
 const option = {
@@ -7,8 +7,8 @@ const option = {
   port: 465,
   secure: true,
   auth: {
-    user: process.env.NODE_MAILER_USER,
-    pass: process.env.NODE_MAILER_PASSWORD,
+    user: process.env.NODE_MAILER_USER || config.email.address,
+    pass: process.env.NODE_MAILER_PASSWORD || config.email.password,
   },
 };
 
@@ -22,7 +22,7 @@ const sendEmail = async ({ to, subject, text, html, ...rest }) => {
       //config mail
       const mail = {
         //sender access
-        from: '"TTB Store" <no-reply@accounts.ttb-store.com>',
+        from: '"Shopology" <no-reply@accounts.ttb-store.com>',
         //receiver access
         to,
         //subject
@@ -62,7 +62,7 @@ const htmlSignupAccount = (token) => {
     ${headerHtmlMail}
     <h2 style="padding: 10px 0; margin-bottom: 10px;">
         Xin chào anh (chị),<br />
-        Mã xác nhận đăng ký tài khoản cho website TTB Store của anh (chị).<br />
+        Mã xác nhận đăng ký tài khoản cho website Shopology của anh (chị).<br />
         Cảm ơn vì đã ghé thăm TTB Store <3
     </h2>
     <h3 style="background: #eee;padding: 10px;">

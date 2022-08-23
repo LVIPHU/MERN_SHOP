@@ -24,6 +24,7 @@ import {
   ORDER_UPDATE_DELIVER_RESET,
 } from "../../constants/orderConstant";
 import DropNotif from "../../components/Modal/Modal";
+import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
 
 const OrderScreen = ({ match, history }) => {
   const orderId = match.params.id;
@@ -234,14 +235,15 @@ const OrderScreen = ({ match, history }) => {
                   ></DropNotif>
                 )}
                 {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
-                  <ListGroup.Item>
+                  <ListGroup.Item style={{display: "flex", flexDirection: "column" ,alignItems: "center"}}>
                     <Button
                       type="button"
                       className="btn btn-block"
                       onClick={deliverHandler}
                       style={{ borderRadius: 30}}
                     >
-                      Mark as Delivered
+                      <DeliveryDiningIcon/>
+                      &nbsp; Mark as Delivered
                     </Button>
                   </ListGroup.Item>
                 )}

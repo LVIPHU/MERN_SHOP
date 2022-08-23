@@ -56,7 +56,7 @@ const OrderListScreen = ({ history }) => {
                      <Button variant="success" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>
                     {order.paidAt.substring(0, 10)}</Button>
                   ) : (
-                    <Button variant="danger" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>Have not paid</Button>
+                    <Button variant="danger" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>Not paid</Button>
                   )}
                 </td>
 
@@ -65,7 +65,7 @@ const OrderListScreen = ({ history }) => {
                     <Button variant="success" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>
                     {order.deliveredAt.substring(0, 10)}</Button>
                   ) : (
-                    <Button variant="danger" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>Has not delivered</Button>
+                    <Button variant="danger" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>Not delivered</Button>
                   )}
                 </td>
                 <td>

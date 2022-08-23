@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import {
-  Table,
+  // Table,
   Button,
   Card,
   Row,
@@ -16,7 +16,7 @@ import Loader from "../../../../components/Loader";
 import { Pagination } from "@mui/material";
 import {
   getProducts,
-  getProductsForSeller,
+  // getProductsForSeller,
 } from "../../../../actions/productActions";
 import { deleteProduct } from "../../../../actions/productActions";
 import DropNotif from "../../../../components/Modal/Modal";

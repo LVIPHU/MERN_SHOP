@@ -16,7 +16,7 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import InboxIcon from '@mui/icons-material/Inbox';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import MoveToInboxIcon from '@mui/icons-material/MoveToInbox';
+// import MoveToInboxIcon from '@mui/icons-material/MoveToInbox';
 import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
 
 const UserProfile = ({ history }) => {

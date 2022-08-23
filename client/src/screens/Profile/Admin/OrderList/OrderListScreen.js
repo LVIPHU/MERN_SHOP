@@ -34,7 +34,7 @@ const OrderListScreen = ({ history }) => {
         <Table striped="column" hover responsive variant="light">
           <thead>
             <tr>
-              <th>ID</th>
+              {/* <th>ID</th> */}
               <th>USER</th>
               <th>DATE</th>
               <th>TOTAL</th>
@@ -46,24 +46,26 @@ const OrderListScreen = ({ history }) => {
           <tbody>
             {orders.map((order) => (
               <tr key={order._id}>
-                <td>{order._id}</td>
+                {/* <td>{order._id}</td> */}
                 <td>{order.user && order.user.name}</td>
                 <td>{order.createdAt.substring(0, 10)}</td>
 
                 <td>${order.totalPrice}</td>
                 <td>
                   {order.isPaid ? (
-                    order.paidAt.substring(0, 10)
+                     <Button variant="success" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>
+                    {order.paidAt.substring(0, 10)}</Button>
                   ) : (
-                    <i className="fas fa-times" style={{ color: "red" }}></i>
+                    <Button variant="danger" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>Have not paid</Button>
                   )}
                 </td>
 
                 <td>
                   {order.isDelivered ? (
-                    order.deliveredAt.substring(0, 10)
+                    <Button variant="success" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>
+                    {order.deliveredAt.substring(0, 10)}</Button>
                   ) : (
-                    <i className="fas fa-times" style={{ color: "red" }}></i>
+                    <Button variant="danger" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>Has not delivered</Button>
                   )}
                 </td>
                 <td>

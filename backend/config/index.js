@@ -14,6 +14,7 @@ const configs = {
     host: process.env.APP_HOST || "0.0.0.0",
     port: 3001,
     publicImagePath: path.join(__dirname, "../assets/public/images"),
+    uploadImagePath: path.join(__dirname, "../uploads/images"),
     tokenExpiresIn: "30d",
   },
   development: {
@@ -22,6 +23,11 @@ const configs = {
     email: {
       address: "N18DCCN150@student.ptithcm.edu.vn",
       password: "phu357159",
+    },
+    cloudinary: { 
+      name: 'lviphu', 
+      apiKey: '342798571746442', 
+      apiSecret: 'Ud_RVjedqHWAh4hS_T0YA5ITXVk' 
     },
     algolia: {
       applicationID: "VFQVLSDKVJ",

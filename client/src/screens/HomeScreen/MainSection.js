@@ -11,18 +11,18 @@ import Card from "../../components/Card";
 const showcases = [
   {
     image: showcase1,
-    text: "Cheaper Products",
-    category: "Electronics",
+    text: "That Bring The Style",
+    category: "Shirts",
   },
   {
     image: showcase2,
-    text: "Fast delivery",
-    category: "Clothes",
+    text: "Just Right Fit",
+    category: "Pants",
   },
   {
     image: showcase3,
-    text: "Many offers",
-    category: "Games",
+    text: "Move With You",
+    category: "Jeans",
   },
 ];
 const responsive = {

@@ -23,6 +23,12 @@ import logo from "../../media/logo.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from '../../actions/userAction'
 
+import LogoutIcon from '@mui/icons-material/Logout';
+import CategoryIcon from '@mui/icons-material/Category';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import LoginIcon from '@mui/icons-material/Login';
+
 const Navigation = () => {
   let mobile = false
 
@@ -94,12 +100,14 @@ const Navigation = () => {
               <SubMenu>
                 <SubItem>
                   <NavLinks active={shop} to="/shop" onClick={clickHandler}>
-                    Shop Category
+                    <CategoryIcon/>
+                    &nbsp; Shop Category
                   </NavLinks>
                 </SubItem>
                 <SubItem>
                   <NavLinks active={shoppingCart} to="/cart" onClick={clickHandler}>
-                    Shopping Cart
+                    <ShoppingCartIcon/>
+                    &nbsp; Shopping Cart
                   </NavLinks>
                 </SubItem>
               </SubMenu>
@@ -125,13 +133,17 @@ const Navigation = () => {
                     <SubMenu>
                       <SubItem>
                         <NavLinks to="/userProfile" onClick={clickHandler}>
-                          User Profile
+                          <i className ="fas fa-user"></i>
+                          &nbsp; User Profile
                         </NavLinks>
                       </SubItem>
                       <SubItem>
-                        <LogoutButton onClick={logoutHandler}>
-                          Logout
-                        </LogoutButton>
+                      <NavLinks active={home} to="/login" onClick={logoutHandler}>
+                        {/* <LogoutButton> */}
+                          <LogoutIcon/>
+                          &nbsp; Logout
+                        {/* </LogoutButton> */}
+                        </NavLinks>
                       </SubItem>
                     </SubMenu>
                   </>
@@ -139,21 +151,22 @@ const Navigation = () => {
                   <>
                   {mobile
                     ?
-                      <MobileButton>Login</MobileButton>
+                      <MobileButton><LoginIcon/> &nbsp; Login</MobileButton>
                     :
                       <NavLinks to="/login">
-                        <Button>Login</Button>
+                        <Button><LoginIcon/> &nbsp; Login</Button>
                       </NavLinks>
                   }
                     <SubMenu>
                       <SubItem>
                         <NavLinks to="/login" onClick={clickHandler}>
-                          Login
+                          <LoginIcon/> &nbsp; Login
                         </NavLinks>
                       </SubItem>
                       <SubItem>
                         <NavLinks to="/register" onClick={clickHandler}>
-                          Register
+                          <HowToRegIcon/>
+                          &nbsp; Register
                         </NavLinks>
                       </SubItem>
                     </SubMenu>

@@ -5,7 +5,7 @@ const Hit = ({ hit }) => {
   return (
     <div className={classes.container}>
       <Link to={`/product/${hit.id}`}>
-        <img src={hit.image} alt="product" />
+        <img src={hit?.image?.url} alt="product" />
       </Link>
       <div className={classes.content}>
         <p className={classes.category}>

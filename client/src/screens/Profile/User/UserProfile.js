@@ -11,6 +11,14 @@ import ProductListScreen from "../Admin/ProductList/ProductListScreen";
 import OrderListScreen from "../Admin/OrderList/OrderListScreen";
 import ManageRequestScreen from "../Admin/ManageRequest/ManageRequestScreen";
 
+import PersonIcon from '@mui/icons-material/Person';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import InboxIcon from '@mui/icons-material/Inbox';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import MoveToInboxIcon from '@mui/icons-material/MoveToInbox';
+import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
+
 const UserProfile = ({ history }) => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -29,7 +37,7 @@ const UserProfile = ({ history }) => {
 
   let selectionShow;
   if (selection === "1") {
-    selectionShow = <Details></Details>;
+    selectionShow = <Details/>;
   } else if (selection === "2") {
     selectionShow = <Addresses />;
   } else if (selection === "3") {
@@ -55,7 +63,8 @@ const UserProfile = ({ history }) => {
             data-selection="1"
             onClick={changeSelection}
           >
-            User Profile
+            <PersonIcon style={{ marginBottom: '5px'}}/>
+            &nbsp; User Profile
           </li>
           {userInfo && !userInfo.isAdmin && (
             <li
@@ -63,7 +72,8 @@ const UserProfile = ({ history }) => {
               data-selection="2"
               onClick={changeSelection}
             >
-              User Addresses
+              <AccountBoxIcon style={{ marginBottom: '5px'}}/>
+              &nbsp; User Addresses
             </li>
           )}
           {userInfo && !userInfo.isAdmin && (
@@ -71,26 +81,29 @@ const UserProfile = ({ history }) => {
               className={classes.navItem}
               data-selection="3"
               onClick={changeSelection}
-            >
-              User Orders
+            > 
+              <ShoppingCartIcon style={{ marginBottom: '5px'}}/>
+              &nbsp; User Orders
             </li>
           )}
-          {userInfo && !userInfo.isAdmin && (
+          {/* {userInfo && userInfo.isSeller && !userInfo.isAdmin && (
             <li
               className={classes.navItem}
               data-selection="4"
               onClick={changeSelection}
             >
-              User Requests
+              <MoveToInboxIcon style={{ marginBottom: '5px'}}/>
+              &nbsp; Warehouse Receipt
             </li>
-          )}
+          )} */}
           {userInfo && userInfo.isAdmin && (
             <li
               className={classes.navItem}
               data-selection="5"
               onClick={changeSelection}
             >
-              Manage Users
+              <PeopleAltIcon style={{ marginBottom: '5px'}}/>
+              &nbsp; Manage Users
             </li>
           )}
           {userInfo && (userInfo.isAdmin || userInfo.isSeller) && (
@@ -99,7 +112,8 @@ const UserProfile = ({ history }) => {
               data-selection="6"
               onClick={changeSelection}
             >
-              Manage Products
+              <InboxIcon style={{ marginBottom: '5px'}}/>
+              &nbsp; Manage Products
             </li>
           )}
           {userInfo && userInfo.isAdmin && (
@@ -108,7 +122,8 @@ const UserProfile = ({ history }) => {
               data-selection="7"
               onClick={changeSelection}
             >
-              Manage Orders
+              <ShoppingCartIcon style={{ marginBottom: '5px'}}/>
+              &nbsp; Manage Orders
             </li>
           )}
           {userInfo && userInfo.isAdmin && (
@@ -117,7 +132,8 @@ const UserProfile = ({ history }) => {
               data-selection="8"
               onClick={changeSelection}
             >
-              Manage requests
+              <InventoryOutlinedIcon style={{ marginBottom: '5px'}}/>
+              &nbsp; Manage requests
             </li>
           )}
         </ul>

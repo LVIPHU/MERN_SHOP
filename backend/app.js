@@ -28,13 +28,13 @@ app.use(express.json());
 app.use("/api/products", productRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/order", orderRoutes);
-app.use("/api/upload", uploadRoutes);
+app.use("/api/file", uploadRoutes);
 app.use("/api/request", requestRoutes);
 
 if ((process.env.NODE_ENV || config.env) != "test") {
-  app.use("/backend/uploads", express.static(path.join(__dirname, "/uploads")));
+  app.use(config.uploadImagePath, express.static(path.join(__dirname, "/uploads/images")));
   app.get("/api/config/paypal", (req, res) =>
-    res.send(process.env.PAYPAL_CLIENT_ID || config.development.paypalID)
+    res.send(process.env.PAYPAL_CLIENT_ID || config.paypalID)
   );
 }
 

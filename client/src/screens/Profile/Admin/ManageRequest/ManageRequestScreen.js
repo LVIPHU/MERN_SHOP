@@ -23,7 +23,7 @@ const ManageRequestScreen = () => {
         <Message variant="danger">{error}</Message>
       ) : (
         <>
-          <Table striped bordered hover responsive className="table-sm">
+          <Table striped="column" hover responsive variant="light">
             <thead>
               <tr>
                 <th>Request ID</th>
@@ -50,9 +50,10 @@ const ManageRequestScreen = () => {
                     )}
                   </td>
                   <td>
-                    <LinkContainer to={`/request/${r._id}`}>
-                      <Button variant="light" className="btn-sm">
-                        Show more
+                    <LinkContainer to={`/request/${r._id}`} style={{ borderRadius: 30, width: "100%"}}>
+                      <Button variant="outline-success">
+                        <i className="fas fa-eye"></i>
+                        &nbsp; Details
                       </Button>
                     </LinkContainer>
                   </td>

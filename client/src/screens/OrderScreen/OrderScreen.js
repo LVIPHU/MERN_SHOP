@@ -152,7 +152,7 @@ const OrderScreen = ({ match, history }) => {
                         <Row>
                           <Col md={1}>
                             <Image
-                              src={item.image}
+                              src={item?.image?.url}
                               alt={item.name}
                               fluid
                               rounded
@@ -239,6 +239,7 @@ const OrderScreen = ({ match, history }) => {
                       type="button"
                       className="btn btn-block"
                       onClick={deliverHandler}
+                      style={{ borderRadius: 30}}
                     >
                       Mark as Delivered
                     </Button>

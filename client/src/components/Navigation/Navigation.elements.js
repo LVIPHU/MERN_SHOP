@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { ImCart } from "react-icons/im";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 export const Nav = styled.nav`
   background: #fff;
@@ -119,7 +119,7 @@ export const NavLinks = styled(Link)`
     text-align: center;
   }
 `
-export const CartIcon = styled(ImCart)`
+export const CartIcon = styled(ShoppingCartIcon)`
   margin-top: 7px;
   font-size: 25px;
   position: relative;

@@ -9,6 +9,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProductDetail } from "../../actions/productActions";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
+
+import ReviewsIcon from '@mui/icons-material/Reviews';
+import RateReviewIcon from '@mui/icons-material/RateReview';
+
 const ProductScreen = ({ match }) => {
   const dispatch = useDispatch();
   const productDetail = useSelector((state) => state.productDetail);
@@ -47,14 +51,16 @@ const ProductScreen = ({ match }) => {
                 data-selection="1"
                 onClick={changeSelection}
               >
-                Description
+                <ReviewsIcon/>
+                 &nbsp; Description
               </li>
               <li
                 className={classes.navItem}
                 data-selection="2"
                 onClick={changeSelection}
               >
-                Reviews
+                <RateReviewIcon/>
+                &nbsp; Reviews
               </li>
             </ul>
             {selectionShow}

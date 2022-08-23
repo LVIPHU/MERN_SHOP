@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { LinkContainer } from "react-router-bootstrap";
-import { Table, Button, Row, Col, Container } from "react-bootstrap";
+import {
+  Table,
+  Button,
+  Card,
+  Row,
+  Col,
+  Container,
+  ListGroup,
+} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../../../components/Message";
@@ -13,6 +21,7 @@ import {
 import { deleteProduct } from "../../../../actions/productActions";
 import DropNotif from "../../../../components/Modal/Modal";
 import { PRODUCT_DELETE_RESET } from "../../../../constants/productConstants";
+import MoveToInboxOutlinedIcon from '@mui/icons-material/MoveToInboxOutlined';
 
 const ProductListScreen = () => {
   const [page, setPage] = useState(1);
@@ -21,12 +30,12 @@ const ProductListScreen = () => {
   const productAll = useSelector((state) => state.productAll);
   const { loading, error, products, pageCount } = productAll;
 
-  const productForSeller = useSelector((state) => state.productForSeller);
-  const {
-    loading: loadingForSeller,
-    error: errorForSeller,
-    products: productsSeller,
-  } = productForSeller;
+  // const productForSeller = useSelector((state) => state.productForSeller);
+  // const {
+  //   loading: loadingForSeller,
+  //   error: errorForSeller,
+  //   products: productsSeller,
+  // } = productForSeller;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -39,11 +48,11 @@ const ProductListScreen = () => {
   } = productDelete;
 
   useEffect(() => {
-    if (userInfo.isAdmin) {
+    // if (userInfo.isAdmin) {
       dispatch(getProducts("", "", "", "", "", page));
-    } else if (userInfo.isSeller && !userInfo.isAdmin) {
-      dispatch(getProductsForSeller());
-    }
+    // } else if (userInfo.isSeller && !userInfo.isAdmin) {
+    //   dispatch(getProductsForSeller());
+    // }
   }, [dispatch, page, userInfo]);
 
   const deleteHandler = (id) => {
@@ -56,15 +65,15 @@ const ProductListScreen = () => {
   };
 
   let productsFinal;
-  if (userInfo.isAdmin) {
+  // if (userInfo.isAdmin) {
     if (products) {
       productsFinal = products;
     }
-  } else if (userInfo.isSeller) {
-    if (productsSeller) {
-      productsFinal = productsSeller;
-    }
-  }
+  // } else if (userInfo.isSeller) {
+  //   if (productsSeller) {
+  //     productsFinal = productsSeller;
+  //   }
+  // }
 
   console.log(productsFinal);
   return (
@@ -73,15 +82,16 @@ const ProductListScreen = () => {
         <Col>
           <h1>Products</h1>
         </Col>
-        <Col className="text-end">
+        {userInfo.isAdmin && 
+        (<Col className="text-end">
           <Link
             className="my-3 btn btn-primary"
             to="/admin/product/create"
-            style={{ marginLeft: "auto" }}
+            style={{ marginLeft: "auto", borderRadius: 30 }}
           >
             <i className="fas fa-plus"></i> Create Product
           </Link>
-        </Col>
+        </Col>)}
       </Row>
       {loading ? (
         <Loader></Loader>
@@ -98,14 +108,81 @@ const ProductListScreen = () => {
               resetData={() => {
                 if (userInfo.isAdmin) {
                   dispatch(getProducts("", "", "", "", "", page));
-                } else if (userInfo.isSeller && !userInfo.isAdmin) {
-                  dispatch(getProductsForSeller());
+                // } else if (userInfo.isSeller && !userInfo.isAdmin) {
+                //   dispatch(getProductsForSeller());
+                  dispatch({ type: PRODUCT_DELETE_RESET });
                 }
-                dispatch({ type: PRODUCT_DELETE_RESET });
+                // dispatch({ type: PRODUCT_DELETE_RESET });
               }}
             />
           )}
-          <Table striped bordered hover responsive className="table-sm">
+          <Row>
+            {productsFinal &&
+              productsFinal.map((product) => (
+                <Col xs={6} md={2} style={{ paddingBottom: "12px" }}>
+                  <Card
+                    className="text-center"
+                    style={{ width: "12rem" }}
+                    key={product._id}
+                  >
+                    <Card.Img
+                      variant="top"
+                      src={product?.image?.url}
+                      style={{ width: "190px", height: "280px" }}
+                    />
+                    <Card.Body>
+                      <Card.Title>{product.name}</Card.Title>
+                      <Card.Text>$ {product.price}</Card.Text>
+                    </Card.Body>
+                    <ListGroup className="list-group-flush">
+                      <ListGroup.Item>{product.brand}</ListGroup.Item>
+                      <ListGroup.Item>{product.category}</ListGroup.Item>
+                      <ListGroup.Item>
+                        Stock: {product.countInStock}
+                      </ListGroup.Item>
+                    </ListGroup>
+                    <Card.Body className="d-flex flex-column">
+                      {userInfo.isAdmin ? (
+                        <>
+                          {" "}
+                          <LinkContainer
+                            to={`/admin/product/${product._id}/edit`}
+                            style={{ borderRadius: 30 }}
+                          >
+                            <Button variant="outline-primary" className="mb-2">
+                              <i className="fas fa-edit"></i>
+                              &nbsp; Edit
+                            </Button>
+                          </LinkContainer>
+                          <Button
+                            style={{ borderRadius: 30 }}
+                            variant="outline-danger"
+                            onClick={() => deleteHandler(product._id)}
+                          >
+                            <i className="fas fa-trash"></i>
+                            &nbsp; Delete
+                          </Button>
+                        </>
+                      ) : userInfo.isSeller && !userInfo.isAdmin ? (
+                        <LinkContainer
+                          to={`/admin/product/${product._id}/import`}
+                          style={{ borderRadius: 30 }}
+                        >
+                          <Button variant="outline-primary" className="mb-2">
+                            <MoveToInboxOutlinedIcon/>
+                            &nbsp; Import
+                          </Button>
+                        </LinkContainer>
+                      ) : (
+                        <></>
+                      )}
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+          </Row>
+
+          {/* <Table striped bordered hover responsive className="table-sm">
             <thead>
               <tr>
                 <th>ID</th>
@@ -145,7 +222,7 @@ const ProductListScreen = () => {
                   </tr>
                 ))}
             </tbody>
-          </Table>
+          </Table> */}
           <Pagination
             count={pageCount}
             size="large"

@@ -10,6 +10,7 @@ import Select from "@mui/material/Select";
 import { updateUserProfile } from "../../actions/userAction";
 import Message from "../../components/Message";
 import { USER_UPDATE_PROFILE_RESET } from "../../constants/userConstants";
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 
 const ShippingScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -105,21 +106,21 @@ const ShippingScreen = ({ history }) => {
             ></Form.Control>
           </Form.Group>
 
-          <Form.Group controlId="city">
-            <Form.Label>City</Form.Label>
+          <Form.Group controlId="ward">
+            <Form.Label>ward</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter your city"
+              placeholder="Enter your ward"
               value={city}
               onChange={(e) => setCity(e.target.value)}
             ></Form.Control>
           </Form.Group>
 
           <Form.Group controlId="postalCode">
-            <Form.Label>Postal Code</Form.Label>
+            <Form.Label>district</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter your postal code"
+              placeholder="Enter your district"
               value={postalCode}
               onChange={(e) => setPostalCode(e.target.value)}
             ></Form.Control>
@@ -127,29 +128,29 @@ const ShippingScreen = ({ history }) => {
 
           <FormControl sx={{ mt: 2, minWidth: 150 }}>
             <InputLabel id="demo-simple-select-autowidth-label">
-              State
+              City
             </InputLabel>
             <Select
               autoWidth
               value={state}
-              label="State"
+              label="City"
               onChange={(e) => setState(e.target.value)}
             >
-              <MenuItem value={"New South Wales"}>New South Wales</MenuItem>
-              <MenuItem value={"Queensland"}>Queensland</MenuItem>
-              <MenuItem value={"Northern Territory"}>
-                Northern Territory
+              <MenuItem value={"Hồ Chí Minh"}>Hồ Chí Minh</MenuItem>
+              <MenuItem value={"Hà Nội"}>Hà Nội</MenuItem>
+              <MenuItem value={"Bà Rịa & Vũng Tàu"}>
+              Bà Rịa & Vũng Tàu
               </MenuItem>
-              <MenuItem value={"Western Australia"}>Western Australia</MenuItem>
-              <MenuItem value={"South Australia"}>South Australia</MenuItem>
-              <MenuItem value={"Vistoria"}>Victoria</MenuItem>
-              <MenuItem value={"Austraian Capital Territory"}>
-                Australian Capital Territory
+              <MenuItem value={"Bình Dương"}>Bình Dương</MenuItem>
+              <MenuItem value={"Cà Mau"}>Cà Mau</MenuItem>
+              <MenuItem value={"Cần Thơ"}>Cần Thơ</MenuItem>
+              <MenuItem value={"Đà Nẵng"}>
+              Đà Nẵng
               </MenuItem>
-              <MenuItem value={"Tasmania"}>Tasmania</MenuItem>
+              <MenuItem value={"Huế"}>Huế</MenuItem>
             </Select>
           </FormControl>
-          <button className={classes.continue}> Continue</button>
+          <button className={classes.continue} style={{ borderRadius: 30}}><FileDownloadDoneIcon/>&nbsp; Continue</button>
         </Form>
       </div>
     </Container>

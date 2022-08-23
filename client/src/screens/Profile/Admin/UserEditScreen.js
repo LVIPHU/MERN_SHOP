@@ -7,6 +7,7 @@ import Loader from "../../../components/Loader";
 import { getUserDetails, updateUser } from "../../../actions/userAction";
 import { USER_UPDATE_RESET } from "../../../constants/userConstants";
 import DropNotif from "../../../components/Modal/Modal";
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 
 const UserEditScreen = ({ match, history }) => {
   const userId = match.params.id;
@@ -47,8 +48,9 @@ const UserEditScreen = ({ match, history }) => {
   return (
     <>
       <Container>
-        <Link to="/userProfile" className="btn btn-primary my-3">
-          Go Back
+        <Link to="/userProfile" className="btn btn-primary my-3" style={{ borderRadius: 30}}>
+          <i className="fas fa-arrow-left"></i>
+          &nbsp; Go Back
         </Link>
         <h1>Edit User</h1>
         {successUpdate && (
@@ -107,8 +109,9 @@ const UserEditScreen = ({ match, history }) => {
               ></Form.Check>
             </Form.Group>
 
-            <Button type="submit" variant="primary">
-              Update
+            <Button size="lg" type="submit" variant="primary" style={{ borderRadius: 30}}>
+              <FileDownloadDoneIcon/>
+              &nbsp; Update
             </Button>
           </Form>
         )}

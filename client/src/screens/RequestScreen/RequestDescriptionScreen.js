@@ -37,8 +37,9 @@ const RequestDescriptionScreen = ({ match, history }) => {
 
   return (
     <Container className="mt-5 mb-5">
-      <Link to="/userProfile" className="btn btn-primary my-3">
-        Go Back
+      <Link to="/userProfile" className="btn btn-primary my-3" style={{ borderRadius: 30}}>
+        <i className="fas fa-arrow-left"></i>
+        &nbsp; Go Back
       </Link>
       {success && (
         <DropNotif
@@ -65,7 +66,7 @@ const RequestDescriptionScreen = ({ match, history }) => {
               {errorApproval && (
                 <Message variant="danger">{errorApproval}</Message>
               )}
-              <Button className="mt-3 mb-3" onClick={buttonHandler}>
+              <Button className="mt-3 mb-3" onClick={buttonHandler} style={{ borderRadius: 30}}>
                 {" "}
                 Approve Request
               </Button>

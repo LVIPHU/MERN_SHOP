@@ -106,14 +106,14 @@ const getProducts = asyncHandler(async (req, res) => {
     res.json({
       pageProducts,
       pageCount: Math.ceil(products.length / 16),
-      electronicsCount: count(products, "category", "Electronics"),
-      menCount: count(products, "category", "Men"),
-      womenCount: count(products, "category", "Women"),
-      sportsCount: count(products, "category", "Sports"),
-      babyCount: count(products, "category", "Baby"),
-      automobileCount: count(products, "category", "Automobile"),
-      booksCount: count(products, "category", "Books"),
-      gamesCount: count(products, "category", "Games"),
+      tankTopCount: count(products, "category", "Tank Top"),
+      shirtsCount: count(products, "category", "Shirts"),
+      polosCount: count(products, "category", "Polos"),
+      tshirtsCount: count(products, "category", "T-Shirts"),
+      shortsCount: count(products, "category", "Shorts"),
+      jeansCount: count(products, "category", "Jeans"),
+      kakiCount: count(products, "category", "Kaki"),
+      sportsCount: count(products, "category", "Sport"),
       blackCount: count(products, "color", "Black"),
       blueCount: count(products, "color", "Blue"),
       redCount: count(products, "color", "Red"),
@@ -363,7 +363,8 @@ const updatedProduct = asyncHandler(async (req, res) => {
     product.name = name;
     product.price = price;
     product.description = description;
-    product.image = image;
+    product.image.public_id = image.public_id;
+    product.image.url = image.url;
     product.brand = brand;
     product.category = category;
     product.countInStock = countInStock;
@@ -387,7 +388,10 @@ const createProduct = asyncHandler(async (req, res) => {
     name,
     price,
     seller: req.user._id,
-    image,
+    image: {
+      public_id: image.public_id,
+      url: image.url,
+    },
     brand,
     category,
     countInStock,

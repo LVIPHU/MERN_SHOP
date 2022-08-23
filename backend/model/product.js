@@ -40,8 +40,14 @@ const productSchema = mongoose.Schema(
       require: true,
     },
     image: {
-      type: String,
-      require: true,
+      public_id: {
+        type: String,
+        require: true,
+      },
+      url: {
+        type: String,
+        require: true,
+      },
     },
     brand: {
       type: String,

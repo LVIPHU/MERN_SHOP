@@ -4,7 +4,7 @@ const SmallCard = ({ product }) => {
   return (
     <div className={classes.container}>
       <Link to={`/product/${product._id}`}>
-        <img src={product.image} alt="product" />
+        <img src={product?.image?.url} alt="product" />
       </Link>
       <div className={classes.content}>
         <p className={classes.category}>{product.category}</p>

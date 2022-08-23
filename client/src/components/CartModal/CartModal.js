@@ -10,14 +10,14 @@ function CartModal({ showModal, closeModal }) {
     <>
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header>
-          <Modal.Title>Add Item to your</Modal.Title>
+          <Modal.Title>Add Item to your cart</Modal.Title>
         </Modal.Header>
         <Modal.Body>Do you want to keep shopping?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="success" onClick={handleClose} style={{ borderRadius: "30px" }}>
             Keep Shoping
           </Button>
-          <Button variant="secondary">
+          <Button variant="primary" style={{ borderRadius: "30px" }}>
             <Link className={classes.link} to="/cart">
               Go to cart
             </Link>

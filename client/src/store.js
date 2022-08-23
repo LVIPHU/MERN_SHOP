@@ -37,6 +37,13 @@ import {
   approveRequestReducer,
 } from "./reducers/requestReducer";
 
+import {
+  uploadImage,
+  deleteImage,
+  uploadDecrepion,
+  deleteDecrepion, 
+} from "./reducers/upload";
+
 const userInfoFromStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
@@ -82,6 +89,11 @@ const reducer = combineReducers({
   getRequestSeller: getRequestSellerReducer,
   getRequestById: getRequestByIdReducer,
   approveRequest: approveRequestReducer,
+  
+  uploadImage: uploadImage,
+  deleteImage: deleteImage,
+  uploadDecrepion: uploadDecrepion,
+  deleteDecrepion: deleteDecrepion
 });
 
 const initialState = {

@@ -25,7 +25,7 @@ const SubProduct = ({ item }) => {
       <ListGroup.Item key={item.product}>
         <Row>
           <Col md={2}>
-            <Image src={item.image} alt={item.name} fluid rounded />
+            <Image src={item?.image?.url} alt={item.name} fluid rounded />
           </Col>
           <Col md={3}>
             <Link to={`/product/${item.product}`}>{item.name}</Link>
@@ -43,6 +43,7 @@ const SubProduct = ({ item }) => {
               type="button"
               variant="light"
               onClick={() => dispatch(removeFromCart(item.product))}
+              style={{ borderRadius: 30}}
             >
               <i className="fas fa-trash"></i>
             </Button>

@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import { LinkContainer } from "react-router-bootstrap";
-import { Table, Button } from "react-bootstrap";
+import { Table, Button, Badge } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../../components/Message";
 import Loader from "../../../components/Loader";
 import { listUsers, deleteUser } from "../../../actions/userAction";
 import DropNotif from "../../../components/Modal/Modal";
 import { USER_DELETE_RESET } from "../../../constants/userConstants";
+
 
 const UserListScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -52,57 +53,60 @@ const UserListScreen = ({ history }) => {
             ></DropNotif>
           )}
           {errorDelete && <Message variant="danger">{errorDelete}</Message>}
-          <Table striped bordered hover responsive className="table-sm">
+          <Table striped="column" hover responsive >
             <thead>
               <tr>
-                <th>ID</th>
+                {/* <th>ID</th> */}
                 <th>NAME</th>
                 <th>EMAIL</th>
-                <th>ADMIN</th>
-                <th>SELLER</th>
+                <th>ROLE</th>
+                <th></th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
               {users.map((user) => (
                 <tr key={user._id}>
-                  <td>{user._id}</td>
+                  {/* <td>{user._id}</td> */}
                   <td>{user.name}</td>
                   <td>
                     <a href={`mailto:${user.email}`}>{user.email}</a>
                   </td>
                   <td>
                     {user.isAdmin ? (
-                      <i
-                        className="fas fa-check"
-                        style={{ color: "green" }}
-                      ></i>
+                      <Button variant="warning" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>
+                     Admin
+                    </Button>
+                    ) : user.isSeller ? (
+                      <Button variant="primary" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>
+                        Seller
+                      </Button>
                     ) : (
-                      <i className="fas fa-times" style={{ color: "red" }}></i>
+                      <Button variant="success" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>
+                        Customer
+                      </Button>
                     )}
                   </td>
+                 
                   <td>
-                    {user.isSeller ? (
-                      <i
-                        className="fas fa-check"
-                        style={{ color: "green" }}
-                      ></i>
-                    ) : (
-                      <i className="fas fa-times" style={{ color: "red" }}></i>
-                    )}
-                  </td>
-                  <td>
-                    <LinkContainer to={`/admin/user/${user._id}/edit`}>
-                      <Button variant="light" className="btn-sm">
+                    <LinkContainer
+                      to={`/admin/user/${user._id}/edit`}
+                      style={{ borderRadius: 30, width: "70%" }}
+                    >
+                      <Button variant="outline-primary">
                         <i className="fas fa-edit"></i>
+                        &nbsp; Edit
                       </Button>
                     </LinkContainer>
+                  </td>
+                  <td>
                     <Button
-                      variant="danger"
-                      className="btn-sm"
+                      style={{ borderRadius: 30, width: "70%" }}
+                      variant="outline-danger"
                       onClick={() => deleteHandler(user._id)}
                     >
                       <i className="fas fa-trash"></i>
+                      &nbsp; Delete
                     </Button>
                   </td>
                 </tr>

@@ -6,6 +6,8 @@ import { Table, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import Loader from "../../../components/Loader";
 
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+
 const Orders = () => {
   const dispatch = useDispatch();
   const orderMyList = useSelector((state) => state.orderMyList);
@@ -23,15 +25,15 @@ const Orders = () => {
           <Message>No Products Ordered</Message>
           <h1>Make a new Purchase now!</h1>
 
-          <LinkContainer to={`/shop`}>
-            <Button className="btn-sm">Shop now</Button>
+          <LinkContainer to={`/shop`} style={{ borderRadius: 30}}>
+            <Button size="lg"><AddShoppingCartIcon style={{ marginBottom: '5px'}}/>&nbsp;Shop now</Button>
           </LinkContainer>
         </>
       );
     } else {
       order = (
         <>
-          <Table striped bordered hover responsive className="table-sm">
+          <Table striped="column" hover responsive variant="light">
             <thead>
               <tr>
                 <th>ID</th>
@@ -63,8 +65,11 @@ const Orders = () => {
                     )}
                   </td>
                   <td>
-                    <LinkContainer to={`/order/${order._id}`}>
-                      <Button className="btn-sm">Details</Button>
+                    <LinkContainer to={`/order/${order._id}`} style={{ borderRadius: 30, width: "70%"}}>
+                      <Button variant="outline-success">
+                        <i className="fas fa-eye"></i>
+                        &nbsp; Details
+                      </Button>
                     </LinkContainer>
                   </td>
                 </tr>

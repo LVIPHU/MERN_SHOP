@@ -7,7 +7,7 @@ import CheckoutSteps from "../../components/CheckoutStep/CheckoutStep";
 import { Container } from "react-bootstrap";
 import { createOrder } from "../../actions/orderAction";
 import { cartReset } from "../../actions/cartAction";
-
+import LocalAtmIcon from '@mui/icons-material/LocalAtm';
 const PlaceOrderScreen = ({ history }) => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
@@ -92,7 +92,7 @@ const PlaceOrderScreen = ({ history }) => {
                         <Row>
                           <Col md={1}>
                             <Image
-                              src={item.image}
+                              src={item?.image?.url}
                               alt={item.name}
                               fluid
                               rounded
@@ -155,7 +155,10 @@ const PlaceOrderScreen = ({ history }) => {
                     type="button"
                     disabled={cart.cartItems === 0}
                     onClick={placeOrderHandler}
+                    style={{ borderRadius: 30}}
                   >
+                    <LocalAtmIcon style={{ marginBottom: '5px' }}/>
+                    &nbsp;
                     Place Order
                   </Button>
                 </ListGroup.Item>

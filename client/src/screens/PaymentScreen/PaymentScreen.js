@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CheckoutSteps from "../../components/CheckoutStep/CheckoutStep";
 import { savePaymentMethod } from "../../actions/cartAction";
 import classes from "../Shipping/ShippingScreen.module.css";
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 
 const PaymentScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -41,6 +42,15 @@ const PaymentScreen = ({ history }) => {
             <Col>
               <Form.Check
                 type="radio"
+                label="COD"
+                id="PayPal"
+                name="paymentMethod"
+                value="Paypal"
+                checked
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              ></Form.Check>
+              <Form.Check
+                type="radio"
                 label="PayPal or Credit Card"
                 id="PayPal"
                 name="paymentMethod"
@@ -51,8 +61,8 @@ const PaymentScreen = ({ history }) => {
             </Col>
           </Form.Group>
 
-          <Button type="submit" variant="primary" className="my-3">
-            Continue
+          <Button type="submit" variant="primary" className="my-3" style={{ borderRadius: 30}}>
+          <FileDownloadDoneIcon/>&nbsp; Continue
           </Button>
         </Form>
       </div>

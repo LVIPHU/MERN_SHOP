@@ -17,7 +17,7 @@ function DropNotif({ heading, text, resetData }) {
         </Modal.Header>
         <Modal.Body>{text}</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="primary" onClick={handleClose} style={{ borderRadius: "30px" }}>
             Close
           </Button>
         </Modal.Footer>

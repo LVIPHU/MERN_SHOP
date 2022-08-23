@@ -5,6 +5,13 @@
   border-bottom: 1px solid #eee;
   padding: 30px;
 }
+.titleForm{
+  padding: 15px 0;
+}
+.stars {
+  display: "flex";
+  flex-direction: "row";
+}
 .leftSide {
   width: 50%;
 }
@@ -39,6 +46,7 @@
   display: flex;
   align-items: center;
   margin-bottom: 5px;
+  padding-left: 35px;
 }
 .ratingStart {
   padding-left: 20px;

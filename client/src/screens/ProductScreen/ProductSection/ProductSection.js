@@ -2,7 +2,10 @@ import { useState } from "react";
 import classes from "./ProductSection.module.css";
 import { addToCart } from "../../../actions/cartAction";
 import { useDispatch } from "react-redux";
+
 import CartModal from "../../../components/CartModal/CartModal";
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import ProductionQuantityLimitsOutlinedIcon from '@mui/icons-material/ProductionQuantityLimitsOutlined';
 const ProductSection = ({ product }) => {
   const dispatch = useDispatch();
   const [qty, setQty] = useState(1);
@@ -12,8 +15,12 @@ const ProductSection = ({ product }) => {
     setQty(product.countInStock);
   }
   const cartHandler = () => {
-    dispatch(addToCart(product._id, qty));
-    setShowModal(true);
+    // if(!product.countInStock === 0) {
+      dispatch(addToCart(product._id, qty));
+      setShowModal(true);
+    // } else {
+
+    // }
   };
   return (
     <div className={classes.container}>
@@ -21,7 +28,7 @@ const ProductSection = ({ product }) => {
         showModal={showModal}
         closeModal={() => setShowModal(false)}
       ></CartModal>
-      <img className={classes.productImage} src={product.image} alt="Product" />
+      <img className={classes.productImage} src={product?.image?.url} alt="Product" />
       <div className={classes.content}>
         <h3 className={classes.productName}>{product.name}</h3>
         <h2 className={classes.productPrice}>${product.price}</h2>
@@ -34,7 +41,7 @@ const ProductSection = ({ product }) => {
           <li>
             <a class="active" href="/">
               <span>Availibility</span> :{" "}
-              {product.countInStock > 0 ? "In Stock" : "Not In Stock"}
+              {product.countInStock > 0 ? "In Stock" : `Not In Stock`}
             </a>
           </li>
         </ul>
@@ -51,9 +58,9 @@ const ProductSection = ({ product }) => {
         <button
           disabled={product.countInStock === 0}
           onClick={cartHandler}
-          className={classes.addCart}
-        >
-          Add to Cart
+          className={classes.addCart}>
+          <AddShoppingCartIcon/>
+          &nbsp; Add to Cart
         </button>
       </div>
     </div>

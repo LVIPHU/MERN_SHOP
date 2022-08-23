@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import classes from "./Details.module.css";
 import DropNotif from "../../../components/Modal/Modal";
 import { USER_UPDATE_PROFILE_RESET } from "../../../constants/userConstants";
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 
 const Details = ({ history }) => {
   const [email, setEmail] = useState("");
@@ -105,7 +106,8 @@ const Details = ({ history }) => {
         </Form.Group>
 
         <button className={classes.update} type="submit" variant="primary">
-          Update
+          <FileDownloadDoneIcon/>
+          &nbsp; Update
         </button>
       </Form>
     </div>

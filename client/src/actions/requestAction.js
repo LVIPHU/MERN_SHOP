@@ -36,7 +36,7 @@ export const createRequest = (request) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.post(`/api/request/newSeller`, request, config);
+    const { data } = await axios.post(`/api/request/newRequest`, request, config);
     console.log(data);
 
     dispatch({

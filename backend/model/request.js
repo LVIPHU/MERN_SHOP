@@ -7,14 +7,26 @@ const requestSchema = mongoose.Schema(
       required: true,
       ref: "User",
     },
-    description: {
-        type: String,
-        require: true,
-    },
     approved: {
       type: Boolean,
       default: false,
       require: true,
+    },
+    approvedAt: {
+      type: Date,
+    },
+    requestAt: {
+      type: Date,
+      require: true,
+    },
+    requestItems: {
+      qty: { type: Number, required: true },
+      price: { type: String, required: true },
+      product: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "Product",
+      },
     }
   })
 

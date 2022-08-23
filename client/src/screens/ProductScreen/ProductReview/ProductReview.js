@@ -11,9 +11,21 @@ import {
   getProductDetail,
 } from "../../../actions/productActions";
 import { PRODUCT_CREATE_REVIEW_RESET } from "../../../constants/productConstants";
+import { FaStar } from "react-icons/fa";
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+
 const ProductReview = ({ productId }) => {
   const dispatch = useDispatch();
+
+  const colors = {
+    yellow: "rgb(248, 232, 37)",
+    grey: "#a9a9a9",
+  };
+
   const [rating, setRating] = useState(0);
+  const [hoverValue, setHoverValue] = useState(undefined);
+  const stars = Array(5).fill(0);
+
   const [comment, setComment] = useState("");
 
   const userLogin = useSelector((state) => state.userLogin);
@@ -35,6 +47,18 @@ const ProductReview = ({ productId }) => {
     }
   }, [dispatch, successReview, productId]);
 
+  const handleClick = (value) => {
+    setRating(value);
+  };
+
+  const handleMouseOver = (newHoverValue) => {
+    setHoverValue(newHoverValue);
+  };
+
+  const handleMouseLeave = () => {
+    setHoverValue(undefined);
+  };
+
   const submitReviewHandler = (e) => {
     e.preventDefault();
     dispatch(createProductReview(productId, { rating, comment }));
@@ -45,7 +69,7 @@ const ProductReview = ({ productId }) => {
         <div className={classes.ratingWrapper}>
           <div className={classes.ratingCard}>
             <h3>Overall</h3>
-            <h2>{product.rating}</h2>
+            <h2>{product.rating}/5</h2>
             <h4>({product.numReviews} Reviews)</h4>
           </div>
           <div className={classes.ratingStart}>
@@ -54,27 +78,27 @@ const ProductReview = ({ productId }) => {
               <li>
                 <div className={classes.startTitle}>5 Star</div>
                 <Rating value={5}></Rating>
-                <div className={classes.startPercent}>20%</div>
+                {/* <div className={classes.startPercent}>20%</div> */}
               </li>
               <li>
                 <div className={classes.startTitle}>4 Star</div>
                 <Rating value={4}></Rating>
-                <div className={classes.startPercent}>20%</div>
+                {/* <div className={classes.startPercent}>20%</div> */}
               </li>
               <li>
                 <div className={classes.startTitle}>3 Star</div>
                 <Rating value={3}></Rating>
-                <div className={classes.startPercent}>20%</div>
+                {/* <div className={classes.startPercent}>20%</div> */}
               </li>
               <li>
                 <div className={classes.startTitle}>2 Star</div>
                 <Rating value={2}></Rating>
-                <div className={classes.startPercent}>20%</div>
+                {/* <div className={classes.startPercent}>20%</div> */}
               </li>
               <li>
                 <div className={classes.startTitle}>1 Star</div>
                 <Rating value={1}></Rating>
-                <div className={classes.startPercent}>20%</div>
+                {/* <div className={classes.startPercent}>20%</div> */}
               </li>
             </ul>
           </div>
@@ -103,22 +127,35 @@ const ProductReview = ({ productId }) => {
         {userInfo ? (
           <Form onSubmit={submitReviewHandler}>
             <Form.Group controlId="rating">
-              <Form.Label>Rating</Form.Label>
-              <Form.Control
-                as="select"
-                value={rating}
-                onChange={(e) => setRating(e.target.value)}
-              >
-                <option value="">Select...</option>
-                <option value="1">1 - Poor</option>
-                <option value="2">2 - Fair</option>
-                <option value="3">3 - Good</option>
-                <option value="4">4 - Very Good</option>
-                <option value="5">5 - Excellent</option>
-              </Form.Control>
+              <h3 className={classes.titleForm}>Rating</h3>
+              <div className={classes.stars}>
+                {stars.map((_, index) => {
+                  return (
+                    <FaStar
+                      key={index}
+                      size={30}
+                      onClick={() => handleClick(index + 1)}
+                      onMouseOver={() => handleMouseOver(index + 1)}
+                      onMouseLeave={handleMouseLeave}
+                      color={
+                        (hoverValue || rating) > index
+                          ? colors.yellow
+                          : colors.grey
+                      }
+                      style={{
+                        marginRight: 10,
+                        cursor: "pointer",
+                        paddingBottom: "5px",
+                        borderColor: "rgb(248, 232, 37)",
+                      }}
+                    />
+                  );
+                })}
+              </div>
             </Form.Group>
+            
             <Form.Group controlId="comment">
-              <Form.Label>Comment</Form.Label>
+              <h3 className={classes.titleForm}>Comment</h3>
               <Form.Control
                 as="textarea"
                 row="3"
@@ -127,7 +164,7 @@ const ProductReview = ({ productId }) => {
                 onChange={(e) => setComment(e.target.value)}
               ></Form.Control>
             </Form.Group>
-            <button className={classes.submitReview}>Submit</button>
+            <button className={classes.submitReview}><FileDownloadDoneIcon/>&nbsp;Submit</button>
           </Form>
         ) : (
           <Message>

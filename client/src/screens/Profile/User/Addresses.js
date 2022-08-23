@@ -14,6 +14,7 @@ import Loader from "../../../components/Loader";
 import { USER_UPDATE_PROFILE_RESET } from "../../../constants/userConstants";
 import { getUserDetails } from "../../../actions/userAction";
 import DropNotif from "../../../components/Modal/Modal";
+import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 
 const Addresses = () => {
   const dispatch = useDispatch();
@@ -107,7 +108,7 @@ const Addresses = () => {
         />
         <TextField
           fullWidth
-          label="Post Code"
+          label="district"
           variant="filled"
           value={postCode}
           onChange={(e) => setPostCode(e.target.value)}
@@ -120,29 +121,32 @@ const Addresses = () => {
           onChange={(e) => setAddress(e.target.value)}
         />
         <TextField
-          label="Town/City"
+          label="ward"
           variant="filled"
           value={city}
           onChange={(e) => setCity(e.target.value)}
         />
         <FormControl sx={{ m: 1, minWidth: 200 }}>
-          <InputLabel id="demo-simple-select-autowidth-label">State</InputLabel>
+          <InputLabel id="demo-simple-select-autowidth-label">City</InputLabel>
           <Select autoWidth value={state} label="State" onChange={stateHandler}>
-            <MenuItem value={"New South Wales"}>New South Wales</MenuItem>
-            <MenuItem value={"Queensland"}>Queensland</MenuItem>
-            <MenuItem value={"Northern Territory"}>Northern Territory</MenuItem>
-            <MenuItem value={"Western Australia"}>Western Australia</MenuItem>
-            <MenuItem value={"South Australia"}>South Australia</MenuItem>
-            <MenuItem value={"Vistoria"}>Victoria</MenuItem>
-            <MenuItem value={"Austraian Capital Territory"}>
-              Australian Capital Territory
-            </MenuItem>
-            <MenuItem value={"Tasmania"}>Tasmania</MenuItem>
+          <MenuItem value={"Hồ Chí Minh"}>Hồ Chí Minh</MenuItem>
+              <MenuItem value={"Hà Nội"}>Hà Nội</MenuItem>
+              <MenuItem value={"Bà Rịa & Vũng Tàu"}>
+              Bà Rịa & Vũng Tàu
+              </MenuItem>
+              <MenuItem value={"Bình Dương"}>Bình Dương</MenuItem>
+              <MenuItem value={"Cà Mau"}>Cà Mau</MenuItem>
+              <MenuItem value={"Cần Thơ"}>Cần Thơ</MenuItem>
+              <MenuItem value={"Đà Nẵng"}>
+              Đà Nẵng
+              </MenuItem>
+              <MenuItem value={"Huế"}>Huế</MenuItem>
           </Select>
         </FormControl>
         <br />
-        <Button type="submit" variant="contained">
-          Add new Address
+        <Button type="submit" variant="contained" style={{ borderRadius: 30}}>
+          <FileDownloadDoneIcon/>
+          &nbsp; Add new Address
         </Button>
       </form>
     </div>

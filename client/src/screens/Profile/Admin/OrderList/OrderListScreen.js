@@ -31,7 +31,7 @@ const OrderListScreen = ({ history }) => {
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
-        <Table striped bordered hover responsive className="table-sm">
+        <Table striped="column" hover responsive variant="light">
           <thead>
             <tr>
               <th>ID</th>
@@ -67,9 +67,10 @@ const OrderListScreen = ({ history }) => {
                   )}
                 </td>
                 <td>
-                  <LinkContainer to={`/order/${order._id}`}>
-                    <Button variant="light" className="btn-sm">
-                      Details
+                  <LinkContainer to={`/order/${order._id}`} style={{ borderRadius: 30, width: "100%"}}>
+                    <Button variant="outline-success">
+                      <i className="fas fa-eye"></i>
+                      &nbsp; Details
                     </Button>
                   </LinkContainer>
                 </td>

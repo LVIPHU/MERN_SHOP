@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 import { LinkContainer } from "react-router-bootstrap";
-import { Table, Button} from "react-bootstrap";
+import { Table, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../../components/Message";
 import Loader from "../../../components/Loader";
 import { listUsers, deleteUser } from "../../../actions/userAction";
 import DropNotif from "../../../components/Modal/Modal";
 import { USER_DELETE_RESET } from "../../../constants/userConstants";
-
 
 const UserListScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -21,7 +20,7 @@ const UserListScreen = ({ history }) => {
   const { success: successDelete, error: errorDelete } = userDelete;
 
   useEffect(() => {
-    if (userInfo && userInfo.isAdmin) {
+    if (userInfo && (userInfo.isAdmin || userInfo.isSeller)) {
       dispatch(listUsers());
     } else {
       history.push("/login");
@@ -53,7 +52,7 @@ const UserListScreen = ({ history }) => {
             ></DropNotif>
           )}
           {errorDelete && <Message variant="danger">{errorDelete}</Message>}
-          <Table striped="column" hover responsive >
+          <Table striped="column" hover responsive>
             <thead>
               <tr>
                 {/* <th>ID</th> */}
@@ -74,41 +73,61 @@ const UserListScreen = ({ history }) => {
                   </td>
                   <td>
                     {user.isAdmin ? (
-                      <Button variant="warning" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>
-                     Admin
-                    </Button>
+                      <Button
+                        variant="warning"
+                        disabled
+                        className="btn-sm"
+                        style={{ borderRadius: 30, width: "50%", opacity: 1 }}
+                      >
+                        Admin
+                      </Button>
                     ) : user.isSeller ? (
-                      <Button variant="primary" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>
+                      <Button
+                        variant="primary"
+                        disabled
+                        className="btn-sm"
+                        style={{ borderRadius: 30, width: "50%", opacity: 1 }}
+                      >
                         Seller
                       </Button>
                     ) : (
-                      <Button variant="success" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>
+                      <Button
+                        variant="success"
+                        disabled
+                        className="btn-sm"
+                        style={{ borderRadius: 30, width: "50%", opacity: 1 }}
+                      >
                         Customer
                       </Button>
                     )}
                   </td>
-                 
-                  <td>
-                    <LinkContainer
-                      to={`/admin/user/${user._id}/edit`}
-                      style={{ borderRadius: 30, width: "70%" }}
-                    >
-                      <Button variant="outline-primary">
-                        <i className="fas fa-edit"></i>
-                        &nbsp; Edit
-                      </Button>
-                    </LinkContainer>
-                  </td>
-                  <td>
-                    <Button
-                      style={{ borderRadius: 30, width: "70%" }}
-                      variant="outline-danger"
-                      onClick={() => deleteHandler(user._id)}
-                    >
-                      <i className="fas fa-trash"></i>
-                      &nbsp; Delete
-                    </Button>
-                  </td>
+                  {userInfo.isAdmin ? (
+                    <>
+                      <td>
+                        <LinkContainer
+                          to={`/admin/user/${user._id}/edit`}
+                          style={{ borderRadius: 30, width: "70%" }}
+                        >
+                          <Button variant="outline-primary">
+                            <i className="fas fa-edit"></i>
+                            &nbsp; Edit
+                          </Button>
+                        </LinkContainer>
+                      </td>
+                      <td>
+                        <Button
+                          style={{ borderRadius: 30, width: "70%" }}
+                          variant="outline-danger"
+                          onClick={() => deleteHandler(user._id)}
+                        >
+                          <i className="fas fa-trash"></i>
+                          &nbsp; Delete
+                        </Button>
+                      </td>
+                    </>
+                  ) : (
+                    <></>
+                  )}
                 </tr>
               ))}
             </tbody>

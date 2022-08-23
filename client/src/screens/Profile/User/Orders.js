@@ -36,7 +36,7 @@ const Orders = () => {
           <Table striped="column" hover responsive variant="light">
             <thead>
               <tr>
-                <th>ID</th>
+                {/* <th>ID</th> */}
                 <th>DATE</th>
                 <th>TOTAL</th>
                 <th>PAID</th>
@@ -47,23 +47,26 @@ const Orders = () => {
             <tbody>
               {orders.map((order) => (
                 <tr key={order._id}>
-                  <td>{order._id}</td>
+                  {/* <td>{order._id}</td> */}
                   <td>{order.createdAt.substring(0, 10)}</td>
-                  <td>{order.totalPrice}</td>
+                  <td>{order.totalPrice} $</td>
                   <td>
-                    {order.isPaid ? (
-                      order.paidAt.substring(0, 10)
-                    ) : (
-                      <i className="fas fa-times" style={{ color: "red" }}></i>
-                    )}
-                  </td>
-                  <td>
-                    {order.isDelivered ? (
-                      order.deliveredAt.substring(0, 10)
-                    ) : (
-                      <i className="fas fa-times" style={{ color: "red" }}></i>
-                    )}
-                  </td>
+                  {order.isPaid ? (
+                     <Button variant="success" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>
+                    {order.paidAt.substring(0, 10)}</Button>
+                  ) : (
+                    <Button variant="danger" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>Not paid</Button>
+                  )}
+                </td>
+
+                <td>
+                  {order.isDelivered ? (
+                    <Button variant="success" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>
+                    {order.deliveredAt.substring(0, 10)}</Button>
+                  ) : (
+                    <Button variant="danger" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>Not delivered</Button>
+                  )}
+                </td>
                   <td>
                     <LinkContainer to={`/order/${order._id}`} style={{ borderRadius: 30, width: "70%"}}>
                       <Button variant="outline-success">

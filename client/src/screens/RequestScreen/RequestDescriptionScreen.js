@@ -1,6 +1,6 @@
 import { Container, Button } from "react-bootstrap";
 import MarkdownEditor from "../../components/TextEditor/MarkdownEditor";
-import React, { useState, useEffect } from "react";
+import React, {useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";

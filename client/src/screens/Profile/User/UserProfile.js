@@ -3,7 +3,7 @@ import Details from "./Details";
 import Addresses from "./Addresses";
 import Orders from "./Orders";
 import { useSelector } from "react-redux";
-import Request from "./Request";
+import Request from "../Seller/WarehouseReceipt/Request";
 import { Container } from "react-bootstrap";
 import classes from "../../ProductScreen/ProductScreen.module.css";
 import UserListScreen from "../Admin/UserListScreen";
@@ -76,7 +76,7 @@ const UserProfile = ({ history }) => {
               &nbsp; User Addresses
             </li>
           )}
-          {userInfo && !userInfo.isAdmin && (
+          {userInfo && !userInfo.isAdmin && !userInfo.isSeller && (
             <li
               className={classes.navItem}
               data-selection="3"
@@ -96,7 +96,7 @@ const UserProfile = ({ history }) => {
               &nbsp; Warehouse Receipt
             </li>
           )} */}
-          {userInfo && userInfo.isAdmin && (
+          {userInfo && (userInfo.isAdmin || userInfo.isSeller) && (
             <li
               className={classes.navItem}
               data-selection="5"
@@ -116,7 +116,7 @@ const UserProfile = ({ history }) => {
               &nbsp; Manage Products
             </li>
           )}
-          {userInfo && userInfo.isAdmin && (
+          {userInfo && (userInfo.isAdmin || userInfo.isSeller) && (
             <li
               className={classes.navItem}
               data-selection="7"

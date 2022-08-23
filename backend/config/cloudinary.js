@@ -1,5 +1,5 @@
 const cloudinary = require('cloudinary');
-const config = require('../config/index')
+const config = require('./index')
 
 cloudinary.config({ 
     cloud_name: process.env.CD_NAME || config.cloudinary.name, 

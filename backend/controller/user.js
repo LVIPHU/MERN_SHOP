@@ -1,7 +1,56 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../model/user");
+const VerifyModel = require('../models/verify.model');
+
 const generateToken = require("../utils/generateToken");
 const validator = require("validator");
+
+const mailConfig = require('../configs/mail.config');
+const config = require('../config');
+const helper = require('../helpers');
+
+
+const postSendVerifyCode = async (req, res) => {
+  try {
+    const { email } = req.body;
+    //Kiểm tra tài khoản đã tồn tại hay chưa
+    const account = await User.findOne({ email });
+
+    //nếu tồn tại, thông báo lỗi, return
+    if (account) {
+      return res.status(400).json({ message: "Email đã được sử dụng !" });
+    }
+
+    //cấu hình email sẽ gửi
+    const verifyCode = helper.generateVerifyCode(config.numberVerify);
+    const mail = {
+      to: email,
+      subject: 'Mã xác thực tạo tài khoản',
+      html: mailConfig.htmlSignupAccount(verifyCode),
+    };
+
+    //lưu mã vào database để xác thực sau này
+    await VerifyModel.findOneAndDelete({ email });
+    await VerifyModel.create({
+      code: verifyCode,
+      email,
+      dateCreated: Date.now(),
+    });
+
+    //gửi mail
+    const result = await mailConfig.sendEmail(mail);
+
+    //if success
+    if (result) {
+      return res.status(200).json({ message: 'success' });
+    }
+  } catch (error) {
+    return res.status(400).json({
+      message: 'Gửi mã thất bại',
+      error,
+    });
+  }
+};
 
 // @desc    Register a new user
 // @route   POST /api/user

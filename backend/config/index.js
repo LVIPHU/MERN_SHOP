@@ -17,6 +17,7 @@ const configs = {
     uploadImagePath: path.join(__dirname, "../uploads/images"),
     tokenExpiresIn: "30d",
     verifyCodeIn: 10 * 60 * 1000,
+    numberVerify: 6
   },
   development: {
     dbURL: `mongodb+srv://${USER}:${DB_PASSWORD}@alpine.yk3hqf3.mongodb.net/${APP_NAME}?retryWrites=true&w=majority`,

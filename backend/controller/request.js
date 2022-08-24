@@ -7,16 +7,20 @@ const Product = require("../model/product")
 // @route   POST /api/request/newRequest
 // @access  Public
 const addRequestItem = asyncHandler(async (req, res) => {
-  const { requestItems } = req.body;
+  const { brand, quantity, price, amount, product } = req.body;
   const user = req.user;
-  if (orderItems && orderItems.length === 0) {
+  if (!product && (quantity < 1)) {
     res.status(400);
     throw new Error("No request items");
   } else {
     const newRequest = {
       user: user._id,
+      brand: brand,
+      qty: quantity,
+      price: price,
+      amount: amount,
+      product: product,
       requestAt: Date.now(),
-      requestItems: requestItems,
     };
     const result = await Request.create(newRequest);
     if (result) {
@@ -62,14 +66,18 @@ const approveUserRequest = asyncHandler(async (req, res) => {
   const request = await Request.findById(req.params.id);
   if (request) {
     const user = await User.findById(request.user._id);
-    const product = await Product.findById(request.requestItems.product._id)
-    if (user && product) {
-      request.approved = true;
-      const approveRequest =await request.save();
-      const { requestItems } = request;
-      let tempProduct = await Product.findById(requestItems.product);
-      tempProduct.countInStock += requestItems.qty;
+    const requestItem = await Product.findById(request.product._id)
+    if (user && requestItem ) {
+
+      const { product } = request;
+      let tempProduct = await Product.findById(product._id);
+      tempProduct.countInStock += request.qty;
       await tempProduct.save();
+
+      request.approved = true;
+      request.approvedAt = Date.now();
+      const approveRequest = await request.save();
+
       res.json(approveRequest);
     } else {
       res.status(404);

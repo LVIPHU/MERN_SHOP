@@ -34,6 +34,11 @@ const userSchema = mongoose.Schema(
       state: { type: String },
       phone: { type: String },
     },
+    isActive: {
+      type: Boolean,
+      require: true,
+      default: false,
+    }
   },
   {
     timestamps: true,

@@ -131,12 +131,12 @@ const ProductListScreen = () => {
                       style={{ width: "190px", height: "280px" }}
                     />
                     <Card.Body>
+                      <Card.Text>{product.category}</Card.Text>
+                      <Card.Text>{product.brand}</Card.Text>
                       <Card.Title>{product.name}</Card.Title>
                       <Card.Text>$ {product.price}</Card.Text>
                     </Card.Body>
-                    <ListGroup className="list-group-flush">
-                      <ListGroup.Item>{product.brand}</ListGroup.Item>
-                      <ListGroup.Item>{product.category}</ListGroup.Item>
+                    <ListGroup className="d-flex flex-column">
                       <ListGroup.Item>
                         Stock: {product.countInStock}
                       </ListGroup.Item>

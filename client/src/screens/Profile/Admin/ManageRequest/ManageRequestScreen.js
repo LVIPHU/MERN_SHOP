@@ -26,27 +26,30 @@ const ManageRequestScreen = () => {
           <Table striped="column" hover responsive variant="light">
             <thead>
               <tr>
-                <th>Request ID</th>
-                <th>User ID</th>
-                <th>User Name</th>
-                <th>Approved</th>
-                <th>Description</th>
+                {/* <th>Request ID</th>
+                <th>User ID</th> */}
+                <th>DATE</th>
+                <th>TIME</th>
+                <th>SELLER</th>
+                <th>BRAND</th>
+                <th>APPROVED</th>
+                <th>DESCRIPTION</th>
               </tr>
             </thead>
             <tbody>
               {request.map((r) => (
                 <tr key={r._id}>
-                  <td>{r._id}</td>
-                  <td>{r.user._id}</td>
+                  {/* <td>{r._id}</td>
+                  <td>{r.user._id}</td> */}
+                  <td>{r.requestAt.substring(0, 10)}</td>
+                  <td>{r.requestAt.substring(11, 19)}</td>
                   <td>{r.user.name}</td>
+                  <td>{r.brand}</td>
                   <td>
                     {r.approved ? (
-                      <i
-                        className="fas fa-check"
-                        style={{ color: "green" }}
-                      ></i>
+                      <Button variant="success" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>{r.approvedAt.substring(0, 10)}</Button>
                     ) : (
-                      <i className="fas fa-times" style={{ color: "red" }}></i>
+                      <Button variant="danger" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>Not approved</Button>
                     )}
                   </td>
                   <td>

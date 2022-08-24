@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -9,41 +8,29 @@ import {
   Row,
   Card,
   Col,
-  ListGroup,
-  ListGroupItem,
+  InputGroup,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 
-// import MarkdownEditor from "../../../../components/TextEditor/MarkdownEditor";
 import Message from "../../../../components/Message";
 import Loader from "../../../../components/Loader";
 import DropNotif from "../../../../components/Modal/Modal";
 
 import { createRequest } from "../../../../actions/requestAction";
-import {
-  getProductDetail,
-  updateProduct,
-} from "../../../../actions/productActions";
+import { getProductDetail } from "../../../../actions/productActions";
 
 import { REQUEST_SELLER_RESET } from "../../../../constants/requestConstant";
-import { PRODUCT_UPDATE_RESET } from "../../../../constants/productConstants";
 
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const Request = ({ match, history }) => {
   const productId = match.params.id;
 
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState(0);
-  const [image, setImage] = useState("");
+  const [unitPrice, setUnitPrice] = useState(0);
+  const [quantity, setQuantity] = useState(0);
   const [brand, setBrand] = useState("");
-  const [category, setCategory] = useState("");
-  const [countInStock, setCountInStock] = useState(0);
-  const [description, setDescription] = useState("");
-  const [uploading, setUploading] = useState(false);
-  const [uploadingDesc, setUploadingDesc] = useState(false);
+  const newAmount = quantity * unitPrice;
 
   const dispatch = useDispatch();
 
@@ -51,94 +38,33 @@ const Request = ({ match, history }) => {
   const { loading, error, product } = productDetail;
   const currentId = product._id;
 
-  const productUpdate = useSelector((state) => state.productUpdate);
+  const productRequest = useSelector((state) => state.requestSeller);
   const {
-    loading: loadingUpdate,
-    error: errorUpdate,
-    success: successUpdate,
-  } = productUpdate;
+    loading: loadingRequest,
+    error: errorRequest,
+    success: successRequest,
+  } = productRequest;
 
   useEffect(() => {
     if (!product.name || currentId !== productId) {
       dispatch(getProductDetail(productId));
     } else {
-      setName(product.name);
-      setPrice(product.price);
-      setImage(product.image);
       setBrand(product.brand);
-      setCategory(product.category);
-      setCountInStock(product.countInStock);
-      setDescription(product.description);
     }
   }, [dispatch, productId, currentId]);
 
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(
-      updateProduct({
-        _id: productId,
-        name,
-        price,
-        image,
-        brand,
-        category,
-        description,
-        countInStock,
+      createRequest({
+        brand: brand,
+        quantity: quantity,
+        price: unitPrice,
+        amount: newAmount,
+        product: product._id,
       })
     );
   };
-  const uploadFileHandler = async (e) => {
-    const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append("image", file);
-    setUploading(true);
-
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      const { data } = await axios.post("/api/upload", formData, config);
-      setImage(data);
-      setUploading(false);
-    } catch (error) {
-      console.error(error);
-      setUploading(false);
-    }
-  };
-
-  const uploadImageForDesc = async (e) => {
-    const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append("image", file);
-    setUploadingDesc(true);
-
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      const { data } = await axios.post(
-        "/api/upload/descripion",
-        formData,
-        config
-      );
-
-      setDescription(description + "\n" + data);
-      setUploadingDesc(false);
-    } catch (error) {
-      console.error(error);
-      setUploadingDesc(false);
-    }
-  };
-
-  const onChange = (value) => {
-    setDescription(value);
-  };
-
-  console.log(image);
 
   return (
     <>
@@ -151,15 +77,15 @@ const Request = ({ match, history }) => {
           <i className="fas fa-arrow-left"></i>
           &nbsp; Go Back
         </Link>
-        <h1>Edit Product</h1>
-        {loadingUpdate && <Loader />}
-        {errorUpdate && <Message variant="danger">{errorUpdate}</Message>}
-        {successUpdate && (
+        <h1>WAREHOUSE RECEIPT</h1>
+        {loadingRequest && <Loader />}
+        {errorRequest && <Message variant="danger">{errorRequest}</Message>}
+        {successRequest && (
           <DropNotif
             heading="Import Product"
             text="Import Product Successfully"
             resetData={() => {
-              dispatch({ type: PRODUCT_UPDATE_RESET });
+              dispatch({ type: REQUEST_SELLER_RESET });
             }}
           ></DropNotif>
         )}
@@ -169,53 +95,152 @@ const Request = ({ match, history }) => {
           <Message variant="danger">{error}</Message>
         ) : (
           <Form onSubmit={submitHandler}>
-            <Row>
+            <Row className="justify-content-md-center">
               <Col>
-                <Card style={{ width: "18rem", textAlign: "center" }}>
-                  <Carousel
-                    fade
-                    prevIcon={
-                      <span
-                        aria-hidden="true"
-                        className="carousel-control-prev-icon"
-                        style={{
-                          backgroundColor: "#384aeb",
-                          borderRadius: "30px",
-                          margin: "10px",
-                        }}
-                      />
-                    }
-                    nextIcon={
-                      <span
-                        aria-hidden="true"
-                        className="carousel-control-next-icon"
-                        style={{
-                          backgroundColor: "#384aeb",
-                          borderRadius: "30px",
-                          margin: "10px",
-                        }}
-                      />
-                    }
-                  >
-                    <Carousel.Item>
-                      <img
-                        className="d-block w-100"
-                        src={image.url}
-                        alt="First slide"
-                      />
-                    </Carousel.Item>
-                  </Carousel>
-                  <Card.Body>
-                    <Card.Title>{name}</Card.Title>
-                  </Card.Body>
-                  <ListGroup className="list-group-flush">
-                    <ListGroupItem>{brand}</ListGroupItem>
-                    <ListGroupItem>{category}</ListGroupItem>
-                    <ListGroupItem>Stock: {countInStock}</ListGroupItem>
-                  </ListGroup>
-                </Card>
+                <Row>
+                  <Col>
+                    <Card style={{ width: "18rem", textAlign: "center" }}>
+                      <Carousel
+                        fade
+                        prevIcon={
+                          <span
+                            aria-hidden="true"
+                            className="carousel-control-prev-icon"
+                            style={{
+                              backgroundColor: "#384aeb",
+                              borderRadius: "30px",
+                              margin: "10px",
+                            }}
+                          />
+                        }
+                        nextIcon={
+                          <span
+                            aria-hidden="true"
+                            className="carousel-control-next-icon"
+                            style={{
+                              backgroundColor: "#384aeb",
+                              borderRadius: "30px",
+                              margin: "10px",
+                            }}
+                          />
+                        }
+                      >
+                        <Carousel.Item>
+                          <img
+                            className="d-block w-100"
+                            src={product?.image?.url}
+                            alt="First slide"
+                          />
+                        </Carousel.Item>
+                      </Carousel>
+                      <Card.Body>
+                        <Card.Title>{product.name}</Card.Title>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                  <Col>
+                    <InputGroup className="mb-3">
+                      <InputGroup.Text>Category</InputGroup.Text>
+                      <Form.Control value={product.category} readOnly />
+                    </InputGroup>
+
+                    <InputGroup className="mb-3">
+                      <InputGroup.Text>Brand</InputGroup.Text>
+                      <Form.Control value={brand} readOnly />
+                    </InputGroup>
+
+                    <InputGroup className="mb-3">
+                      <InputGroup.Text>Stock</InputGroup.Text>
+                      <Form.Control value={product.countInStock} readOnly />
+                    </InputGroup>
+                  </Col>
+                </Row>
               </Col>
-              <Col>2 of 2</Col>
+              <Col>
+                <Form.Group as={Row} className="mb-3" controlId="id">
+                  <Form.Label column sm="2">
+                    ID
+                  </Form.Label>
+                  <Col sm="10">
+                    <Form.Control type="id" value={product._id} readOnly />
+                  </Col>
+                </Form.Group>
+
+                <Form.Group as={Row} className="mb-3" controlId="name">
+                  <Form.Label column sm="2">
+                    Name
+                  </Form.Label>
+                  <Col sm="10">
+                    <Form.Control type="name" value={product.name} readOnly />
+                  </Col>
+                </Form.Group>
+
+                <Form.Group as={Row} className="mb-3" controlId="countInStock">
+                  <Form.Label column sm="2">
+                    Quantity
+                  </Form.Label>
+                  <Col sm="10">
+                    <Form.Control
+                      type="number"
+                      value={quantity}
+                      onChange={(e) => setQuantity(e.target.value)}
+                    />
+                  </Col>
+                </Form.Group>
+
+                <Form.Group as={Row} className="mb-3" controlId="price">
+                  <Form.Label column sm="2">
+                    Unit price
+                  </Form.Label>
+                  <Col sm="10">
+                    <InputGroup className="mb-3">
+                      <InputGroup.Text>$</InputGroup.Text>
+                      <Form.Control
+                        type="number"
+                        value={unitPrice}
+                        onChange={(e) => setUnitPrice(e.target.value)}
+                      />
+                      <InputGroup.Text>.00</InputGroup.Text>
+                    </InputGroup>
+                  </Col>
+                </Form.Group>
+
+                <Form.Group as={Row} className="mb-3" controlId="amount">
+                  <Form.Label column sm="2">
+                    Amount
+                  </Form.Label>
+                  <Col sm="10">
+                    <InputGroup className="mb-3">
+                      <InputGroup.Text>$</InputGroup.Text>
+                      <Form.Control
+                        type="text"
+                        Value={newAmount}
+                        // onchange={(e) => setAmount(e.target.value)}
+                      />
+                      <InputGroup.Text>.00</InputGroup.Text>
+                    </InputGroup>
+                  </Col>
+                </Form.Group>
+
+                <Button
+                  className="mt-3"
+                  type="submit"
+                  variant="primary"
+                  style={{ borderRadius: 30 }}
+                >
+                  <FileDownloadDoneIcon />
+                  &nbsp; Request
+                </Button>
+
+                <Link
+                  to={`/product/${product._id}`}
+                  className="btn btn-primary mt-3 ms-3"
+                  style={{ borderRadius: 30 }}
+                >
+                  <VisibilityIcon />
+                  &nbsp; Go to product
+                </Link>
+              </Col>
             </Row>
           </Form>
         )}

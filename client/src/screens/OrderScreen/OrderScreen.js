@@ -9,6 +9,7 @@ import {
   Card,
   Button,
   Container,
+  Table,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -101,8 +102,8 @@ const OrderScreen = ({ match, history }) => {
           <Col md={8}>
             <ListGroup variant="flush">
               <ListGroup.Item>
-                <h1>Order {order._id}</h1>
-                <h2>Shipping</h2>
+                <h1>Order</h1>
+                <h2>Information</h2>
                 <p>
                   <strong>Full Name: </strong> {order.shippingAddress.fullname}
                 </p>
@@ -147,30 +148,69 @@ const OrderScreen = ({ match, history }) => {
                 {order.orderItems.length === 0 ? (
                   <Message>Your order is empty</Message>
                 ) : (
-                  <ListGroup variant="flush">
-                    {order.orderItems.map((item, index) => (
-                      <ListGroup.Item key={index}>
-                        <Row>
-                          <Col md={1}>
-                            <Image
-                              src={item?.image?.url}
-                              alt={item.name}
-                              fluid
-                              rounded
-                            />
-                          </Col>
-                          <Col>
-                            <Link to={`/product/${item.product}`}>
-                              {item.name}
-                            </Link>
-                          </Col>
-                          <Col md={4}>
-                            {item.qty}x ${item.price} = ${item.qty * item.price}
-                          </Col>
-                        </Row>
-                      </ListGroup.Item>
-                    ))}
-                  </ListGroup>
+                  <Table striped="column" hover responsive>
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th></th>
+                <th></th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              {order.orderItems.map((item, index) => (
+                <tr key={index}>
+                  <td>
+                    <Image
+                      src={item?.image?.url}
+                      alt={item.name}
+                      fluid
+                      rounded
+                      height={40}
+                      width={40}
+                    />
+                  </td>
+                  <td>
+                    <Link to={`/product/${item.product}`}>
+                      {item.name}
+                    </Link>
+                  </td>
+                  <td> </td>
+                  <td> </td>
+                  <td>${item.price}</td>
+                  <td>{item.qty}</td>
+                  <td>${item.qty * item.price}</td>
+                </tr>
+              ))}
+            </tbody>
+            </Table>
+                  // <ListGroup variant="flush">
+                  //   {order.orderItems.map((item, index) => (
+                  //     <ListGroup.Item key={index}>
+                  //       <Row>
+                  //         <Col md={1}>
+                  //           <Image
+                  //             src={item?.image?.url}
+                  //             alt={item.name}
+                  //             fluid
+                  //             rounded
+                  //           />
+                  //         </Col>
+                  //         <Col>
+                  //           <Link to={`/product/${item.product}`}>
+                  //             {item.name}
+                  //           </Link>
+                  //         </Col>
+                  //         <Col md={4}>
+                  //           {item.qty}x ${item.price} = ${item.qty * item.price}
+                  //         </Col>
+                  //       </Row>
+                  //     </ListGroup.Item>
+                  //   ))}
+                  // </ListGroup>
                 )}
               </ListGroup.Item>
             </ListGroup>

@@ -10,6 +10,7 @@ import HomeScreen from "./screens/HomeScreen/HomeScreen";
 import ProductScreen from "./screens/ProductScreen/ProductScreen";
 import LoginScreen from "./screens/Auth/LoginScreen/LoginScreen";
 import RegisterScreen from "./screens/Auth/RegisterScreen/RegisterScreen";
+import ForgotPasswordScreen from "./screens/Auth/ForgotPasswordScreen/ForgotPasswordScreen"
 import UserProfile from "./screens/Profile/User/UserProfile";
 import CartScreen from "./screens/CartScreen/CartScreen";
 import ShippingScreen from "./screens/Shipping/ShippingScreen";
@@ -38,6 +39,7 @@ function App() {
         <Route path="/shop" component={Shop}></Route>
         <Route path="/login" component={LoginScreen}></Route>
         <Route path="/register" component={RegisterScreen}></Route>
+        <Route path="/forgotPassword" component={ForgotPasswordScreen}></Route>
         <Route path="/userProfile" component={UserProfile}></Route>
         <Route path="/cart" component={CartScreen} />
         <Route path="/admin/user/:id/edit" component={UserEditScreen} />

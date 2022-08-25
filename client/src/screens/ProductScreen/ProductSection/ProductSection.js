@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 
 import CartModal from "../../../components/CartModal/CartModal";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import ProductionQuantityLimitsOutlinedIcon from '@mui/icons-material/ProductionQuantityLimitsOutlined';
+// import ProductionQuantityLimitsOutlinedIcon from '@mui/icons-material/ProductionQuantityLimitsOutlined';
 const ProductSection = ({ product }) => {
   const dispatch = useDispatch();
   const [qty, setQty] = useState(1);

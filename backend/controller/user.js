@@ -1,15 +1,17 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../model/user");
-const VerifyModel = require('../models/verify.model');
+const VerifyModel = require('../model/verify.model');
 
 const generateToken = require("../utils/generateToken");
 const validator = require("validator");
 
-const mailConfig = require('../configs/mail.config');
+const mailConfig = require('../config/mail.config');
 const config = require('../config');
-const helper = require('../helpers');
+const helper = require('../helper');
 
-
+// @desc    Send a verify code
+// @route   POST /api/verify
+// @access  Public
 const postSendVerifyCode = async (req, res) => {
   try {
     const { email } = req.body;

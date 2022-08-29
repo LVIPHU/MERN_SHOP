@@ -37,3 +37,5 @@ const order = [
         "deliveredAt":{"$date":{"$numberLong":"1635231235817"}}
     }
 ]
+
+module.exports = order;

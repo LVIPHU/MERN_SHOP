@@ -29,6 +29,7 @@ const getProducts = asyncHandler(async (req, res) => {
       req.query.colorFilter !== "" &&
       req.query.priceFilter !== ""
     ) {
+      products = fil
       pageProducts = filterProducts(
         products,
         "category",

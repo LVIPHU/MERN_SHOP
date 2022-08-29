@@ -4,7 +4,7 @@ import classes from "../LoginScreen/LoginScreen.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../../actions/userAction";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader";
 import Message from "../../../components/Message";
 const ForgotPasswordScreen = ({ location, history }) => {
@@ -41,13 +41,7 @@ const ForgotPasswordScreen = ({ location, history }) => {
               placeholder="Your Email"
               onChange={(e) => setEmail(e.target.value)}
             />
-            <input
-              type="password"
-              placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <button type="submit">Log in</button>
-            <Link to={""}>Forgot password ?</Link>
+            <button type="submit">SEND MAIL</button>
           </form>
         </div>
       </div>

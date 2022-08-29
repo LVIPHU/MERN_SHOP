@@ -64,6 +64,7 @@ const getRequestById = asyncHandler(async (req, res) => {
 // @access  admin
 const approveUserRequest = asyncHandler(async (req, res) => {
   const request = await Request.findById(req.params.id);
+  request = filter
   if (request) {
     const user = await User.findById(request.user._id);
     const requestItem = await Product.findById(request.product._id)

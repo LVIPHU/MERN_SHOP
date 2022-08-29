@@ -41,7 +41,7 @@ const upload = multer({
 router.post("/upload", upload.single("image"), (req, res) => {
   cloudinary.v2.uploader.upload(
     req.file.path,
-    { folder: "products" },
+    { folder: "shopology" },
     async (err, result) => {
       if (err) console.log(err);
       res.json({ public_id: result.public_id, url: result.url, path: req.file.path });

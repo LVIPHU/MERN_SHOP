@@ -4,12 +4,11 @@ import classes from "../LoginScreen/LoginScreen.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../../actions/userAction";
 import { useEffect } from "react";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader";
 import Message from "../../../components/Message";
 const ForgotPasswordScreen = ({ location, history }) => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const dispatch = useDispatch();
 
   const userLogin = useSelector((state) => state.userLogin);
@@ -25,11 +24,21 @@ const ForgotPasswordScreen = ({ location, history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(login(email, password));
+    // dispatch(login(email, password));
   };
 
   return (
     <Container>
+      <div className={classes.leftSide}>
+          <h3>New to our website?</h3>
+          <p>
+            We will have something right here, but we dont know what we gonna
+            put yet?
+          </p>
+          <Link to={redirect ? `/register?redirect=${redirect}` : "/register"}>
+            Create an Account
+          </Link>
+        </div>
       <div className={classes.wrapper}>
         <div className={classes.rightSide}style={{width: '100%'}}>
           <h4>Change a password</h4>

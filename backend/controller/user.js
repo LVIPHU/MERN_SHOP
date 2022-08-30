@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../model/user");
-const VerifyModel = require('../model/verify.model');
+const Verify = require('../model/verify');
 
 const generateToken = require("../utils/generateToken");
 const validator = require("validator");
@@ -9,56 +9,11 @@ const mailConfig = require('../config/mail.config');
 const config = require('../config');
 const helper = require('../helper');
 
-// @desc    Send a verify code
-// @route   POST /api/verify
-// @access  Public
-const postSendVerifyCode = async (req, res) => {
-  try {
-    const { email } = req.body;
-    //Kiểm tra tài khoản đã tồn tại hay chưa
-    const account = await User.findOne({ email });
-
-    //nếu tồn tại, thông báo lỗi, return
-    if (account) {
-      return res.status(400).json({ message: "Email đã được sử dụng !" });
-    }
-
-    //cấu hình email sẽ gửi
-    const verifyCode = helper.generateVerifyCode(config.numberVerify);
-    const mail = {
-      to: email,
-      subject: 'Mã xác thực tạo tài khoản',
-      html: mailConfig.htmlSignupAccount(verifyCode),
-    };
-
-    //lưu mã vào database để xác thực sau này
-    await VerifyModel.findOneAndDelete({ email });
-    await VerifyModel.create({
-      code: verifyCode,
-      email,
-      dateCreated: Date.now(),
-    });
-
-    //gửi mail
-    const result = await mailConfig.sendEmail(mail);
-
-    //if success
-    if (result) {
-      return res.status(200).json({ message: 'success' });
-    }
-  } catch (error) {
-    return res.status(400).json({
-      message: 'Gửi mã thất bại',
-      error,
-    });
-  }
-};
-
 // @desc    Register a new user
 // @route   POST /api/user
 // @access  Public
 const signup = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, verifyCode } = req.body;
 
   const userExist = await User.findOne({ email });
   if (userExist) {
@@ -74,6 +29,11 @@ const signup = asyncHandler(async (req, res) => {
     throw new Error(
       "At least 8 characters—the more characters, the better. \nA mixture of both uppercase and lowercase letters. A mixture of letters and numbers. Inclusion of at least one special character, e.g., ! @ # ? ]"
     );
+  }
+  // kiểm tra mã xác thực
+  const isVerify = await helper.isVerifyEmail(email, verifyCode);
+  if (!isVerify) {
+    return res.status(400).json({ message: 'Mã xác nhận không hợp lệ !' });
   }
 
   const user = await User.create({
@@ -92,6 +52,8 @@ const signup = asyncHandler(async (req, res) => {
       shippingAddress: user.shippingAddress,
       token: generateToken(user._id),
     });
+    // xoá mã xác nhận
+    await Verify.deleteOne({ email });
   } else {
     res.status(400);
     throw new Error("Invalid user data");
@@ -255,6 +217,128 @@ const updateUserbyId = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Send a verify code
+// @route   POST /api/verify
+// @access  Public
+const postSendVerifyCode = async (req, res) => {
+  try {
+    const { email } = req.body;
+    //Kiểm tra tài khoản đã tồn tại hay chưa
+    const account = await User.findOne({ email });
+
+    //nếu tồn tại, thông báo lỗi, return
+    if (account) {
+      return res.status(400).json({ message: "Email đã được sử dụng !" });
+    }
+
+    //cấu hình email sẽ gửi
+    const verifyCode = helper.generateVerifyCode(config.numberVerify);
+    const mail = {
+      to: email,
+      subject: 'Mã xác thực tạo tài khoản',
+      html: mailConfig.htmlSignupAccount(verifyCode),
+    };
+
+    //lưu mã vào database để xác thực sau này
+    await Verify.findOneAndDelete({ email });
+    await Verify.create({
+      code: verifyCode,
+      email,
+      dateCreated: Date.now(),
+    });
+
+    //gửi mail
+    const result = await mailConfig.sendEmail(mail);
+
+    //if success
+    if (result) {
+      return res.status(200).json({ message: 'success' });
+    }
+  } catch (error) {
+    return res.status(400).json({
+      message: 'Send verify code failed !',
+      error,
+    });
+  }
+};
+
+//fn: Gửi mã xác thực để lấy lại mật khẩu
+const postSendCodeForgotPW = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    //Kiểm tra tài khoản đã tồn tại hay chưa
+    const account = await User.findOne({ email });
+
+    //nếu tồn tại, thông báo lỗi, return
+    if (!account)
+      return res.status(406).json({ message: 'Tài khoản không tồn tại' });
+
+    //cấu hình email sẽ gửi
+    const verifyCode = helper.generateVerifyCode(constants.NUMBER_VERIFY_CODE);
+    const mail = {
+      to: email,
+      subject: 'Thay đổi mật khẩu',
+      html: mailConfig.htmlResetPassword(verifyCode),
+    };
+
+    //lưu mã vào database để xác thực sau này
+    await Verify.findOneAndDelete({ email });
+    await Verify.create({
+      code: verifyCode,
+      email,
+      dateCreated: Date.now(),
+    });
+
+    //gửi mail
+    const result = await mailConfig.sendEmail(mail);
+
+    //if success
+    if (result) {
+      return res.status(200).json({ message: 'success' });
+    }
+  } catch (error) {
+    return res.status(409).json({
+      message: 'Gửi mã thấy bại',
+      error,
+    });
+  }
+};
+
+//fn: reset password
+const postResetPassword = async (req, res, next) => {
+  try {
+    const { email, password, verifyCode } = req.body.account;
+
+    // kiểm tra mã xác thực
+    const isVerify = await helper.isVerifyEmail(email, verifyCode);
+
+    if (!isVerify) {
+      return res.status(401).json({ message: 'Mã xác nhận không hợp lệ.' });
+    }
+    //check userName -> hash new password -> change password
+    const hashPassword = await bcrypt.hash(
+      password,
+      parseInt(process.env.SALT_ROUND),
+    );
+
+    const response = await User.updateOne(
+      { email},
+      { password: hashPassword },
+    );
+
+    //check response -> return client
+    if (response.n) {
+      //xoá mã xác nhận
+      await Verify.deleteOne({ email });
+      return res.status(200).json({ message: 'Thay đổi mật khẩu thành công' });
+    } else {
+      return res.status(409).json({ message: 'Thay đổi mật khẩu thất bại' });
+    }
+  } catch (error) {
+    return res.status(409).json({ message: 'Thay đổi mật khẩu thất bại' });
+  }
+};
+
 const controller = {
   getUsers,
   getUserbyId,
@@ -264,6 +348,7 @@ const controller = {
   getUserProfile,
   updateUserprofile,
   updateUserbyId,
+  postSendVerifyCode,
 };
 
 module.exports = controller;

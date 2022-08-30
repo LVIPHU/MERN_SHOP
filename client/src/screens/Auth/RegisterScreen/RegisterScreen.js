@@ -68,7 +68,7 @@ const RegisterScreen = ({ location, history }) => {
     if (password !== confirmPassword) {
       setMessage("Password do not match");
     } else {
-      dispatch(register(username, email, password));
+      dispatch(register(username, email, password, verifyCode));
     }
   };
   return (
@@ -93,11 +93,13 @@ const RegisterScreen = ({ location, history }) => {
             <input
               type="text"
               placeholder="Username"
+              autocomplete="nope"
               onChange={(e) => setUserName(e.target.value)}
             />
             <input
               type="email"
               placeholder="Email"
+              autocomplete="nope"
               onChange={(e) => setEmail(e.target.value)}
             />
             {isSending ? (
@@ -115,16 +117,19 @@ const RegisterScreen = ({ location, history }) => {
             <input
               type="text"
               placeholder="Verify Code"
+              autocomplete="nope"
               onChange={(e) => setVerifyCode(e.target.value)}
             />
             <input
               type="password"
               placeholder="Password"
+              autocomplete="nope"
               onChange={(e) => setPassword(e.target.value)}
             />
             <input
               type="password"
               placeholder="Confirm Password"
+              autocomplete="nope"
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
             <button type="submit">Register</button>

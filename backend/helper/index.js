@@ -1,4 +1,5 @@
 const config = require("../config");
+const Verify = require("../model/verify")
 
 // create verify code
 const generateVerifyCode = (numberOfDigits) => {
@@ -16,7 +17,7 @@ const generateVerifyCode = (numberOfDigits) => {
   // Check time of verify code
   const isVerifyEmail = async (email, verifyCode) => {
     try {
-      const res = await VerifyModel.findOne({ email });
+      const res = await Verify.findOne({ email });
       if (res) {
         const { code, dateCreated } = res;
         if (code !== verifyCode) return false;

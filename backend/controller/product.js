@@ -1,5 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Product = require("../model/product");
+const Brand = require("../model/brand");
+const Category = require("../model/catelogy");
 
 const getProductsForSeller = asyncHandler(async (req, res) => {
   const user = req.user;

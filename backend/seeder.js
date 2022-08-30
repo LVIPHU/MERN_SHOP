@@ -2,10 +2,16 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const colors = require("colors");
 const users = require("./data/users");
+const brands = require("./data/brands");
+const catelogies = require("./data/catelogies")
 const products = require("./data/products");
+
 const User = require("./model/userModel");
+const Catelogy = require("./model/catelogy");
+const Brands = require("./model/brand");
 const Product = require("./model/productModel");
 const Order = require("./model/orderModel");
+
 const connectDB = require("./db/index");
 
 dotenv.config();
@@ -15,6 +21,8 @@ const importData = async () => {
   try {
     await Order.deleteMany();
     await Product.deleteMany();
+    await Brands.deleteMany();
+    await Catelogy.deleteMany();
     await User.deleteMany();
 
     // Will fix these thing latter
@@ -38,6 +46,8 @@ const destroyData = async () => {
   try {
     await Order.deleteMany();
     await Product.deleteMany();
+    await Brands.deleteMany();
+    await Catelogy.deleteMany();
     await User.deleteMany();
 
     console.log("Data Destroy!".red.inverse);

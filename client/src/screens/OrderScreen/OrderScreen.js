@@ -72,9 +72,9 @@ const OrderScreen = ({ match, history }) => {
   }, [dispatch, orderId, order, sucessPay, history, userInfo]);
 
   if (!loading) {
-    const addDecimal = (num) => {
-      return (Math.round(num * 100) / 100).toFixed(2);
-    };
+      const addDecimal = (num) => {
+        return (Math.round(num * 100) / 100).toFixed(2);
+      };
     // Caculate price
     order.itemPrices = addDecimal(
       order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
@@ -109,7 +109,7 @@ const OrderScreen = ({ match, history }) => {
                 </p>
                 <p>
                   <strong>Email: </strong>{" "}
-                  <a href={`mailto:${order.user.email}`}>{order.user.email}</a>
+                  <a href={`mailto:${order?.user?.email}`}>{order?.user?.email}</a>
                 </p>
                 <p>
                   <strong>Phone number: </strong>

@@ -236,7 +236,7 @@ const postSendVerifyCode = asyncHandler(async (req, res) => {
     const verifyCode = helper.generateVerifyCode(config.numberVerify);
     const mail = {
       to: email,
-      subject: 'Mã xác thực tạo tài khoản',
+      subject: 'Verify code',
       html: mailConfig.htmlSignupAccount(verifyCode),
     };
 
@@ -265,7 +265,7 @@ const postSendVerifyCode = asyncHandler(async (req, res) => {
 // @desc    Send a verify code forgot password
 // @route   POST /api/users/verify/forgot
 // @access  Public
-const postSendCodeForgotPW = asyncHandler(async (req, res, next) => {
+const postSendCodeForgotPW = asyncHandler(async (req, res) => {
   try {
     const { email } = req.body;
     //Kiểm tra tài khoản đã tồn tại hay chưa
@@ -300,7 +300,7 @@ const postSendCodeForgotPW = asyncHandler(async (req, res, next) => {
     }
   } catch (error) {
     return res.status(409).json({
-      message: 'Gửi mã thấy bại',
+      message: 'Send verify code failed',
       error,
     });
   }

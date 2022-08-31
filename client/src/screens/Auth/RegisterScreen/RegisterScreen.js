@@ -47,7 +47,6 @@ const RegisterScreen = ({ location, history }) => {
     if (password !== confirmPassword) {
       setMessage("Password do not match");
     } else {
-      console.log(password);
       dispatch(register(username, email, password, verifyCode));
     }
   };
@@ -68,6 +67,7 @@ const RegisterScreen = ({ location, history }) => {
           <h4>Create an account</h4>
           {error && <Message variant="danger">{error}</Message>}
           {sendErr && <Message variant="danger">{sendErr}</Message>}
+          {message && <Message variant="danger">{message}</Message>}
           {success && <Message variant="success">"Send success please check your email"</Message>}
           {loading && <Loader></Loader>}
           <form onSubmit={submitHandler}>

@@ -1,11 +1,10 @@
-const nodemailer = require('nodemailer');
-const config = require('../config/index');
+const nodemailer = require("nodemailer");
+const config = require("../config/index");
 
 // configure option
 const option = {
-  host: 'smtp.gmail.com',
+  host: "smtp.gmail.com",
   port: 465,
-  domain: 'gmail.com',
   secure: true,
   auth: {
     user: process.env.NODE_MAILER_USER || config.email.address,
@@ -43,7 +42,7 @@ const sendEmail = async ({ to, subject, text, html, ...rest }) => {
       }
     }
   } catch (err) {
-    console.error('ERROR MAILER: ', err);
+    console.error("ERROR MAILER: ", err);
     return false;
   }
 };
@@ -51,6 +50,7 @@ const sendEmail = async ({ to, subject, text, html, ...rest }) => {
 const headerHtmlMail = `<h1 style="color: #4c649b; font-size: 48px; border-bottom: solid 2px #ccc;padding-bottom: 10px">
 Shopology<br />
     </h1>`;
+
 const footerHtmlVerifyMail = `<h3 style="color: red">
         Chú ý: Không đưa mã này cho bất kỳ ai,
         có thể dẫn đến mất tài khoản.<br />
@@ -103,9 +103,143 @@ const htmlWarningLogin = () => {
   </div>`;
 };
 
+const htmlBill = (order, email) => {
+  const addDecimal = (num) => {
+    return Math.round(num * 100) / 100;
+  };
+  // Caculate price
+  order.itemPrices = addDecimal(
+    order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
+  );
+
+  return `<div style="background-color: #F6F6F6; margin: 0;padding: 0;">
+    <div style="width: 80%;
+    margin-right: auto;
+    margin-left: auto;">
+        <div style="background-color: #0d1033; padding: 10px 40px;">
+            <div style="display: flex; flex-wrap: wrap;">
+                <div style="width: 50%; flex: 0 0 auto;">
+                    <h1 style="color: #fff; margin: 0; padding: 0;">SHOPOLOGY</h1>
+                </div>
+                <div style="width: 50%; flex: 0 0 auto;">
+                    <div style="float: right; text-align: right;">
+                        <p style="color: #fff">97 Man Thiện, Phường Hiệp Phú, Thủ Đức, TP. Hồ Chí Minh</p>
+                        <p style="color: #fff">shopology.lvp@gmail.com</p>
+                        <p style="color: #fff">+84 528307775</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style=" padding: 16px; border: 1px solid gray;">
+            <div style="display: flex; flex-wrap: wrap;">
+                <div style="width: 50%; flex: 0 0 auto;">
+                    <h2 style="font-size: 20px; margin-bottom: 08px;">Invoice No. ${
+                      order._id
+                    }</h2>
+                    <p style="color: #262626; margin-bottom: 05px;">Tracking No. Shopology </p>
+                    <p style="color: #262626; margin-bottom: 05px;">Order Date: ${
+                      order.createdAt
+                    } </p>
+                    <p style="color: #262626; margin-bottom: 05px;">Email Address: ${email} </p>
+                </div>
+                <div style="width: 50%; flex: 0 0 auto;">
+                    <p style="color: #262626; margin-bottom: 05px;">Full Name: ${
+                      order.shippingAddress.fullname
+                    } </p>
+                    <p style="color: #262626; margin-bottom: 05px;">Address: ${
+                      order.shippingAddress.address +
+                      ", Ward " +
+                      order.shippingAddress.city +
+                      ", District " +
+                      order.shippingAddress.postalCode
+                    } </p>
+                    <p style="color: #262626; margin-bottom: 05px;">Phone Number: ${
+                      order.shippingAddress.phone
+                    } </p>
+                    <p style="color: #262626; margin-bottom: 05px;">City: ${
+                      order.shippingAddress.state
+                    } </p>
+                </div>
+            </div>
+        </div>
+
+        <div style=" padding: 16px; border: 1px solid gray;">
+            <h3 style="font-size: 20px; margin-bottom: 08px;">Ordered Items</h3>
+            <br>
+            <table style="box-shadow: 0px 0px 5px 0.5px gray;  background-color: #fff; width: 100%; border-collapse: collapse">
+                <thead>
+                    <tr style=" border: 1px solid #111; background-color: #f2f2f2;">
+                        <th style="border: 1px solid #dee2e6;">Product</th>
+                        <th style="width: 20%; border: 1px solid #dee2e6;">Price</th>
+                        <th style="width: 20%; border: 1px solid #dee2e6;">Quantity</th>
+                        <th style="width: 20%; border: 1px solid #dee2e6;">Grandtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                ${order.orderItems.map(
+                  (item, index) =>
+                    `<tr key={${index}}>
+                      <td style="border: 1px solid #dee2e6; vertical-align: middle !important; text-align: center; padding-top: 08px; padding-bottom: 08px;">${
+                        item.name
+                      }</td>
+                      <td style="border: 1px solid #dee2e6; vertical-align: middle !important; text-align: center; padding-top: 08px; padding-bottom: 08px;">${
+                        item.price
+                      }</td>
+                      <td style="border: 1px solid #dee2e6; vertical-align: middle !important; text-align: center; padding-top: 08px; padding-bottom: 08px;">${
+                        item.qty
+                      }</td>
+                      <td style="border: 1px solid #dee2e6; vertical-align: middle !important; text-align: center; padding-top: 08px; padding-bottom: 08px;">${
+                        item.price * item.qty
+                      }</td>
+                  </tr>`
+                )}
+                    <tr>
+                        <td colspan="3" style="text-align: end; border: 1px solid #dee2e6; vertical-align: middle !important; text-align: center; padding-top: 08px; padding-bottom: 08px;">Sub Total</td>
+                        <td style="border: 1px solid #dee2e6; vertical-align: middle !important; text-align: center; padding-top: 08px; padding-bottom: 08px;">${
+                          order.itemPrices
+                        }</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="text-align: end; border: 1px solid #dee2e6; vertical-align: middle !important; text-align: center; padding-top: 08px; padding-bottom: 08px;">Shipping</td>
+                        <td style="border: 1px solid #dee2e6; vertical-align: middle !important; text-align: center; padding-top: 08px; padding-bottom: 08px;">${
+                          order.shippingPrice
+                        }</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="text-align: end; border: 1px solid #dee2e6; vertical-align: middle !important; text-align: center; padding-top: 08px; padding-bottom: 08px;">Tax Total</td>
+                        <td style="border: 1px solid #dee2e6; vertical-align: middle !important; text-align: center;" padding-top: 08px; padding-bottom: 08px;>${
+                          order.taxPrice
+                        }</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="text-align: end; border: 1px solid #dee2e6; vertical-align: middle !important; text-align: center; padding-top: 08px; padding-bottom: 08px;">Grand Total</td>
+                        <td style="border: 1px solid #dee2e6; vertical-align: middle !important; text-align: center; padding-top: 08px; padding-bottom: 08px;">${
+                          order.totalPrice
+                        }</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <h3 style="font-size: 20px; margin-bottom: 08px;">Payment Status: Paid</h3>
+            <h3 style="font-size: 20px; margin-bottom: 08px;">Payment Mode: ${
+              order.paymentMethod
+            }</h3>
+        </div>
+
+        <div style=" padding: 16px; border: 1px solid gray;">
+            <p>&copy; Copyright 2021 - Shopology. All rights reserved. 
+                <a href="http://localhost:3000/" style="float: right">www.shopology.com</a>
+            </p>
+        </div>      
+    </div>      
+  </div>`;
+};
+
 module.exports = {
   sendEmail,
   htmlSignupAccount,
   htmlResetPassword,
   htmlWarningLogin,
+  htmlBill,
 };

@@ -29,7 +29,7 @@ const sendVerifyCode = (email) => async (dispatch) => {
   }
 };
 
-const changePasswordCode = (password) => async (dispatch) => {
+const changePasswordCode = ( email, password, verifyCode ) => async (dispatch) => {
   try {
     dispatch({
       type: constants.CHANGE_PASSWORD_REQUEST,
@@ -41,7 +41,7 @@ const changePasswordCode = (password) => async (dispatch) => {
       },
     };
 
-    const { data } = await axios.post("/api/user/reset-pw", { password }, config);
+    const { data } = await axios.post("/api/user/reset-pw", { email, password, verifyCode }, config);
     console.log(data);
     dispatch({
       type: constants.CHANGE_PASSWORD_SUCCESS,

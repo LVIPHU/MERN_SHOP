@@ -1,6 +1,9 @@
 const asyncHandler = require("express-async-handler");
 const Order = require("../model/order");
 const Product = require("../model/product");
+const User = require("../model/user");
+const mailConfig = require('../config/mail.config');
+
 
 // @desc    Create new order
 // @route   POST /api/order
@@ -64,7 +67,6 @@ const getOrderById = asyncHandler(async (req, res) => {
 // @access  Private
 const updateOrderToPaid = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
-
   if (order) {
     order.isPaid = true;
     order.paidAt = Date.now();
@@ -82,7 +84,14 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
       tempProduct.countInStock -= orderItems[i].qty;
       const updatedPro = await tempProduct.save();
     }
-
+    const user = await User.findById(req.user._id);
+    const email = user.email;
+    const mail = {
+      to: email,
+      subject: 'Send Invoice',
+      html: mailConfig.htmlBill(order, email),
+    };
+    const result = await mailConfig.sendEmail(mail);
     res.json(updatedOrder);
   } else {
     res.status(404);

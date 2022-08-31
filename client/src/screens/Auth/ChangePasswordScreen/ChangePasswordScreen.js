@@ -2,14 +2,16 @@ import { useState } from "react";
 import { Container } from "react-bootstrap";
 import classes from "../LoginScreen/LoginScreen.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../../actions/userAction";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader";
 import Message from "../../../components/Message";
+import actions from './../../../actions/account';
+
 const ForgotPasswordScreen = ({ location, history }) => {
-  const [email, setEmail] = useState("");
   const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [passwword, setPassword] = useState("");
 
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, error, userInfo } = userLogin;
@@ -24,12 +26,14 @@ const ForgotPasswordScreen = ({ location, history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    // dispatch(login(email, password));
+    dispatch(actions.changePasswordCode(email));
   };
 
   return (
     <Container>
-      <div className={classes.leftSide}>
+      
+      <div className={classes.wrapper}>
+        <div className={classes.leftSide}>
           <h3>New to our website?</h3>
           <p>
             We will have something right here, but we dont know what we gonna
@@ -39,8 +43,7 @@ const ForgotPasswordScreen = ({ location, history }) => {
             Create an Account
           </Link>
         </div>
-      <div className={classes.wrapper}>
-        <div className={classes.rightSide}style={{width: '100%'}}>
+        <div className={classes.rightSide}>
           <h4>Change a password</h4>
           {loading && <Loader />}
           <form onSubmit={submitHandler}>

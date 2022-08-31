@@ -174,10 +174,11 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
 
 export const logout = () => (dispatch) => {
   localStorage.removeItem("userInfo");
-  dispatch({ type: USER_LOGOUT });
+
   dispatch({ type: USER_DETAIL_RESET });
   dispatch({ type: CART_RESET });
   dispatch({ type: USER_LIST_RESET });
+  dispatch({ type: USER_LOGOUT });
 };
 
 export const listUsers = () => async (dispatch, getState) => {

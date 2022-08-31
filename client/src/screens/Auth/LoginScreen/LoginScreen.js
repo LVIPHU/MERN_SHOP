@@ -57,7 +57,7 @@ const LoginScreen = ({ location, history }) => {
               onChange={(e) => setPassword(e.target.value)}
             />
             <button type="submit">Log in</button>
-            <Link to={"/forgotPassword"}>Forgot password ?</Link>
+            <Link to={"/ChangePassword"}>Forgot password ?</Link>
           </form>
         </div>
       </div>

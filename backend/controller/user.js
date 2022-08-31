@@ -4,6 +4,7 @@ const Verify = require('../model/verify');
 
 const generateToken = require("../utils/generateToken");
 const validator = require("validator");
+const bcrypt = require("bcryptjs");
 
 const mailConfig = require('../config/mail.config');
 const config = require('../config');
@@ -218,11 +219,11 @@ const updateUserbyId = asyncHandler(async (req, res) => {
 });
 
 // @desc    Send a verify code
-// @route   POST /api/verify
+// @route   POST /api/user/verify
 // @access  Public
-const postSendVerifyCode = async (req, res) => {
-  try {
+const postSendVerifyCode = asyncHandler(async (req, res) => {
     const { email } = req.body;
+    console.log(email);
     //Kiểm tra tài khoản đã tồn tại hay chưa
     const account = await User.findOne({ email });
 
@@ -252,18 +253,19 @@ const postSendVerifyCode = async (req, res) => {
 
     //if success
     if (result) {
-      return res.status(200).json({ message: 'success' });
+      res.status(200).json(result);
     }
-  } catch (error) {
-    return res.status(400).json({
-      message: 'Send verify code failed !',
-      error,
-    });
+  else {
+      res.status(400);
+        throw new error('Send verify code failed !');
+      
   }
-};
+});
 
-//fn: Gửi mã xác thực để lấy lại mật khẩu
-const postSendCodeForgotPW = async (req, res, next) => {
+// @desc    Send a verify code forgot password
+// @route   POST /api/users/verify/forgot
+// @access  Public
+const postSendCodeForgotPW = asyncHandler(async (req, res, next) => {
   try {
     const { email } = req.body;
     //Kiểm tra tài khoản đã tồn tại hay chưa
@@ -274,7 +276,7 @@ const postSendCodeForgotPW = async (req, res, next) => {
       return res.status(406).json({ message: 'Tài khoản không tồn tại' });
 
     //cấu hình email sẽ gửi
-    const verifyCode = helper.generateVerifyCode(constants.NUMBER_VERIFY_CODE);
+    const verifyCode = helper.generateVerifyCode(config.numberVerify);
     const mail = {
       to: email,
       subject: 'Thay đổi mật khẩu',
@@ -302,10 +304,12 @@ const postSendCodeForgotPW = async (req, res, next) => {
       error,
     });
   }
-};
+});
 
-//fn: reset password
-const postResetPassword = async (req, res, next) => {
+// @desc    Send a verify code forgot password
+// @route   POST /api/users/reset-pw
+// @access  private
+const postResetPassword = asyncHandler(async (req, res) => {
   try {
     const { email, password, verifyCode } = req.body.account;
 
@@ -316,13 +320,14 @@ const postResetPassword = async (req, res, next) => {
       return res.status(401).json({ message: 'Mã xác nhận không hợp lệ.' });
     }
     //check userName -> hash new password -> change password
+    const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(
       password,
-      parseInt(process.env.SALT_ROUND),
+      salt
     );
 
     const response = await User.updateOne(
-      { email},
+      { email },
       { password: hashPassword },
     );
 
@@ -337,18 +342,21 @@ const postResetPassword = async (req, res, next) => {
   } catch (error) {
     return res.status(409).json({ message: 'Thay đổi mật khẩu thất bại' });
   }
-};
+});
 
 const controller = {
   getUsers,
   getUserbyId,
   deleteUser,
-  login,
-  signup,
   getUserProfile,
   updateUserprofile,
   updateUserbyId,
+  // account
+  login,
+  signup,
   postSendVerifyCode,
+  postSendCodeForgotPW,
+  postResetPassword,
 };
 
 module.exports = controller;

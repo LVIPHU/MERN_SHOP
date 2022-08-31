@@ -9,6 +9,7 @@ const connectDB = require("./config/mongo.config");
 
 const { notFound, errorHandler } = require("./middlewares/errorHandlers");
 
+const ImportData = require("./DataImport.js");
 const brandRoutes = require("./routes/brand");
 const categoryRoutes = require("./routes/catelogy");
 const productRoutes = require("./routes/product");
@@ -32,6 +33,7 @@ app.use(express.json());
 app.use(cors(corsConfig));
 
 // Main Routes
+app.use("/api/import", ImportData);
 app.use("/api/brands", brandRoutes);
 app.use("/api/catelogies", categoryRoutes)
 app.use("/api/products", productRoutes);

@@ -5,9 +5,7 @@ export const catelogyAllReducer = (state = { catelogies: [] }, action) => {
       case constants.CATELOGY_ALL_REQUEST:
         return { loading: true, catelogies: [] };
       case constants.CATELOGY_ALL_SUCCESS:
-        return {
-          
-        };
+        return { loading: false, catelogies: action.payload };
       case constants.CATELOGY_ALL_FAIL:
         return { loading: false, error: action.payload };
       default:

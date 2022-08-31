@@ -12,6 +12,7 @@ import {
   productCreateReducer,
   productForSellerReducer,
 } from "./reducers/productReducers";
+
 import {
   userLoginReducer,
   userRegisterReducer,
@@ -21,7 +22,15 @@ import {
   userDeleteReducer,
   userUpdateReducer,
 } from "./reducers/userReducer";
+
+import {
+  sendVerifyCodeReducer,
+  changePasswordReducer,
+  forgotPasswordReducer,
+} from "./reducers/account"
+
 import { cartReducer } from "./reducers/cartReducer";
+
 import {
   orderCreateReducer,
   orderDetailsReducer,
@@ -30,6 +39,7 @@ import {
   orderListsReducer,
   orderDeliverReducer,
 } from "./reducers/orderReducer";
+
 import {
   requestSellerReducer,
   getRequestSellerReducer,
@@ -43,6 +53,13 @@ import {
   uploadDecrepion,
   deleteDecrepion, 
 } from "./reducers/upload";
+
+const resetEnhanser = (rootReducer) => (state, action) => {
+  if (action.type !== "USER_LOGOUT") return rootReducer(state, action);
+  const newState = rootReducer(undefined, {});
+  newState.router = state.router;
+  return newState;
+};
 
 const userInfoFromStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
@@ -72,6 +89,11 @@ const reducer = combineReducers({
   userList: userListReducer,
   userDelete: userDeleteReducer,
   userUpdate: userUpdateReducer,
+
+  // Account reducer
+  sendVerifyCode: sendVerifyCodeReducer,
+  changePassword: changePasswordReducer,
+  forgotPassword: forgotPasswordReducer,
 
   // Cart reducer
   cart: cartReducer,
@@ -108,7 +130,7 @@ const initialState = {
 const middleware = [thunk];
 
 const store = createStore(
-  reducer,
+  resetEnhanser(reducer),
   initialState,
   composeWithDevTools(applyMiddleware(...middleware))
 );

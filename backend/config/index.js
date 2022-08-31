@@ -24,7 +24,7 @@ const configs = {
     secretToken: "000000_BI_MAT_DONG_TROI_00000",
     email: {
       address: "shopology.lvp@gmail.com",
-      password: "phu357159",
+      password: "crjzvkbhrnfuaciy",
     },
     cloudinary: { 
       name: 'lviphu', 

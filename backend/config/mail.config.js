@@ -5,11 +5,13 @@ const config = require('../config/index');
 const option = {
   host: 'smtp.gmail.com',
   port: 465,
+  domain: 'gmail.com',
   secure: true,
   auth: {
     user: process.env.NODE_MAILER_USER || config.email.address,
     pass: process.env.NODE_MAILER_PASSWORD || config.email.password,
   },
+  authentication: 'plain'
 };
 
 const transporter = nodemailer.createTransport(option);
@@ -22,7 +24,7 @@ const sendEmail = async ({ to, subject, text, html, ...rest }) => {
       //config mail
       const mail = {
         //sender access
-        from: '"Shopology" <no-reply@accounts.ttb-store.com>',
+        from: '"Shopology" <no-reply@accounts.shopology.com>',
         //receiver access
         to,
         //subject
@@ -47,7 +49,7 @@ const sendEmail = async ({ to, subject, text, html, ...rest }) => {
 };
 
 const headerHtmlMail = `<h1 style="color: #4c649b; font-size: 48px; border-bottom: solid 2px #ccc;padding-bottom: 10px">
-      TTB Store<br />
+Shopology<br />
     </h1>`;
 const footerHtmlVerifyMail = `<h3 style="color: red">
         Chú ý: Không đưa mã này cho bất kỳ ai,
@@ -63,7 +65,7 @@ const htmlSignupAccount = (token) => {
     <h2 style="padding: 10px 0; margin-bottom: 10px;">
         Xin chào anh (chị),<br />
         Mã xác nhận đăng ký tài khoản cho website Shopology của anh (chị).<br />
-        Cảm ơn vì đã ghé thăm TTB Store <3
+        Cảm ơn vì đã ghé thăm Shopology <3
     </h2>
     <h3 style="background: #eee;padding: 10px;">
       <i><b>${token}</b></i>
@@ -78,7 +80,7 @@ const htmlResetPassword = (token) => {
     ${headerHtmlMail}
     <h2 style="padding: 10px 0; margin-bottom: 10px;">
         Xin chào anh (chị),<br />
-        Cửa hàng TTB Store đã nhận được yêu cầu lấy lại mật khẩu từ quý khách.<br />
+        Cửa hàng Shopology đã nhận được yêu cầu lấy lại mật khẩu từ quý khách.<br />
         Đừng lo lắng, hãy nhập mã này để khôi phục:
     </h2>
     <h1 style="background: #eee;padding: 10px;">

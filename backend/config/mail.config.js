@@ -5,6 +5,7 @@ const config = require("../config/index");
 const option = {
   host: "smtp.gmail.com",
   port: 465,
+  domain: "gmail.com",
   secure: true,
   auth: {
     user: process.env.NODE_MAILER_USER || config.email.address,

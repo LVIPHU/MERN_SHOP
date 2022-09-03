@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Product = require("../model/product");
 const Brand = require("../model/brand");
-const Category = require("../model/catelogy");
+const Category = require("../model/category");
 
 const getProductsForSeller = asyncHandler(async (req, res) => {
   const user = req.user;
@@ -343,8 +343,18 @@ const createProductReview = asyncHandler(async (req, res) => {
 // @access  Prive/admin
 const deleteProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
-
   if (product) {
+
+    const brand = await Brand.findOne(product.brand);
+    const newProducts =  brand.products.filter(item => item !== product._id);
+    brand.products = newProducts;
+    await brand.save();
+    
+    const Category = await Category.findOne(product.category);
+    const newProducts1 =  Category.products.filter(item => item !== product._id);
+    Category.products = newProducts1;
+    await Category.save();
+
     await product.remove();
     res.json({ message: "Product Remove!" });
   } else {
@@ -398,6 +408,12 @@ const createProduct = asyncHandler(async (req, res) => {
     category,
     description,
   });
+
+  const tempBrand = await Brand.findOne({ brand });
+  tempBrand.products.push(product._id);
+
+  const tempCategory = await Category.findOne({ Category });
+  tempCategory.products.push(product._id);
 
   const createdProduct = await product.save();
   res.status(201).json(createdProduct);

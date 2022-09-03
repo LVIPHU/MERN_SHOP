@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 
-const catelogySchema = mongoose.Schema(
+const { Schema } = mongoose;
+mongoose.Promise = global.Promise;
+
+const categorySchema = new Schema(
   {
     name: {
       type: String,
@@ -34,6 +37,6 @@ const catelogySchema = mongoose.Schema(
   }
 );
 
-const Catelogy = mongoose.model("Catelogy", catelogySchema);
+const Category = mongoose.models.Category || mongoose.model("Category", categorySchema);
 
-module.exports = Catelogy;
+module.exports = Category;

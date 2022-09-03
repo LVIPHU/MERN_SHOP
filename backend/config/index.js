@@ -4,7 +4,7 @@ const path = require("path");
 dotenv.config();
 
 const env = process.env.NODE_ENV || "development";
-const APP_NAME = process.env.APP_NAME || "ALPINE";
+const APP_NAME = process.env.APP_NAME || "Shopology";
 const USER = "LVIPHU";
 const DB_PASSWORD = "1234";
 const configs = {

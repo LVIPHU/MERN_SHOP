@@ -11,7 +11,7 @@ const { notFound, errorHandler } = require("./middlewares/errorHandlers");
 
 const ImportData = require("./DataImport.js");
 const brandRoutes = require("./routes/brand");
-const categoryRoutes = require("./routes/catelogy");
+const categoryRoutes = require("./routes/category");
 const productRoutes = require("./routes/product");
 const userRoutes = require("./routes/user");
 const orderRoutes = require("./routes/order");
@@ -35,7 +35,7 @@ app.use(cors(corsConfig));
 // Main Routes
 app.use("/api/import", ImportData);
 app.use("/api/brands", brandRoutes);
-app.use("/api/catelogies", categoryRoutes)
+app.use("/api/categories", categoryRoutes)
 app.use("/api/products", productRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/order", orderRoutes);

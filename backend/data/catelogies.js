@@ -1,4 +1,4 @@
-const catelogies = [
+const categories = [
     {
         name: "T-Shirts",
         image: {
@@ -25,4 +25,4 @@ const catelogies = [
     }
 ];
 
-module.exports = catelogies;
+module.exports = categories;

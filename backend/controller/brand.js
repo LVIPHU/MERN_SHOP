@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Brand = require("../model/brand");
+const Product = require("../model/product");
 
 // @desc    Get all brands
 // @route   GET /api/brands/
@@ -50,6 +51,12 @@ const updatedBrand = asyncHandler(async (req, res) => {
     const brand = await Brand.findById(req.params.id);
   
     if (brand) {
+      if(brand.name !== name) {
+        let queryObject= {brand: brand.name};
+        let newName = {$set: {brand: name} };
+        await Product.updateMany(queryObject, newName);
+      }
+
       brand.name = name;
       brand.image.public_id = image.public_id;
       brand.image.url = image.url;
@@ -68,7 +75,7 @@ const updatedBrand = asyncHandler(async (req, res) => {
 // @access  Prive/admin
 const deleteBrand = asyncHandler(async (req, res) => {
     const brand = await Brand.findById(req.params.id);
-  
+    
     if (brand && (brand.products.length === 0)) {
       await brand.remove();
       res.json({ message: "Brand Remove!" });

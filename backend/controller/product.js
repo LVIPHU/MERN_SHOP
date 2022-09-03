@@ -373,6 +373,28 @@ const updatedProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
 
   if (product) {
+    if (product.brand !== brand) {
+      const oldBrand = await Brand.findOne(product.brand);
+      const newProducts =  oldBrand.products.filter(item => item !== product._id);
+      oldBrand.products = newProducts;
+      await oldBrand.save();
+
+      const newBrand = await Brand.findOne({ brand });
+      newBrand.products.push(product._id);
+      await newBrand.save();
+    }
+
+    if (product.category !== category) {
+      const oldCategory = await Category.findOne(product.category);
+      const newProducts1 =  oldCategory.products.filter(item => item !== product._id);
+      oldCategory.products = newProducts1;
+      await oldCategory.save();
+
+      const newCategory = await Category.findOne({ Category });
+      newCategory.products.push(product._id);
+      await newCategory.save();
+    }
+
     product.name = name;
     product.price = price;
     product.description = description;
@@ -411,9 +433,11 @@ const createProduct = asyncHandler(async (req, res) => {
 
   const tempBrand = await Brand.findOne({ brand });
   tempBrand.products.push(product._id);
+  await tempBrand.save();
 
   const tempCategory = await Category.findOne({ Category });
   tempCategory.products.push(product._id);
+  await tempCategory.save();
 
   const createdProduct = await product.save();
   res.status(201).json(createdProduct);

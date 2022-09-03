@@ -18,7 +18,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const ProductEditScreen = ({ match, history }) => {
   const productId = match.params.id;
-
+  const dispatch = useDispatch();
+  
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [image, setImage] = useState("");
@@ -28,7 +29,6 @@ const ProductEditScreen = ({ match, history }) => {
   const [uploading, setUploading] = useState(false);
   const [uploadingDesc, setUploadingDesc] = useState(false);
 
-  const dispatch = useDispatch();
 
   const productDetail = useSelector((state) => state.productDetail);
   const { loading, error, product } = productDetail;

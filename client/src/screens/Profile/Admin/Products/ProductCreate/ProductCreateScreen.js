@@ -7,7 +7,6 @@ import {
   Button,
   Row,
   Col,
-  Image,
   Card,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,8 +17,6 @@ import { PRODUCT_CREATE_RESET } from "../../../../../constants/productConstants"
 import DropNotif from "../../../../../components/Modal/Modal";
 import MarkdownEditor from "../../../../../components/TextEditor/MarkdownEditor";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-
-//import actions from "../../../../actions/upload";
 
 const ProductCreateScreen = ({ match, history }) => {
   const [name, setName] = useState("");

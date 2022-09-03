@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Category = require("../model/category");
-
+const Product = require("../model/product");
 
 // @desc    Get all categories
 // @route   GET /api/categories/
@@ -52,6 +52,12 @@ const updatedCategory = asyncHandler(async (req, res) => {
     const category = await Category.findById(req.params.id);
   
     if (category) {
+      if(category.name !== name) {
+        let queryObject= {category: category.name};
+        let newName = {$set: {category: name} };
+        await Product.updateMany(queryObject, newName);
+      }
+      
       category.name = name;
       category.image.public_id = image.public_id;
       category.image.url = image.url;

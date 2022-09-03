@@ -179,6 +179,7 @@ export const logout = () => (dispatch) => {
   dispatch({ type: CART_RESET });
   dispatch({ type: USER_LIST_RESET });
   dispatch({ type: USER_LOGOUT });
+  window.location.href = "/login";
 };
 
 export const listUsers = () => async (dispatch, getState) => {

@@ -11,16 +11,16 @@ import {
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import Message from "../../../../components/Message";
-import Loader from "../../../../components/Loader";
+import Message from "../../../../../components/Message";
+import Loader from "../../../../../components/Loader";
 import { Pagination } from "@mui/material";
 import {
   getProducts,
   // getProductsForSeller,
-} from "../../../../actions/productActions";
-import { deleteProduct } from "../../../../actions/productActions";
-import DropNotif from "../../../../components/Modal/Modal";
-import { PRODUCT_DELETE_RESET } from "../../../../constants/productConstants";
+} from "../../../../../actions/productActions";
+import { deleteProduct } from "../../../../../actions/productActions";
+import DropNotif from "../../../../../components/Modal/Modal";
+import { PRODUCT_DELETE_RESET } from "../../../../../constants/productConstants";
 import MoveToInboxOutlinedIcon from '@mui/icons-material/MoveToInboxOutlined';
 
 const ProductListScreen = () => {

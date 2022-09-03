@@ -23,11 +23,13 @@ import logo from "../../media/logo.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from '../../actions/userAction'
 
+import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import CategoryIcon from '@mui/icons-material/Category';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import LoginIcon from '@mui/icons-material/Login';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const Navigation = () => {
   let mobile = false
@@ -133,12 +135,18 @@ const Navigation = () => {
                     <SubMenu>
                       <SubItem>
                         <NavLinks to="/userProfile" onClick={clickHandler}>
-                          <i className ="fas fa-user"></i>
+                          <PersonIcon/>
                           &nbsp; User Profile
                         </NavLinks>
                       </SubItem>
                       <SubItem>
-                      <NavLinks active={home} to="/login" onClick={logoutHandler}>
+                        <NavLinks to="/ChangePassword" onClick={clickHandler}>
+                          <SettingsIcon/>
+                          &nbsp; Change Password
+                        </NavLinks>
+                      </SubItem>
+                      <SubItem>
+                        <NavLinks active={home} onClick={logoutHandler}>
                         {/* <LogoutButton> */}
                           <LogoutIcon/>
                           &nbsp; Logout

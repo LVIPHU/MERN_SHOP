@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Form, Button, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import Message from "../../../components/Message";
-import Loader from "../../../components/Loader";
-import { getUserDetails, updateUser } from "../../../actions/userAction";
-import { USER_UPDATE_RESET } from "../../../constants/userConstants";
-import DropNotif from "../../../components/Modal/Modal";
+import Message from "./../../../../../components/Message";
+import Loader from "./../../../../../components/Loader";
+import { getUserDetails, updateUser } from "./../../../../../actions/userAction";
+import { USER_UPDATE_RESET } from "./../../../../../constants/userConstants";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import DropNotif from './../../../../../components/Modal/Modal';
 
 const UserEditScreen = ({ match, history }) => {
   const userId = match.params.id;

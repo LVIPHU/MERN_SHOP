@@ -234,7 +234,7 @@ const htmlBill = (order, email) => {
             </p>
         </div>      
     </div>      
-  </div>`;
+  </div>`.replace(">,<", "");
 };
 
 module.exports = {

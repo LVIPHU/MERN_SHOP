@@ -19,9 +19,9 @@ import PlaceOrderScreen from "./screens/PlaceOrderScreen/PlaceOrderScreen";
 import OrderScreen from "./screens/OrderScreen/OrderScreen";
 import RequestDescriptionScreen from "./screens/RequestScreen/RequestDescriptionScreen";
 
-import UserEditScreen from "./screens/Profile/Admin/UserEditScreen";
-import ProductEditScreen from "./screens/Profile/Admin/ProductEdit/ProductEditScreen";
-import ProductCreateScreen from "./screens/Profile/Admin/ProductCreate/ProductCreateScreen";
+import UserEditScreen from "./screens/Profile/Admin/Users/UserEdit/UserEditScreen";
+import ProductEditScreen from "./screens/Profile/Admin/Products/ProductEdit/ProductEditScreen";
+import ProductCreateScreen from "./screens/Profile/Admin/Products/ProductCreate/ProductCreateScreen";
 
 import RequestScreen from "./screens/Profile/Seller/WarehouseReceipt/Request"
 

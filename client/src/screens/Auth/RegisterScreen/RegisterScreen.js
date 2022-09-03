@@ -1,5 +1,4 @@
-import axios from "axios";
-import { Container, Button, Row, Col } from "react-bootstrap";
+import { Container, Button, Row, Col, Toast } from "react-bootstrap";
 import classes from "../LoginScreen/LoginScreen.module.css";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +7,8 @@ import { Link } from "react-router-dom";
 import Message from "../../../components/Message";
 import Loader from "../../../components/Loader";
 import actions from "./../../../actions/account";
+import DropNotif from './../../../components/Modal/Modal';
+
 const RegisterScreen = ({ location, history }) => {
   const dispatch = useDispatch();
 
@@ -39,7 +40,7 @@ const RegisterScreen = ({ location, history }) => {
   useEffect(() => {
     if (userInfo) {
       history.push(redirect);
-    } 
+    }
   }, [history, userInfo, redirect]);
 
   const submitHandler = (e) => {
@@ -53,6 +54,13 @@ const RegisterScreen = ({ location, history }) => {
   return (
     <Container>
       <div className={classes.wrapper}>
+      {success && (
+        <DropNotif
+          heading="Send Mail"
+          text="Send success please check your email"
+          resetData
+        ></DropNotif>
+      )}
         <div className={classes.leftSide}>
           <h3>Already have an account?</h3>
           <p>
@@ -68,8 +76,7 @@ const RegisterScreen = ({ location, history }) => {
           {error && <Message variant="danger">{error}</Message>}
           {sendErr && <Message variant="danger">{sendErr}</Message>}
           {message && <Message variant="danger">{message}</Message>}
-          {success && <Message variant="success">"Send success please check your email"</Message>}
-          {loading && <Loader></Loader>}
+          {loading && <Loader />}
           <form onSubmit={submitHandler}>
             <input
               type="text"

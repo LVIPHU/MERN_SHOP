@@ -2,11 +2,12 @@ import { useState } from "react";
 import { Button, Container, Col, Row } from "react-bootstrap";
 import classes from "../LoginScreen/LoginScreen.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader";
 import Message from "../../../components/Message";
 import actions from './../../../actions/account';
+import DropNotif from './../../../components/Modal/Modal';
+import { logout } from './../../../actions/userAction';
 
 const ForgotPasswordScreen = ({ location, history }) => {
   const dispatch = useDispatch();
@@ -16,11 +17,11 @@ const ForgotPasswordScreen = ({ location, history }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
 
-  const userLogin = useSelector((state) => state.userLogin);
-  const { loading, error, userInfo } = userLogin;
+  const changePassword = useSelector((state) => state.changePassword);
+  const { loading, error, success } = changePassword;
 
-  const sendVerifyCode = useSelector((state) => state.sendVerifyCode);
-  const { loading: sending, error: sendErr, success } = sendVerifyCode;
+  const forgotPassword = useSelector((state) => state.forgotPassword);
+  const { loading: sending, error: sendErr, success: sendSuc } = forgotPassword;
 
   const redirect = location.search ? location.search.split("=")[1] : "/";
 
@@ -30,29 +31,38 @@ const ForgotPasswordScreen = ({ location, history }) => {
       setMessage("Email invalid !");
       return;
     } else {
-      dispatch(actions.sendVerifyCode(email));
+      dispatch(actions.forgotPasswordCode(email));
     }
   };
-
-  useEffect(() => {
-    if (userInfo) {
-      history.push(redirect);
-    }
-  }, [history, userInfo, redirect]);
 
   const submitHandler = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setMessage("Password do not match");
     } else {
-      dispatch(actions.changePasswordCode(email, password, verifyCode));
+      dispatch(actions.changePassword(email, password, verifyCode));
     }
   };
 
   return (
     <Container>
-      
       <div className={classes.wrapper}>
+      {success && (
+        <DropNotif
+          heading="Change Password"
+          text="Change password success"
+          resetData={() => {
+            dispatch(logout());
+          }}
+        ></DropNotif>
+      )}
+      {sendSuc && (
+        <DropNotif
+          heading="Send Mail"
+          text="Send success please check your email"
+          resetData
+        ></DropNotif>
+      )}
         <div className={classes.leftSide}>
           <h3>New to our website?</h3>
           <p>
@@ -68,11 +78,8 @@ const ForgotPasswordScreen = ({ location, history }) => {
           {error && <Message variant="danger">{error}</Message>}
           {sendErr && <Message variant="danger">{sendErr}</Message>}
           {message && <Message variant="danger">{message}</Message>}
-          {success && <Message variant="success">"Send success please check your email"</Message>}
-          {loading && <Loader></Loader>}
           {loading && <Loader />}
           <form onSubmit={submitHandler}>
-            {error && <Message variant="danger">{error}</Message>}
             <input
               type="text"
               placeholder="Your Email"
@@ -109,7 +116,7 @@ const ForgotPasswordScreen = ({ location, history }) => {
               placeholder="Confirm Password"
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
-            <button type="submit">SEND MAIL</button>
+            <button type="submit">CHANGE PASSWORD</button>
           </form>
         </div>
       </div>

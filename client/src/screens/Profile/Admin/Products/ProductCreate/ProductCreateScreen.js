@@ -11,12 +11,12 @@ import {
   Card,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import Message from "../../../../components/Message";
-import Loader from "../../../../components/Loader";
-import { createProduct } from "../../../../actions/productActions";
-import { PRODUCT_CREATE_RESET } from "../../../../constants/productConstants";
-import DropNotif from "../../../../components/Modal/Modal";
-import MarkdownEditor from "../../../../components/TextEditor/MarkdownEditor";
+import Message from "../../../../../components/Message";
+import Loader from "../../../../../components/Loader";
+import { createProduct } from "../../../../../actions/productActions";
+import { PRODUCT_CREATE_RESET } from "../../../../../constants/productConstants";
+import DropNotif from "../../../../../components/Modal/Modal";
+import MarkdownEditor from "../../../../../components/TextEditor/MarkdownEditor";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 
 //import actions from "../../../../actions/upload";
@@ -27,7 +27,6 @@ const ProductCreateScreen = ({ match, history }) => {
   const [image, setImage] = useState("");
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
-  const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState("");
   const [uploading, setUploading] = useState(false);
   const [uploadingDesc, setUploadingDesc] = useState(false);
@@ -48,7 +47,6 @@ const ProductCreateScreen = ({ match, history }) => {
         brand,
         category,
         description,
-        countInStock,
       })
     );
   };
@@ -123,9 +121,9 @@ const ProductCreateScreen = ({ match, history }) => {
     setDescription(value);
   };
 
-  const validation = () => {
+  // const validation = () => {
 
-  };
+  // };
 
   return (
     <>
@@ -228,17 +226,6 @@ const ProductCreateScreen = ({ match, history }) => {
                 placeholder="Enter brand"
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId="countInStock">
-              <Form.Label>Quantity</Form.Label>
-              <Form.Control
-                type="number"
-                min={0}
-                placeholder="Enter the quantity"
-                value={countInStock}
-                onChange={(e) => setCountInStock(e.target.value)}
               ></Form.Control>
             </Form.Group>
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
@@ -19,9 +19,11 @@ import { Link } from "react-router-dom";
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 
 const RequestDescriptionScreen = ({ match, history }) => {
+  const dispatch = useDispatch();
+
   const requestDetail = useSelector((state) => state.getRequestById);
   const { loading, error, request } = requestDetail;
-  console.log(request);
+
   const approveDetail = useSelector((state) => state.approveRequest);
   const {
     loading: loadingApproval,
@@ -29,17 +31,16 @@ const RequestDescriptionScreen = ({ match, history }) => {
     success,
   } = approveDetail;
 
-  const dispatch = useDispatch();
-
   const requestId = match.params.id;
   useEffect(() => {
     dispatch(getRequestById(requestId));
-  }, [requestId, dispatch]);
+  }, [requestId, dispatch, success]);
 
   const buttonHandler = (e) => {
     e.preventDefault();
     dispatch(approveRequest(requestId));
   };
+
   return (
     <Container className="mt-5 mb-5">
       <Link
@@ -174,19 +175,21 @@ const RequestDescriptionScreen = ({ match, history }) => {
                 </Form.Group>
                 {!request.approved && (
                   <>
-                    {loadingApproval && <Loader />}
                     {errorApproval && (
                       <Message variant="danger">{errorApproval}</Message>
                     )}
-                    <Button
-                      className="mt-3 mb-3"
-                      onClick={buttonHandler}
-                      style={{ borderRadius: 30, marginLeft:"170px" }}
-                    >
-                      <FileDownloadDoneIcon />
-                      {" "}
-                      Approve Request
-                    </Button>
+                    {loadingApproval ? (
+                      <Loader />
+                    ) : (
+                      <Button
+                        className="mt-3 mb-3"
+                        onClick={buttonHandler}
+                        style={{ borderRadius: 30, marginLeft: "170px" }}
+                      >
+                        <FileDownloadDoneIcon />
+                        Approve Request
+                      </Button>
+                    )}
                   </>
                 )}
               </Col>

@@ -3,15 +3,15 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Container, Form, Button, Row, Card, Col} from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import Message from "../../../../components/Message";
-import Loader from "../../../../components/Loader";
+import Message from "../../../../../components/Message";
+import Loader from "../../../../../components/Loader";
 import {
   getProductDetail,
   updateProduct,
-} from "../../../../actions/productActions";
-import { PRODUCT_UPDATE_RESET } from "../../../../constants/productConstants";
-import DropNotif from "../../../../components/Modal/Modal";
-import MarkdownEditor from "../../../../components/TextEditor/MarkdownEditor";
+} from "../../../../../actions/productActions";
+import { PRODUCT_UPDATE_RESET } from "../../../../../constants/productConstants";
+import DropNotif from "../../../../../components/Modal/Modal";
+import MarkdownEditor from "../../../../../components/TextEditor/MarkdownEditor";
 
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -24,7 +24,6 @@ const ProductEditScreen = ({ match, history }) => {
   const [image, setImage] = useState("");
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
-  const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState("");
   const [uploading, setUploading] = useState(false);
   const [uploadingDesc, setUploadingDesc] = useState(false);
@@ -51,7 +50,6 @@ const ProductEditScreen = ({ match, history }) => {
       setImage(product.image);
       setBrand(product.brand);
       setCategory(product.category);
-      setCountInStock(product.countInStock);
       setDescription(product.description);
     }
   }, [dispatch, productId, currentId]);
@@ -67,7 +65,6 @@ const ProductEditScreen = ({ match, history }) => {
         brand,
         category,
         description,
-        countInStock,
       })
     );
   };
@@ -205,17 +202,6 @@ const ProductEditScreen = ({ match, history }) => {
                 placeholder="Enter brand"
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId="countInStock">
-              <Form.Label>Quantity</Form.Label>
-              <Form.Control
-                type="number"
-                min={0}
-                placeholder="Enter the quantity"
-                value={countInStock}
-                onChange={(e) => setCountInStock(e.target.value)}
               ></Form.Control>
             </Form.Group>
 

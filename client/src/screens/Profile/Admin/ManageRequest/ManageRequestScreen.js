@@ -43,7 +43,7 @@ const ManageRequestScreen = () => {
                   <td>{r.user._id}</td> */}
                   <td>{r.requestAt.substring(0, 10)}</td>
                   <td>{r.requestAt.substring(11, 19)}</td>
-                  <td>{r.user.name}</td>
+                  <td>{r?.user?.name}</td>
                   <td>{r.brand}</td>
                   <td>
                     {r.approved ? (

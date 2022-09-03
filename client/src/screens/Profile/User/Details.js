@@ -65,7 +65,7 @@ const Details = ({ history }) => {
       {updateLoading && <Loader />}
       {updateError && <Message variant="danger">{updateError}</Message>}
       <Form onSubmit={submitHandler}>
-        <Form.Group controlId="name">
+        <Form.Group controlId="name" style={{ paddingBottom: "20px" }}>
           <Form.Label>Name</Form.Label>
           <Form.Control
             type="name"
@@ -75,33 +75,13 @@ const Details = ({ history }) => {
           ></Form.Control>
         </Form.Group>
 
-        <Form.Group controlId="email">
+        <Form.Group controlId="email" style={{ paddingBottom: "20px" }}>
           <Form.Label>Email Address</Form.Label>
           <Form.Control
             type="email"
             placeholder="Enter email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group controlId="password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Enter password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group controlId="confirmPassword">
-          <Form.Label>Confirm password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Enter confirm password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
           ></Form.Control>
         </Form.Group>
 

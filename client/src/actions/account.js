@@ -29,7 +29,7 @@ const sendVerifyCode = (email) => async (dispatch) => {
   }
 };
 
-const changePasswordCode = ( email, password, verifyCode ) => async (dispatch) => {
+const changePassword = ( email, password, verifyCode ) => async (dispatch) => {
   try {
     dispatch({
       type: constants.CHANGE_PASSWORD_REQUEST,
@@ -87,7 +87,7 @@ const forgotPasswordCode = (email) => async (dispatch) => {
 
 const actions = {
   sendVerifyCode,
-  changePasswordCode,
+  changePassword,
   forgotPasswordCode,
 };
 

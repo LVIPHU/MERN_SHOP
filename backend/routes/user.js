@@ -16,5 +16,5 @@ router.route("/login").post(controller.login);
 router.route("/register").post(controller.signup);
 router.route("/verify").post(controller.postSendVerifyCode);
 router.route("/verify/forgot").post(controller.postSendCodeForgotPW);
-router.route("/reset-pw").post(protect.auth, controller.postResetPassword);
+router.route("/reset-pw").post(controller.postResetPassword);
 module.exports = router;

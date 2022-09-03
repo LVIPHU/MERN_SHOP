@@ -114,9 +114,7 @@ const updateUserprofile = asyncHandler(async (req, res) => {
   if (user) {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
-    if (req.body.password) {
-      user.password = req.body.password;
-    }
+    
     const { address, city, postalCode, state, phone, fullname } = req.body;
     if (address) {
       user.shippingAddress.address = address;
@@ -279,7 +277,7 @@ const postSendCodeForgotPW = asyncHandler(async (req, res) => {
     const verifyCode = helper.generateVerifyCode(config.numberVerify);
     const mail = {
       to: email,
-      subject: 'Thay đổi mật khẩu',
+      subject: 'doi mat khau',
       html: mailConfig.htmlResetPassword(verifyCode),
     };
 
@@ -311,35 +309,27 @@ const postSendCodeForgotPW = asyncHandler(async (req, res) => {
 // @access  private
 const postResetPassword = asyncHandler(async (req, res) => {
   try {
-    const { email, password, verifyCode } = req.body.account;
-
+    const { email, password, verifyCode } = req.body;
     // kiểm tra mã xác thực
     const isVerify = await helper.isVerifyEmail(email, verifyCode);
 
     if (!isVerify) {
       return res.status(401).json({ message: 'Mã xác nhận không hợp lệ.' });
     }
-    //check userName -> hash new password -> change password
-    const salt = await bcrypt.genSalt(10);
-    const hashPassword = await bcrypt.hash(
-      password,
-      salt
-    );
 
-    const response = await User.updateOne(
-      { email },
-      { password: hashPassword },
-    );
+    const user = await User.findOne({email});
 
-    //check response -> return client
-    if (response.n) {
-      //xoá mã xác nhận
+    if (user) {
+      user.password = password;
+      const result = await user.save();
       await Verify.deleteOne({ email });
-      return res.status(200).json({ message: 'Thay đổi mật khẩu thành công' });
+      return res.status(200).json(result);
     } else {
       return res.status(409).json({ message: 'Thay đổi mật khẩu thất bại' });
     }
   } catch (error) {
+    console.log(error);
+
     return res.status(409).json({ message: 'Thay đổi mật khẩu thất bại' });
   }
 });

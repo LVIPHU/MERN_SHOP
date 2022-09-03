@@ -357,7 +357,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 // @route   PUT /api/products/:id
 // @access  Private/Admin
 const updatedProduct = asyncHandler(async (req, res) => {
-  const { name, price, description, image, brand, category, countInStock } =
+  const { name, price, description, image, brand, category } =
     req.body;
 
   const product = await Product.findById(req.params.id);
@@ -370,7 +370,6 @@ const updatedProduct = asyncHandler(async (req, res) => {
     product.image.url = image.url;
     product.brand = brand;
     product.category = category;
-    product.countInStock = countInStock;
 
     const updatedProduct = await product.save();
     res.json(updatedProduct);
@@ -384,7 +383,7 @@ const updatedProduct = asyncHandler(async (req, res) => {
 // @route   POST /api/products/
 // @access  Private/Admin
 const createProduct = asyncHandler(async (req, res) => {
-  const { name, price, description, image, brand, category, countInStock } =
+  const { name, price, description, image, brand, category } =
     req.body;
 
   const product = new Product({
@@ -397,7 +396,6 @@ const createProduct = asyncHandler(async (req, res) => {
     },
     brand,
     category,
-    countInStock,
     description,
   });
 

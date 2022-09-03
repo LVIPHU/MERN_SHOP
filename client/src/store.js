@@ -27,7 +27,23 @@ import {
   sendVerifyCodeReducer,
   changePasswordReducer,
   forgotPasswordReducer,
-} from "./reducers/account"
+} from "./reducers/account";
+
+import {
+  categoryCreateReducer,
+  categoryDeleteReducer,
+  categoryUpdateReducer,
+  categoryAllReducer,
+  categoryDetailReducer,
+} from "./reducers/category";
+
+import {
+  brandCreateReducer,
+  brandDeleteReducer,
+  brandUpdateReducer,
+  brandAllReducer,
+  brandDetailReducer,
+} from "./reducers/brands";
 
 import { cartReducer } from "./reducers/cartReducer";
 
@@ -94,6 +110,20 @@ const reducer = combineReducers({
   sendVerifyCode: sendVerifyCodeReducer,
   changePassword: changePasswordReducer,
   forgotPassword: forgotPasswordReducer,
+
+  // Category reducer
+  categoryCreate: categoryCreateReducer,
+  categoryDelete: categoryDeleteReducer,
+  categoryUpdate: categoryUpdateReducer,
+  categoryAll: categoryAllReducer,
+  categoryDetail: categoryDetailReducer,
+
+  // Brand reducer
+  brandCreate: brandCreateReducer,
+  brandDelete: brandDeleteReducer,
+  brandUpdate: brandUpdateReducer,
+  brandAll: brandAllReducer,
+  brandDetail: brandDetailReducer,
 
   // Cart reducer
   cart: cartReducer,

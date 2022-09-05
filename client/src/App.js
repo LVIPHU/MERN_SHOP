@@ -19,6 +19,9 @@ import PlaceOrderScreen from "./screens/PlaceOrderScreen/PlaceOrderScreen";
 import OrderScreen from "./screens/OrderScreen/OrderScreen";
 import RequestDescriptionScreen from "./screens/RequestScreen/RequestDescriptionScreen";
 
+
+import BrandCreateScreen from "./screens/Profile/Admin/Brands/BrandCreate/BrandCreateScreen";
+import BrandEditScreen from "./screens/Profile/Admin/Brands/BrandEdit/BrandEditScreen";
 import UserEditScreen from "./screens/Profile/Admin/Users/UserEdit/UserEditScreen";
 import ProductEditScreen from "./screens/Profile/Admin/Products/ProductEdit/ProductEditScreen";
 import ProductCreateScreen from "./screens/Profile/Admin/Products/ProductCreate/ProductCreateScreen";
@@ -44,6 +47,8 @@ function App() {
         <Route path="/cart" component={CartScreen} />
         <Route path="/admin/user/:id/edit" component={UserEditScreen} />
         <Route path="/request/:id" component={RequestDescriptionScreen} />
+        <Route path="/admin/brand/:id/edit" component={BrandEditScreen} />
+        <Route path="/admin/brand/create" component={BrandCreateScreen} />
         <Route path="/admin/product/:id/edit" component={ProductEditScreen} />
         <Route path="/admin/product/:id/import" component={RequestScreen} />
         <Route path="/admin/product/create" component={ProductCreateScreen} />

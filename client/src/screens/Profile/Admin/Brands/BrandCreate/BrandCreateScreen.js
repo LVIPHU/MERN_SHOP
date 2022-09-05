@@ -11,7 +11,7 @@ import DropNotif from "../../../../../components/Modal/Modal";
 import MarkdownEditor from "../../../../../components/TextEditor/MarkdownEditor";
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 
-const ProductCreateScreen = ({ match, history }) => {
+const BrandCreateScreen = ({ match, history }) => {
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
@@ -19,9 +19,10 @@ const ProductCreateScreen = ({ match, history }) => {
 
   const dispatch = useDispatch();
 
-  const productCreate = useSelector((state) => state.productCreate);
-  const { loading, error, product, success } = productCreate;
+  const brandCreate = useSelector((state) => state.brandCreate);
+  const { loading, error, brand, success } = brandCreate;
 
+  console.log(loading);
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(
@@ -72,15 +73,15 @@ const ProductCreateScreen = ({ match, history }) => {
           <i className="fas fa-arrow-left"></i>
           &nbsp; Go Back
         </Link>
-        <h1>Create Product</h1>
+        <h1>Create Brand</h1>
         {loading && <Loader />}
         {error && <Message variant="danger">{error}</Message>}
         {success && (
           <DropNotif
-            heading="Create Product"
-            text="Create Product Successfully"
+            heading="Create Brand"
+            text="Create Brand Successfully"
             resetData={() => {
-              history.push(`/admin/product/${product._id}/edit`);
+              history.push(`/admin/brand/${brand._id}/edit`);
               dispatch({ type: constants.BRAND_CREATE_RESET });
             }}
           ></DropNotif>
@@ -140,4 +141,4 @@ const ProductCreateScreen = ({ match, history }) => {
   );
 };
 
-export default ProductCreateScreen;
+export default BrandCreateScreen;

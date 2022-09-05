@@ -345,15 +345,15 @@ const deleteProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
   if (product) {
 
-    const brand = await Brand.findOne(product.brand);
-    const newProducts =  brand.products.filter(item => item !== product._id);
-    brand.products = newProducts;
-    await brand.save();
+    // const brand = await Brand.findOne(product.brand);
+    // const newProducts =  brand.products.filter(item => item !== product._id);
+    // brand.products = newProducts;
+    // await brand.save();
     
-    const Category = await Category.findOne(product.category);
-    const newProducts1 =  Category.products.filter(item => item !== product._id);
-    Category.products = newProducts1;
-    await Category.save();
+    // const Category = await Category.findOne(product.category);
+    // const newProducts1 =  Category.products.filter(item => item !== product._id);
+    // Category.products = newProducts1;
+    // await Category.save();
 
     await product.remove();
     res.json({ message: "Product Remove!" });
@@ -373,27 +373,27 @@ const updatedProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
 
   if (product) {
-    if (product.brand !== brand) {
-      const oldBrand = await Brand.findOne(product.brand);
-      const newProducts =  oldBrand.products.filter(item => item !== product._id);
-      oldBrand.products = newProducts;
-      await oldBrand.save();
+    // if (product.brand !== brand) {
+    //   const oldBrand = await Brand.findOne(product.brand);
+    //   const newProducts =  oldBrand.products.filter(item => item !== product._id);
+    //   oldBrand.products = newProducts;
+    //   await oldBrand.save();
 
-      const newBrand = await Brand.findOne({ brand });
-      newBrand.products.push(product._id);
-      await newBrand.save();
-    }
+    //   const newBrand = await Brand.findOne({ brand });
+    //   newBrand.products.push(product._id);
+    //   await newBrand.save();
+    // }
 
-    if (product.category !== category) {
-      const oldCategory = await Category.findOne(product.category);
-      const newProducts1 =  oldCategory.products.filter(item => item !== product._id);
-      oldCategory.products = newProducts1;
-      await oldCategory.save();
+    // if (product.category !== category) {
+    //   const oldCategory = await Category.findOne(product.category);
+    //   const newProducts1 =  oldCategory.products.filter(item => item !== product._id);
+    //   oldCategory.products = newProducts1;
+    //   await oldCategory.save();
 
-      const newCategory = await Category.findOne({ Category });
-      newCategory.products.push(product._id);
-      await newCategory.save();
-    }
+    //   const newCategory = await Category.findOne({ Category });
+    //   newCategory.products.push(product._id);
+    //   await newCategory.save();
+    // }
 
     product.name = name;
     product.price = price;
@@ -417,7 +417,7 @@ const updatedProduct = asyncHandler(async (req, res) => {
 const createProduct = asyncHandler(async (req, res) => {
   const { name, price, description, image, brand, category } =
     req.body;
-
+  console.log(req.body);
   const product = new Product({
     name,
     price,
@@ -431,13 +431,13 @@ const createProduct = asyncHandler(async (req, res) => {
     description,
   });
 
-  const tempBrand = await Brand.findOne({ brand });
-  tempBrand.products.push(product._id);
-  await tempBrand.save();
+  // const tempBrand = await Brand.findOne({ brand });
+  // tempBrand.products.push(product._id);
+  // await tempBrand.save();
 
-  const tempCategory = await Category.findOne({ Category });
-  tempCategory.products.push(product._id);
-  await tempCategory.save();
+  // const tempCategory = await Category.findOne({ Category });
+  // tempCategory.products.push(product._id);
+  // await tempCategory.save();
 
   const createdProduct = await product.save();
   res.status(201).json(createdProduct);

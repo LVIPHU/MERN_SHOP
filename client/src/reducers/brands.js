@@ -5,10 +5,7 @@ export const brandAllReducer = (state = { brands: [] }, action) => {
     case constants.BRAND_ALL_REQUEST:
       return { loading: true, brands: [] };
     case constants.BRAND_ALL_SUCCESS:
-      return {
-        loading: false,
-        brands: action.payload,
-      };
+      return { loading: false, brands: action.payload };
     case constants.BRAND_ALL_FAIL:
       return { loading: false, error: action.payload };
     default:
@@ -23,7 +20,7 @@ export const brandDetailReducer = (
   switch (action.type) {
     case constants.BRAND_DETAIL_REQUEST:
       return { loading: true, brand: { products: [] } };
-    case constants.BRAND_UPDATE_SUCCESS:
+    case constants.BRAND_DETAIL_SUCCESS:
       return { loading: false, brand: action.payload };
     case constants.BRAND_DETAIL_FAIL:
       return { loading: false, error: action.payload };

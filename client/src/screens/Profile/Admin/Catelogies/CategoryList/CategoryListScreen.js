@@ -15,7 +15,7 @@ import Loader from "../../../../../components/Loader";
 import constants from "../../../../../constants/brand";
 import actions from "../../../../../actions/brand";
 import DropNotif from "../../../../../components/Modal/Modal";
-
+import MoveToInboxOutlinedIcon from '@mui/icons-material/MoveToInboxOutlined';
 
 const BrandListScreen = () => {
   const dispatch = useDispatch();
@@ -43,7 +43,6 @@ const BrandListScreen = () => {
     }
   };
 
-  console.log(brands);
 
   return (
     <Container className="mb-5">
@@ -99,21 +98,22 @@ const BrandListScreen = () => {
                     </Card.Body>
                     <ListGroup className="d-flex flex-column">
                       <ListGroup.Item>
-                        {brand.products.length} product
+                        {brand.products.lenght} product
                       </ListGroup.Item>
                     </ListGroup>
                     <Card.Body className="d-flex flex-column">
-                        
+                      {userInfo.isAdmin ? (
+                        <>
+                          {" "}
                           <LinkContainer
                             to={`/admin/brand/${brand._id}/edit`}
                             style={{ borderRadius: 30 }}
-                            >
+                          >
                             <Button variant="outline-primary" className="mb-2">
                               <i className="fas fa-edit"></i>
                               &nbsp; Edit
                             </Button>
                           </LinkContainer>
-                            {brand.products.length === 0 && (
                           <Button
                             style={{ borderRadius: 30 }}
                             variant="outline-danger"
@@ -122,8 +122,20 @@ const BrandListScreen = () => {
                             <i className="fas fa-trash"></i>
                             &nbsp; Delete
                           </Button>
+                        </>
+                      ) : userInfo.isSeller && !userInfo.isAdmin ? (
+                        <LinkContainer
+                          to={`/admin/brand/${brand._id}/import`}
+                          style={{ borderRadius: 30 }}
+                        >
+                          <Button variant="outline-primary" className="mb-2">
+                            <MoveToInboxOutlinedIcon/>
+                            &nbsp; Import
+                          </Button>
+                        </LinkContainer>
+                      ) : (
+                        <></>
                       )}
-                        
                     </Card.Body>
                   </Card>
                 </Col>

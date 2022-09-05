@@ -66,7 +66,7 @@ const Shop = () => {
 
   return (
     <>
-      <InstantSearch indexName="ALPINE" searchClient={searchClient}>
+      <InstantSearch indexName="Shopology" searchClient={searchClient}>
         {mobile ? (
           <>
             <SearchAndFilters>
@@ -106,10 +106,10 @@ const Shop = () => {
                   </SidebarFilters>
                 </MobileFilterOverlay>
                 <SortBy
-                  defaultRefinement="ALPINE"
+                  defaultRefinement="Shopology"
                   className="me-3"
                   items={[
-                    { value: "ALPINE", label: "Features" },
+                    { value: "Shopology", label: "Features" },
                     { value: "price_asc", label: "Price asc." },
                     { value: "price_desc", label: "Price desc." },
                   ]}
@@ -169,10 +169,10 @@ const Shop = () => {
               <MainContent>
                 <FilterBar>
                   <SortBy
-                    defaultRefinement="ALPINE"
+                    defaultRefinement="Shopology"
                     className="me-3"
                     items={[
-                      { value: "ALPINE", label: "Features" },
+                      { value: "Shopology", label: "Features" },
                       { value: "price_asc", label: "Price asc." },
                       { value: "price_desc", label: "Price desc." },
                     ]}

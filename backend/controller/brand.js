@@ -15,6 +15,7 @@ const getBrands = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const getBrandById = asyncHandler(async (req, res) => {
     const brand = await Brand.findById(req.params.id);
+    console.log(brand);
     if (brand) {
       res.json(brand);
     } else {

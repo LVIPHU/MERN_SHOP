@@ -1,78 +1,56 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Container, Form, Button, Card} from "react-bootstrap";
+import { Container, Form, Button, Card } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../../../../components/Message";
 import Loader from "../../../../../components/Loader";
-import constants from "../../../../../constants/brand";
-import actions from "../../../../../actions/brand"
+import constants from "../../../../../constants/category";
+import actions from "../../../../../actions/category";
 import DropNotif from "../../../../../components/Modal/Modal";
 import MarkdownEditor from "../../../../../components/TextEditor/MarkdownEditor";
+import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-
-const BrandEditScreen = ({ match, history }) => {
-  const brandId = match.params.id;
-  const dispatch = useDispatch();
-
+const CategoryCreateScreen = ({ match, history }) => {
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
   const [uploading, setUploading] = useState(false);
 
+  const dispatch = useDispatch();
 
-  const brandDetail = useSelector((state) => state.brandDetail);
-  const { loading, error, brand } = brandDetail;
-  const currentId = brand._id;
+  const categoryCreate = useSelector((state) => state.categoryCreate);
+  const { loading, error, category, success } = categoryCreate;
 
-  const brandUpdate = useSelector((state) => state.brandUpdate);
-  const {
-    loading: loadingUpdate,
-    error: errorUpdate,
-    success: successUpdate,
-  } = brandUpdate;
-
-  useEffect(() => {
-    if (!brand.name || currentId !== brandId) {
-      dispatch(actions.getBrandDetail(brandId));
-    } else {
-      setName(brand.name);
-      setImage(brand.image);
-      setDescription(brand.description);
-    }
-  }, [dispatch, brandId, currentId]);
-
+  console.log(loading);
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(
-      actions.updatedBrand({
-        _id: brandId,
+      actions.createCategory({
         name,
         image,
         description,
       })
     );
   };
+
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
     const formData = new FormData();
-    formData.append("image", file);
     setUploading(true);
-
+    formData.append("image", file);
     try {
       const config = {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       };
-      const { data } = await axios.post("/api/upload", formData, config);
+      const { data } = await axios.post("/api/file/upload", formData, config);
       setImage(data);
       setUploading(false);
     } catch (error) {
-      console.error(error);
       setUploading(false);
+      console.log(error);
     }
   };
 
@@ -80,24 +58,31 @@ const BrandEditScreen = ({ match, history }) => {
     setDescription(value);
   };
 
-  console.log(brand);
+  // const validation = () => {
+
+  // };
 
   return (
     <>
       <Container className="mb-5">
-        <Link to="/userProfile" className="btn btn-primary my-3" style={{ borderRadius: 30}}>
+        <Link
+          to="/userProfile"
+          className="btn btn-primary my-3"
+          style={{ borderRadius: 30 }}
+        >
           <i className="fas fa-arrow-left"></i>
           &nbsp; Go Back
         </Link>
-        <h1>Edit Brand</h1>
-        {loadingUpdate && <Loader />}
-        {errorUpdate && <Message variant="danger">{errorUpdate}</Message>}
-        {successUpdate && (
+        <h1>Create Category</h1>
+        {loading && <Loader />}
+        {error && <Message variant="danger">{error}</Message>}
+        {success && (
           <DropNotif
-            heading="Update Brand"
-            text="Update Brand Successfully"
+            heading="Create Category"
+            text="Create Category Successfully"
             resetData={() => {
-              dispatch({ type: constants.BRAND_UPDATE_RESET });
+              history.push(`/admin/category/${category._id}/edit`);
+              dispatch({ type: constants.CATEGORY_CREATE_RESET });
             }}
           ></DropNotif>
         )}
@@ -117,42 +102,38 @@ const BrandEditScreen = ({ match, history }) => {
               ></Form.Control>
             </Form.Group>
 
-        
             <Form.Group controlId="image" className="mb-3">
               <Form.Label>Image</Form.Label>
-           
+
               <Form.File
                 id="image-file"
                 custom
                 onChange={uploadFileHandler}
               ></Form.File>
             </Form.Group>
-            
-                    <Card className="text-center" style={{ width: "12rem" }} key={image?.public_id}>
-                      {uploading ? (
-                        <Loader />
-                      ) : (
-                        <Card.Img variant="top" src={image?.url} />
-                      )}
-                    </Card>
-                 
-    
+
+            <Card className="text-center" style={{ width: "12rem" }}>
+              {uploading ? (
+                <Loader />
+              ) : (
+                <Card.Img variant="top" src={image.url} />
+              )}
+            </Card>
+
             <Form.Group className="mt-3" controlId="description">
               <Form.Label>Description</Form.Label>
               <MarkdownEditor text={description} onChange={onChange} />
             </Form.Group>
 
-            <Button className="mt-3" type="submit" variant="primary" style={{ borderRadius: 30}}>
-              <FileDownloadDoneIcon/>
-              &nbsp; Update
+            <Button
+              className="mt-3"
+              type="submit"
+              variant="primary"
+              style={{ borderRadius: 30 }}
+            >
+              <FileDownloadDoneIcon />
+              &nbsp; Create category
             </Button>
-            <Link
-              to={`/brand/${brand._id}`}
-              className="btn btn-primary mt-3 ms-3"
-              style={{ borderRadius: 30}}>
-              <VisibilityIcon/> 
-              &nbsp; Go to brand
-            </Link>
           </Form>
         )}
       </Container>
@@ -160,4 +141,4 @@ const BrandEditScreen = ({ match, history }) => {
   );
 };
 
-export default BrandEditScreen;
+export default CategoryCreateScreen;

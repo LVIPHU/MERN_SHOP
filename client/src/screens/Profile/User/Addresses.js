@@ -34,22 +34,22 @@ const Addresses = () => {
   const { success } = userUpdateProfile;
 
   useEffect(() => {
-    if (user.shippingAddress.address) {
+    if (user?.shippingAddress?.address) {
       setAddress(user.shippingAddress.address);
     }
-    if (user.shippingAddress.phone) {
+    if (user?.shippingAddress?.phone) {
       setMobile(user.shippingAddress.phone);
     }
-    if (user.shippingAddress.state) {
+    if (user?.shippingAddress?.state) {
       setState(user.shippingAddress.state);
     }
-    if (user.shippingAddress.city) {
+    if (user?.shippingAddress?.city) {
       setCity(user.shippingAddress.city);
     }
-    if (user.shippingAddress.fullname) {
+    if (user?.shippingAddress?.fullname) {
       setFullName(user.shippingAddress.fullname);
     }
-    if (user.shippingAddress.postalCode) {
+    if (user?.shippingAddress?.postalCode) {
       setPostCode(user.shippingAddress.postalCode);
     }
   }, []);

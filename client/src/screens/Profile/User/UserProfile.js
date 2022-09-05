@@ -3,12 +3,12 @@ import Details from "./Details";
 import Addresses from "./Addresses";
 import Orders from "./Orders";
 import { useSelector } from "react-redux";
-import Request from "../Seller/WarehouseReceipt/Request";
 import { Container } from "react-bootstrap";
 import classes from "../../ProductScreen/ProductScreen.module.css";
 import UserListScreen from "../Admin/Users/UserList/UserListScreen";
 import ProductListScreen from "../Admin/Products/ProductList/ProductListScreen";
 import OrderListScreen from "../Admin/OrderList/OrderListScreen";
+import BrandListScreen from './../Admin/Brands/BrandList/BrandListScreen';
 import ManageRequestScreen from "../Admin/ManageRequest/ManageRequestScreen";
 import Chart from "../Admin/Chart/Chart";
 
@@ -17,9 +17,10 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import InboxIcon from "@mui/icons-material/Inbox";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-// import MoveToInboxIcon from '@mui/icons-material/MoveToInbox';
 import InventoryOutlinedIcon from "@mui/icons-material/InventoryOutlined";
 import BarChartIcon from '@mui/icons-material/BarChart';
+import BrandingWatermarkIcon from '@mui/icons-material/BrandingWatermark';
+import CategoryIcon from '@mui/icons-material/Category';
 
 const UserProfile = ({ history }) => {
   const userLogin = useSelector((state) => state.userLogin);
@@ -49,17 +50,18 @@ const UserProfile = ({ history }) => {
   } else if (selection === "3") {
     selectionShow = <Orders />;
   } else if (selection === "4") {
-    selectionShow = <Request />;
-  } else if (selection === "5") {
     selectionShow = <UserListScreen />;
+  } else if (selection === "5") {
+    selectionShow = <CategoryIcon />;
   } else if (selection === "6") {
-    selectionShow = <ProductListScreen />;
+    selectionShow = <BrandListScreen/>;
   } else if (selection === "7") {
-    selectionShow = <OrderListScreen />;
+    selectionShow = <ProductListScreen />;
   } else if (selection === "8") {
+    selectionShow = <OrderListScreen />;
+  } else if (selection === "9") {
     selectionShow = <ManageRequestScreen />;
   }
-
   return (
     <Container>
       <div className={classes["selection-container"]}>
@@ -72,7 +74,7 @@ const UserProfile = ({ history }) => {
             {(!userInfo.isAdmin && !userInfo.isSeller) ? (
               <>
                 <PersonIcon style={{ marginBottom: "5px" }} />
-                &nbsp; User Profile
+                &nbsp; Profile
               </>
             ) : (
               <>
@@ -88,7 +90,7 @@ const UserProfile = ({ history }) => {
               onClick={changeSelection}
             >
               <AccountBoxIcon style={{ marginBottom: "5px" }} />
-              &nbsp; User Addresses
+              &nbsp; Addresses
             </li>
           )}
           {userInfo && !userInfo.isAdmin && !userInfo.isSeller && (
@@ -98,57 +100,68 @@ const UserProfile = ({ history }) => {
               onClick={changeSelection}
             >
               <ShoppingCartIcon style={{ marginBottom: "5px" }} />
-              &nbsp; User Orders
+              &nbsp; Orders
             </li>
           )}
-          {/* {userInfo && userInfo.isSeller && !userInfo.isAdmin && (
+          
+          {userInfo && (userInfo.isAdmin || userInfo.isSeller) && (
             <li
               className={classes.navItem}
               data-selection="4"
               onClick={changeSelection}
             >
-              <MoveToInboxIcon style={{ marginBottom: '5px'}}/>
-              &nbsp; Warehouse Receipt
+              <PeopleAltIcon style={{ marginBottom: "5px" }} />
+              &nbsp; Users
             </li>
-          )} */}
+          )}
           {userInfo && (userInfo.isAdmin || userInfo.isSeller) && (
             <li
               className={classes.navItem}
               data-selection="5"
               onClick={changeSelection}
             >
-              <PeopleAltIcon style={{ marginBottom: "5px" }} />
-              &nbsp; Manage Users
+              <CategoryIcon style={{ marginBottom: '5px'}}/>
+              &nbsp; Categories
             </li>
-          )}
+          )} 
           {userInfo && (userInfo.isAdmin || userInfo.isSeller) && (
             <li
               className={classes.navItem}
               data-selection="6"
               onClick={changeSelection}
             >
-              <InboxIcon style={{ marginBottom: "5px" }} />
-              &nbsp; Manage Products
+              <BrandingWatermarkIcon style={{ marginBottom: '5px'}}/>
+              &nbsp; Brands
             </li>
-          )}
+          )} 
           {userInfo && (userInfo.isAdmin || userInfo.isSeller) && (
             <li
               className={classes.navItem}
               data-selection="7"
               onClick={changeSelection}
             >
-              <ShoppingCartIcon style={{ marginBottom: "5px" }} />
-              &nbsp; Manage Orders
+              <InboxIcon style={{ marginBottom: "5px" }} />
+              &nbsp; Products
             </li>
           )}
-          {userInfo && userInfo.isAdmin && (
+          {userInfo && (userInfo.isAdmin || userInfo.isSeller) && (
             <li
               className={classes.navItem}
               data-selection="8"
               onClick={changeSelection}
             >
+              <ShoppingCartIcon style={{ marginBottom: "5px" }} />
+              &nbsp; Orders
+            </li>
+          )}
+          {userInfo && userInfo.isAdmin && (
+            <li
+              className={classes.navItem}
+              data-selection="9"
+              onClick={changeSelection}
+            >
               <InventoryOutlinedIcon style={{ marginBottom: "5px" }} />
-              &nbsp; Manage requests
+              &nbsp; Requests
             </li>
           )}
         </ul>

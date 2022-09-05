@@ -20,7 +20,7 @@ export const categoryAllReducer = (state = { categories: [] }, action) => {
     switch (action.type) {
       case constants.CATEGORY_DETAIL_REQUEST:
         return { loading: true, category: { products: [] } };
-      case constants.CATEGORY_UPDATE_SUCCESS:
+      case constants.CATEGORY_DETAIL_SUCCESS:
         return { loading: false, category: action.payload };
       case constants.CATEGORY_DETAIL_FAIL:
         return { loading: false, error: action.payload };

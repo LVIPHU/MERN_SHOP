@@ -5,16 +5,16 @@ import { Container, Form, Button, Card} from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../../../../components/Message";
 import Loader from "../../../../../components/Loader";
-import constants from "../../../../../constants/brand";
-import actions from "../../../../../actions/brand"
+import constants from "../../../../../constants/category";
+import actions from "../../../../../actions/category"
 import DropNotif from "../../../../../components/Modal/Modal";
 import MarkdownEditor from "../../../../../components/TextEditor/MarkdownEditor";
 
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+// import VisibilityIcon from '@mui/icons-material/Visibility';
 
-const BrandEditScreen = ({ match, history }) => {
-  const brandId = match.params.id;
+const CategoryEditScreen = ({ match, history }) => {
+  const categoryId = match.params.id;
   const dispatch = useDispatch();
 
   const [name, setName] = useState("");
@@ -23,32 +23,32 @@ const BrandEditScreen = ({ match, history }) => {
   const [uploading, setUploading] = useState(false);
 
 
-  const brandDetail = useSelector((state) => state.brandDetail);
-  const { loading, error, brand } = brandDetail;
-  const currentId = brand._id;
+  const categoryDetail = useSelector((state) => state.categoryDetail);
+  const { loading, error, category } = categoryDetail;
+  const currentId = category._id;
 
-  const brandUpdate = useSelector((state) => state.brandUpdate);
+  const categoryUpdate = useSelector((state) => state.categoryUpdate);
   const {
     loading: loadingUpdate,
     error: errorUpdate,
     success: successUpdate,
-  } = brandUpdate;
+  } = categoryUpdate;
 
   useEffect(() => {
-    if (!brand.name || currentId !== brandId) {
-      dispatch(actions.getBrandDetail(brandId));
+    if (!category.name || currentId !== categoryId) {
+      dispatch(actions.getCategoryDetail(categoryId));
     } else {
-      setName(brand.name);
-      setImage(brand.image);
-      setDescription(brand.description);
+      setName(category.name);
+      setImage(category.image);
+      setDescription(category.description);
     }
-  }, [dispatch, brandId, currentId]);
+  }, [dispatch, categoryId, currentId]);
 
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(
-      actions.updatedBrand({
-        _id: brandId,
+      actions.updatedCategory({
+        _id: categoryId,
         name,
         image,
         description,
@@ -80,7 +80,7 @@ const BrandEditScreen = ({ match, history }) => {
     setDescription(value);
   };
 
-  console.log(brand);
+  console.log(category);
 
   return (
     <>
@@ -89,15 +89,15 @@ const BrandEditScreen = ({ match, history }) => {
           <i className="fas fa-arrow-left"></i>
           &nbsp; Go Back
         </Link>
-        <h1>Edit Brand</h1>
+        <h1>Edit category</h1>
         {loadingUpdate && <Loader />}
         {errorUpdate && <Message variant="danger">{errorUpdate}</Message>}
         {successUpdate && (
           <DropNotif
-            heading="Update Brand"
-            text="Update Brand Successfully"
+            heading="Update Category"
+            text="Update Category Successfully"
             resetData={() => {
-              dispatch({ type: constants.BRAND_UPDATE_RESET });
+              dispatch({ type: constants.CATEGORY_UPDATE_RESET });
             }}
           ></DropNotif>
         )}
@@ -146,13 +146,13 @@ const BrandEditScreen = ({ match, history }) => {
               <FileDownloadDoneIcon/>
               &nbsp; Update
             </Button>
-            <Link
-              to={`/brand/${brand._id}`}
+            {/* <Link
+              to={`/category/${category._id}`}
               className="btn btn-primary mt-3 ms-3"
               style={{ borderRadius: 30}}>
               <VisibilityIcon/> 
-              &nbsp; Go to brand
-            </Link>
+              &nbsp; Go to Category
+            </Link> */}
           </Form>
         )}
       </Container>
@@ -160,4 +160,4 @@ const BrandEditScreen = ({ match, history }) => {
   );
 };
 
-export default BrandEditScreen;
+export default CategoryEditScreen;

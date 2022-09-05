@@ -146,13 +146,13 @@ const BrandEditScreen = ({ match, history }) => {
               <FileDownloadDoneIcon/>
               &nbsp; Update
             </Button>
-            <Link
+            {/* <Link
               to={`/brand/${brand._id}`}
               className="btn btn-primary mt-3 ms-3"
               style={{ borderRadius: 30}}>
               <VisibilityIcon/> 
               &nbsp; Go to brand
-            </Link>
+            </Link> */}
           </Form>
         )}
       </Container>

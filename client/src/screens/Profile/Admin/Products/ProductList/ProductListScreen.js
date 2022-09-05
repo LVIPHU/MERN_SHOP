@@ -19,6 +19,8 @@ import {
   // getProductsForSeller,
 } from "../../../../../actions/productActions";
 import { deleteProduct } from "../../../../../actions/productActions";
+import actionBrand from "../../../../../actions/brand"
+import actionCategory from "../../../../../actions/category"
 import DropNotif from "../../../../../components/Modal/Modal";
 import { PRODUCT_DELETE_RESET } from "../../../../../constants/productConstants";
 import MoveToInboxOutlinedIcon from '@mui/icons-material/MoveToInboxOutlined';
@@ -50,6 +52,8 @@ const ProductListScreen = () => {
   useEffect(() => {
     // if (userInfo.isAdmin) {
       dispatch(getProducts("", "", "", "", "", page));
+      dispatch(actionBrand.getBrands);
+      dispatch(actionCategory.getCategories);
     // } else if (userInfo.isSeller && !userInfo.isAdmin) {
     //   dispatch(getProductsForSeller());
     // }
@@ -119,7 +123,7 @@ const ProductListScreen = () => {
           <Row>
             {productsFinal &&
               productsFinal.map((product) => (
-                <Col xs={6} md={2} style={{ paddingBottom: "12px" }}>
+                <Col xs={6} md={2} style={{ paddingBottom: "12px" }} key={product._id} >
                   <Card
                     className="text-center"
                     style={{ width: "12rem" }}

@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Container,
@@ -10,15 +10,20 @@ import {
   Card,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import DropNotif from "../../../../../components/Modal/Modal";
+import MarkdownEditor from "../../../../../components/TextEditor/MarkdownEditor";
 import Message from "../../../../../components/Message";
 import Loader from "../../../../../components/Loader";
 import { createProduct } from "../../../../../actions/productActions";
 import { PRODUCT_CREATE_RESET } from "../../../../../constants/productConstants";
-import DropNotif from "../../../../../components/Modal/Modal";
-import MarkdownEditor from "../../../../../components/TextEditor/MarkdownEditor";
+
+// import actionBrand from "../../../../../actions/brand"
+// import actionCategory from "../../../../../actions/category"
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 
 const ProductCreateScreen = ({ match, history }) => {
+  const dispatch = useDispatch();
+
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [image, setImage] = useState("");
@@ -29,11 +34,21 @@ const ProductCreateScreen = ({ match, history }) => {
   const [uploadingDesc, setUploadingDesc] = useState(false);
   const [listImage, setListImage] = useState([]);
 
-  const dispatch = useDispatch();
+  const brandAll = useSelector((state) => state.brandAll);
+  const { brands } = brandAll;
+
+  const categoryAll = useSelector((state) => state.categoryAll);
+  const { categories } = categoryAll;
 
   const productCreate = useSelector((state) => state.productCreate);
   const { loading, error, product, success } = productCreate;
 
+  // useEffect(() => {
+  //   dispatch(actionBrand.getBrands);
+  //   dispatch(actionCategory.getCategories);
+  // }, [dispatch])
+
+  console.log(brands + "\n ======================== \n" + categories)
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(
@@ -219,11 +234,16 @@ const ProductCreateScreen = ({ match, history }) => {
             <Form.Group controlId="brand">
               <Form.Label>Brand</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="Enter brand"
+                as="select"
+                placeholder="Enter the brand"
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
-              ></Form.Control>
+              >
+                <option value=""></option>
+                {brands && brands.map((item) => (
+                    <option key={item._id} value={item.name}>{item.name}</option>
+                ))}
+              </Form.Control>
             </Form.Group>
 
             <Form.Group controlId="selection">
@@ -235,14 +255,9 @@ const ProductCreateScreen = ({ match, history }) => {
                 onChange={(e) => setCategory(e.target.value)}
               >
                 <option value=""></option>
-                <option value="Tank Top">Tank Top</option>
-                <option value="Shirts">Shirts</option>
-                <option value="Polos">Polos</option>
-                <option value="T-Shirts">T-Shirts</option>
-                <option value="Shorts">Shorts</option>
-                <option value="Jeans">Jeans</option>
-                <option value="Kaki">Kaki</option>
-                <option value="Sport">Sport</option>
+                {categories && categories.map((item) => (
+                    <option key={item._id} value={item.name}>{item.name}</option>
+                ))}
               </Form.Control>
             </Form.Group>
 

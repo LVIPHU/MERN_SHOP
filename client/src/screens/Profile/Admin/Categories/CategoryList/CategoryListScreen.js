@@ -12,34 +12,34 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../../../../components/Message";
 import Loader from "../../../../../components/Loader";
-import constants from "../../../../../constants/brand";
-import actions from "../../../../../actions/brand";
+import constants from "../../../../../constants/category";
+import actions from "../../../../../actions/category";
 import DropNotif from "../../../../../components/Modal/Modal";
 import MoveToInboxOutlinedIcon from '@mui/icons-material/MoveToInboxOutlined';
 
-const BrandListScreen = () => {
+const CategoryListScreen = () => {
   const dispatch = useDispatch();
 
-  const brandAll = useSelector((state) => state.brandAll);
-  const { loading, error, brands } = brandAll;
+  const categoryAll = useSelector((state) => state.categoryAll);
+  const { loading, error, categories } = categoryAll;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const brandDelete = useSelector((state) => state.brandDelete);
+  const categoryDelete = useSelector((state) => state.categoryDelete);
   const {
     loading: loadingDelete,
     success: successDelete,
     error: errorDelete,
-  } = brandDelete;
+  } = categoryDelete;
 
   useEffect(() => {
-      dispatch(actions.getBrands());
+      dispatch(actions.getCategories());
   }, [dispatch, userInfo, successDelete]);
 
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure?")) {
-      dispatch(actions.deleteBrand(id));
+      dispatch(actions.deleteCategory(id));
     }
   };
 
@@ -48,16 +48,16 @@ const BrandListScreen = () => {
     <Container className="mb-5">
       <Row className="align-items-center">
         <Col>
-          <h1>brands</h1>
+          <h1>Categories</h1>
         </Col>
         {userInfo.isAdmin && 
         (<Col className="text-end">
           <Link
             className="my-3 btn btn-primary"
-            to="/admin/brand/create"
+            to="/admin/category/create"
             style={{ marginLeft: "auto", borderRadius: 30 }}
           >
-            <i className="fas fa-plus"></i> Create brand
+            <i className="fas fa-plus"></i> Create category
           </Link>
         </Col>)}
       </Row>
@@ -71,71 +71,58 @@ const BrandListScreen = () => {
           {errorDelete && <Message variant="danger">{errorDelete}</Message>}
           {successDelete && (
             <DropNotif
-              heading="Delete brand"
-              text="Delete brand successfully"
+              heading="Delete category"
+              text="Delete category successfully"
               resetData={() => {
-                  dispatch(actions.getBrands);
-                  dispatch({ type: constants.BRAND_DELETE_RESET });
+                  dispatch(actions.getCategories);
+                  dispatch({ type: constants.CATEGORY_DELETE_RESET });
               }}
             />
           )}
           <Row>
-            {brands &&
-              brands.map((brand) => (
-                <Col xs={6} md={2} style={{ paddingBottom: "12px" }}>
+            {categories &&
+              categories.map((category) => (
+                <Col xs={6} md={2} style={{ paddingBottom: "12px" }} key={category._id}>
                   <Card
                     className="text-center"
                     style={{ width: "12rem" }}
-                    key={brand._id}
+                    key={category._id}
                   >
                     <Card.Img
                       variant="top"
-                      src={brand?.image?.url}
+                      src={category?.image?.url}
                       style={{ width: "190px", height: "280px" }}
                     />
                     <Card.Body>
-                      <Card.Title>{brand.name}</Card.Title>
+                      <Card.Title>{category.name}</Card.Title>
                     </Card.Body>
                     <ListGroup className="d-flex flex-column">
                       <ListGroup.Item>
-                        {brand.products.lenght} product
+                        {category.products.length} product
                       </ListGroup.Item>
                     </ListGroup>
                     <Card.Body className="d-flex flex-column">
-                      {userInfo.isAdmin ? (
-                        <>
-                          {" "}
+                       
                           <LinkContainer
-                            to={`/admin/brand/${brand._id}/edit`}
+                            to={`/admin/category/${category._id}/edit`}
                             style={{ borderRadius: 30 }}
-                          >
+                            >
                             <Button variant="outline-primary" className="mb-2">
                               <i className="fas fa-edit"></i>
                               &nbsp; Edit
                             </Button>
                           </LinkContainer>
+                            {(category.products.length === 0) && (
                           <Button
                             style={{ borderRadius: 30 }}
                             variant="outline-danger"
-                            onClick={() => deleteHandler(brand._id)}
+                            onClick={() => deleteHandler(category._id)}
                           >
                             <i className="fas fa-trash"></i>
                             &nbsp; Delete
                           </Button>
-                        </>
-                      ) : userInfo.isSeller && !userInfo.isAdmin ? (
-                        <LinkContainer
-                          to={`/admin/brand/${brand._id}/import`}
-                          style={{ borderRadius: 30 }}
-                        >
-                          <Button variant="outline-primary" className="mb-2">
-                            <MoveToInboxOutlinedIcon/>
-                            &nbsp; Import
-                          </Button>
-                        </LinkContainer>
-                      ) : (
-                        <></>
-                      )}
+                           )}
+                       
                     </Card.Body>
                   </Card>
                 </Col>
@@ -148,4 +135,4 @@ const BrandListScreen = () => {
   );
 };
 
-export default BrandListScreen;
+export default CategoryListScreen;

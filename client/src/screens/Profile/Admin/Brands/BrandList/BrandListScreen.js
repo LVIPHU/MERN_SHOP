@@ -83,7 +83,7 @@ const BrandListScreen = () => {
           <Row>
             {brands &&
               brands.map((brand) => (
-                <Col xs={6} md={2} style={{ paddingBottom: "12px" }}>
+                <Col xs={6} md={2} style={{ paddingBottom: "12px" }} key={brand._id}>
                   <Card
                     className="text-center"
                     style={{ width: "12rem" }}

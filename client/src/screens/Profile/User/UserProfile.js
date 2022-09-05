@@ -8,6 +8,7 @@ import classes from "../../ProductScreen/ProductScreen.module.css";
 import UserListScreen from "../Admin/Users/UserList/UserListScreen";
 import ProductListScreen from "../Admin/Products/ProductList/ProductListScreen";
 import OrderListScreen from "../Admin/OrderList/OrderListScreen";
+import CategoryListScreen from './../Admin/Categories/CategoryList/CategoryListScreen';
 import BrandListScreen from './../Admin/Brands/BrandList/BrandListScreen';
 import ManageRequestScreen from "../Admin/ManageRequest/ManageRequestScreen";
 import Chart from "../Admin/Chart/Chart";
@@ -52,9 +53,9 @@ const UserProfile = ({ history }) => {
   } else if (selection === "4") {
     selectionShow = <UserListScreen />;
   } else if (selection === "5") {
-    selectionShow = <CategoryIcon />;
+    selectionShow = <CategoryListScreen />;
   } else if (selection === "6") {
-    selectionShow = <BrandListScreen/>;
+    selectionShow = <BrandListScreen />;
   } else if (selection === "7") {
     selectionShow = <ProductListScreen />;
   } else if (selection === "8") {

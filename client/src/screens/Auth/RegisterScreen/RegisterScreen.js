@@ -58,7 +58,7 @@ const RegisterScreen = ({ location, history }) => {
         <DropNotif
           heading="Send Mail"
           text="Send success please check your email"
-          resetData
+          resetData={() => {}}
         ></DropNotif>
       )}
         <div className={classes.leftSide}>

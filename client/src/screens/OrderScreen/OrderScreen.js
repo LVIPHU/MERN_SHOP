@@ -274,7 +274,7 @@ const OrderScreen = ({ match, history }) => {
                     }}
                   ></DropNotif>
                 )}
-                {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                {!userInfo.isSeller && order.isPaid && !order.isDelivered && (
                   <ListGroup.Item style={{display: "flex", flexDirection: "column" ,alignItems: "center"}}>
                     <Button
                       type="button"

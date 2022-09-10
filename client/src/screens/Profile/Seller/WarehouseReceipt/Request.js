@@ -125,13 +125,16 @@ const Request = ({ match, history }) => {
                           />
                         }
                       >
-                        <Carousel.Item>
-                          <img
-                            className="d-block w-100"
-                            src={product?.image?.url}
-                            alt="First slide"
-                          />
-                        </Carousel.Item>
+                        {product.image &&
+                          product.image.map((item) => (
+                            <Carousel.Item key={item.public_id}>
+                              <img
+                                className="d-block w-100"
+                                src={item.url}
+                                alt="First slide"
+                              />
+                            </Carousel.Item>
+                          ))}
                       </Carousel>
                       <Card.Body>
                         <Card.Title>{product.name}</Card.Title>
@@ -215,7 +218,6 @@ const Request = ({ match, history }) => {
                       <Form.Control
                         type="text"
                         Value={newAmount}
-                        // onchange={(e) => setAmount(e.target.value)}
                       />
                       <InputGroup.Text>.00</InputGroup.Text>
                     </InputGroup>

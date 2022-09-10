@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import {
-  // Table,
   Button,
   Card,
-  Row,
+  Carousel,
   Col,
   Container,
+  Row,
   ListGroup,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -19,25 +19,17 @@ import {
   // getProductsForSeller,
 } from "../../../../../actions/productActions";
 import { deleteProduct } from "../../../../../actions/productActions";
-import actionBrand from "../../../../../actions/brand"
-import actionCategory from "../../../../../actions/category"
+
 import DropNotif from "../../../../../components/Modal/Modal";
 import { PRODUCT_DELETE_RESET } from "../../../../../constants/productConstants";
 import MoveToInboxOutlinedIcon from '@mui/icons-material/MoveToInboxOutlined';
 
 const ProductListScreen = () => {
-  const [page, setPage] = useState(1);
   const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
 
   const productAll = useSelector((state) => state.productAll);
   const { loading, error, products, pageCount } = productAll;
-
-  // const productForSeller = useSelector((state) => state.productForSeller);
-  // const {
-  //   loading: loadingForSeller,
-  //   error: errorForSeller,
-  //   products: productsSeller,
-  // } = productForSeller;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -50,13 +42,7 @@ const ProductListScreen = () => {
   } = productDelete;
 
   useEffect(() => {
-    // if (userInfo.isAdmin) {
       dispatch(getProducts("", "", "", "", "", page));
-      dispatch(actionBrand.getBrands);
-      dispatch(actionCategory.getCategories);
-    // } else if (userInfo.isSeller && !userInfo.isAdmin) {
-    //   dispatch(getProductsForSeller());
-    // }
   }, [dispatch, page, userInfo]);
 
   const deleteHandler = (id) => {
@@ -69,17 +55,11 @@ const ProductListScreen = () => {
   };
 
   let productsFinal;
-  // if (userInfo.isAdmin) {
     if (products) {
       productsFinal = products;
     }
-  // } else if (userInfo.isSeller) {
-  //   if (productsSeller) {
-  //     productsFinal = productsSeller;
-  //   }
-  // }
 
-  console.log(productsFinal);
+
   return (
     <Container className="mb-5">
       <Row className="align-items-center">
@@ -126,14 +106,45 @@ const ProductListScreen = () => {
                 <Col xs={6} md={2} style={{ paddingBottom: "12px" }} key={product._id} >
                   <Card
                     className="text-center"
-                    style={{ width: "12rem" }}
+                    style={{ width: "12rem", textAlign: "center"}}
                     key={product._id}
                   >
-                    <Card.Img
-                      variant="top"
-                      src={product?.image?.url}
-                      style={{ width: "190px", height: "280px" }}
-                    />
+                    <Carousel
+                        fade
+                        prevIcon={
+                          <span
+                            aria-hidden="true"
+                            className="carousel-control-prev-icon"
+                            style={{
+                              backgroundColor: "#384aeb",
+                              borderRadius: "30px",
+                              margin: "10px",
+                            }}
+                          />
+                        }
+                        nextIcon={
+                          <span
+                            aria-hidden="true"
+                            className="carousel-control-next-icon"
+                            style={{
+                              backgroundColor: "#384aeb",
+                              borderRadius: "30px",
+                              margin: "10px",
+                            }}
+                          />
+                        }
+                      >
+                        {product.image &&
+                          product.image.map((item) => (
+                            <Carousel.Item key={item.public_id}>
+                              <img
+                                className="d-block w-100"
+                                src={item.url}
+                                alt="First slide"
+                              />
+                            </Carousel.Item>
+                          ))}
+                      </Carousel>
                     <Card.Body>
                       <Card.Text>{product.category}</Card.Text>
                       <Card.Text>{product.brand}</Card.Text>
@@ -158,6 +169,7 @@ const ProductListScreen = () => {
                               &nbsp; Edit
                             </Button>
                           </LinkContainer>
+                          {product.countInStock <= 0 && (
                           <Button
                             style={{ borderRadius: 30 }}
                             variant="outline-danger"
@@ -165,7 +177,7 @@ const ProductListScreen = () => {
                           >
                             <i className="fas fa-trash"></i>
                             &nbsp; Delete
-                          </Button>
+                          </Button>)}
                         </>
                       ) : userInfo.isSeller && !userInfo.isAdmin ? (
                         <LinkContainer
@@ -185,48 +197,6 @@ const ProductListScreen = () => {
                 </Col>
               ))}
           </Row>
-
-          {/* <Table striped bordered hover responsive className="table-sm">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>NAME</th>
-                <th>PRICE</th>
-                <th>CATEGORY</th>
-                <th>BRAND</th>
-                <th>RATING</th>
-                <th>IN STOCK</th>
-              </tr>
-            </thead>
-            <tbody>
-              {productsFinal &&
-                productsFinal.map((product) => (
-                  <tr key={product._id}>
-                    <td>{product._id}</td>
-                    <td>{product.name}</td>
-                    <td>${product.price}</td>
-                    <td>{product.category}</td>
-                    <td>{product.brand}</td>
-                    <td>{product.rating}</td>
-                    <td>{product.countInStock}</td>
-                    <td>
-                      <LinkContainer to={`/admin/product/${product._id}/edit`}>
-                        <Button variant="light" className="btn-sm">
-                          <i className="fas fa-edit"></i>
-                        </Button>
-                      </LinkContainer>
-                      <Button
-                        variant="danger"
-                        className="btn-sm"
-                        onClick={() => deleteHandler(product._id)}
-                      >
-                        <i className="fas fa-trash"></i>
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </Table> */}
           <Pagination
             count={pageCount}
             size="large"

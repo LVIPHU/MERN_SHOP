@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Form, Container } from "react-bootstrap";
+import { Form, Container, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import CheckoutSteps from "../../components/CheckoutStep/CheckoutStep";
 import classes from "./ShippingScreen.module.css";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import { updateUserProfile } from "../../actions/userAction";
 import Message from "../../components/Message";
 import { USER_UPDATE_PROFILE_RESET } from "../../constants/userConstants";
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
+import addressApi from "./../../api/Address";
 
 const ShippingScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -20,12 +20,21 @@ const ShippingScreen = ({ history }) => {
   const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
   const { success } = userUpdateProfile;
 
+  const [province, setProvince] = useState("");
+  const [provinceId, setProvinceId] = useState("");
+  const [provinceList, setProvinceList] = useState([]);
+
+  const [district, setDistrict] = useState("");
+  const [districtId, setDistrictId] = useState("");
+  const [districtList, setDistrictList] = useState([]);
+
+  const [ward, setWard] = useState("");
+  const [wardId, setWardId] = useState("");
+  const [wardList, setWardList] = useState([]);
+
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-  const [state, setState] = useState("");
   const [message, setMessage] = useState("");
 
   useEffect(() => {
@@ -33,38 +42,121 @@ const ShippingScreen = ({ history }) => {
       history.push("/payment");
       dispatch({ type: USER_UPDATE_PROFILE_RESET });
     }
+    if (userInfo.shippingAddress.fullname) {
+      setFullName(userInfo.shippingAddress.fullname);
+    }
     if (userInfo.shippingAddress.address) {
       setAddress(userInfo.shippingAddress.address);
     }
     if (userInfo.shippingAddress.phone) {
       setPhone(userInfo.shippingAddress.phone);
     }
-    if (userInfo.shippingAddress.state) {
-      setState(userInfo.shippingAddress.state);
+    if (
+      userInfo.shippingAddress.province &&
+      userInfo.shippingAddress.provinceId
+    ) {
+      setProvince(userInfo.shippingAddress.province);
+      setProvinceId(userInfo.shippingAddress.provinceId);
     }
-    if (userInfo.shippingAddress.city) {
-      setCity(userInfo.shippingAddress.city);
+    if (
+      userInfo.shippingAddress.district &&
+      userInfo.shippingAddress.districtId
+    ) {
+      setDistrict(userInfo.shippingAddress.district);
+      setDistrictId(userInfo.shippingAddress.districtId);
     }
-    if (userInfo.shippingAddress.fullname) {
-      setFullName(userInfo.shippingAddress.fullname);
+    if (userInfo.shippingAddress.ward && userInfo.shippingAddress.wardId) {
+      setWard(userInfo.shippingAddress.ward);
+      setWardId(userInfo.shippingAddress.wardId);
     }
-    if (userInfo.shippingAddress.postalCode) {
-      setPostalCode(userInfo.shippingAddress.postalCode);
+
+    let isSubscribe = true;
+
+    async function getProvinceList() {
+      try {
+        const response = await addressApi.getProvinces();
+        if (response) {
+          if (isSubscribe) setProvinceList(response.data);
+        }
+      } catch (error) {}
     }
+    getProvinceList();
+    // cleanup
+    return () => (isSubscribe = false);
   }, [success]);
+
+  // fn: lấy danh sách huyện/xã khi đã chọn tỉnh/thành
+  const getDistrictList = async (provinceId) => {
+    try {
+      const response = await addressApi.getDistricts(provinceId);
+      if (response) {
+        setDistrictList(response.data.districts);
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  // fn: lấy danh sách huyện/xã khi đã chọn tỉnh/thành
+  const getWardStreetList = async (districtId) => {
+    try {
+      const response = await addressApi.getWards(districtId);
+      if (response) {
+        setWardList(response.data.wards);
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const get_province = (e) => {
+    var array = e.split("|");
+    setProvinceId(array[0]);
+    setProvince(array[1]);
+    getDistrictList(array[0]);
+    console.log(province);
+  };
+
+  const get_district = (e) => {
+    var array = e.split("|");
+    setDistrictId(array[0]);
+    setDistrict(array[1]);
+    getWardStreetList(array[0]);
+    console.log(district);
+  };
+
+  const get_ward = (e) => {
+    var array = e.split("|");
+    setWardId(array[0]);
+    setWard(array[1]);
+    console.log(ward);
+  };
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if (!fullName || !phone || !address || !city || !postalCode || !state) {
+    if (
+      !fullName ||
+      !phone ||
+      !address ||
+      !province ||
+      !district ||
+      !ward ||
+      !provinceId ||
+      !districtId ||
+      !wardId
+    ) {
       setMessage("Please fill up all the information");
     } else {
       const updateUser = {
-        address,
         fullname: fullName,
-        city,
-        state,
-        postalCode,
+        address,
         phone,
+        province,
+        provinceId,
+        district,
+        districtId,
+        ward,
+        wardId,
       };
       dispatch(updateUserProfile(updateUser));
     }
@@ -75,8 +167,9 @@ const ShippingScreen = ({ history }) => {
       <div className={classes.wrapper}>
         <h1>Shipping</h1>
         {message && <Message variant="danger">{message}</Message>}
-        <Form onSubmit={submitHandler}>
-          <Form.Group controlId="fullName">
+        <Form onSubmit={submitHandler} style={{ paddingBottom: "20px" }}>
+
+          <Form.Group controlId="fullName" style={{ paddingBottom: "20px" }}>
             <Form.Label>Full name</Form.Label>
             <Form.Control
               type="text"
@@ -86,7 +179,7 @@ const ShippingScreen = ({ history }) => {
             ></Form.Control>
           </Form.Group>
 
-          <Form.Group controlId="phone">
+          <Form.Group controlId="phone" style={{ paddingBottom: "20px" }}>
             <Form.Label>Phone Number</Form.Label>
             <Form.Control
               type="number"
@@ -96,7 +189,85 @@ const ShippingScreen = ({ history }) => {
             ></Form.Control>
           </Form.Group>
 
-          <Form.Group controlId="address">
+          <Row style={{ paddingBottom: "20px" }}>
+            <Col xs={1}>
+              <Form.Label>Province</Form.Label>
+              <FormControl size={"small"} style={{ width: '100%'}}>
+                <Select
+                  autoWidth
+                  value={province}
+                  label="Province"
+                  onChange={(e) => get_province(e.target.value)}
+                >
+                  {provinceList &&
+                    provinceList?.map((item) => (
+                      <MenuItem
+                        key={item.code}
+                        value={`${item.code}|${item.name}`}
+                      >
+                        {item.name}
+                      </MenuItem>
+                    ))}
+                </Select>
+              </FormControl>
+            </Col>
+            <Col xs={11}>
+              <Form.Label style={{ marginTop: '17px'}}></Form.Label>
+              <Form.Control type="text" value={province} readOnly></Form.Control>
+            </Col>
+          </Row>
+
+          <Row style={{ paddingBottom: "20px" }}>
+            <Col xs={1}>
+              <Form.Label>District</Form.Label>
+              <FormControl size={"small"} style={{ width: '100%'}}>
+                <Select
+                  autoWidth
+                  value={district}
+                  label="District"
+                  onChange={(e) => get_district(e.target.value)}
+                >
+                  {districtList &&
+                    districtList?.map((item) => (
+                      <MenuItem key={item.code} value={`${item.code}|${item.name}`}>
+                        {item.name}
+                      </MenuItem>
+                    ))}
+                </Select>
+              </FormControl>
+            </Col>
+            <Col xs={11}>
+              <Form.Label style={{ marginTop: '17px'}}></Form.Label>
+              <Form.Control type="text" value={district} readOnly></Form.Control>
+            </Col>
+          </Row>
+
+          <Row style={{ paddingBottom: "20px" }}>
+            <Col xs={1}>
+              <Form.Label>Ward</Form.Label>
+              <FormControl size={"small"} style={{ width: '100%'}}>
+            <Select
+              autoWidth
+              value={ward}
+              label="Ward"
+              onChange={(e) => get_ward(e.target.value)}
+            >
+              {wardList &&
+                wardList?.map((item) => (
+                  <MenuItem key={item.code} value={`${item.code}|${item.name}`}>
+                    {item.name}
+                  </MenuItem>
+                ))}
+            </Select>
+          </FormControl>
+          </Col>
+            <Col xs={11}>
+              <Form.Label style={{ marginTop: '17px'}}></Form.Label>
+              <Form.Control type="text" value={ward} readOnly></Form.Control>
+            </Col>
+          </Row>
+
+          <Form.Group controlId="address" style={{ paddingBottom: "20px" }}>
             <Form.Label>Address</Form.Label>
             <Form.Control
               type="text"
@@ -106,51 +277,10 @@ const ShippingScreen = ({ history }) => {
             ></Form.Control>
           </Form.Group>
 
-          <Form.Group controlId="ward">
-            <Form.Label>ward</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter your ward"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-
-          <Form.Group controlId="postalCode">
-            <Form.Label>district</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter your district"
-              value={postalCode}
-              onChange={(e) => setPostalCode(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-
-          <FormControl sx={{ mt: 2, minWidth: 150 }}>
-            <InputLabel id="demo-simple-select-autowidth-label">
-              City
-            </InputLabel>
-            <Select
-              autoWidth
-              value={state}
-              label="City"
-              onChange={(e) => setState(e.target.value)}
-            >
-              <MenuItem value={"Hồ Chí Minh"}>Hồ Chí Minh</MenuItem>
-              <MenuItem value={"Hà Nội"}>Hà Nội</MenuItem>
-              <MenuItem value={"Bà Rịa & Vũng Tàu"}>
-              Bà Rịa & Vũng Tàu
-              </MenuItem>
-              <MenuItem value={"Bình Dương"}>Bình Dương</MenuItem>
-              <MenuItem value={"Cà Mau"}>Cà Mau</MenuItem>
-              <MenuItem value={"Cần Thơ"}>Cần Thơ</MenuItem>
-              <MenuItem value={"Đà Nẵng"}>
-              Đà Nẵng
-              </MenuItem>
-              <MenuItem value={"Huế"}>Huế</MenuItem>
-            </Select>
-          </FormControl>
-          <button className={classes.continue} style={{ borderRadius: 30}}><FileDownloadDoneIcon/>&nbsp; Continue</button>
+          <button className={classes.continue} style={{ borderRadius: 30 }}>
+            <FileDownloadDoneIcon />
+            &nbsp; Continue
+          </button>
         </Form>
       </div>
     </Container>

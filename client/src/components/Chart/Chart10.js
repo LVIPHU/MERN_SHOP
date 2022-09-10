@@ -14,7 +14,7 @@ const Chart10 = (URL) => {
               width: "100%",
               height:"480px"
             }}
-            src="https://charts.mongodb.com/charts-e-commerce-jqkjl/embed/charts?id=63071a2b-e876-49fc-8197-cd9a517e59d4&maxDataAge=10&theme=light&autoRefresh=true"
+            src="https://charts.mongodb.com/charts-e-commerce-jqkjl/embed/charts?id=631c5580-2840-4a0f-8927-8634b931ee84&maxDataAge=10&theme=light&autoRefresh=true"
           ></iframe>
         </article>
       </div>

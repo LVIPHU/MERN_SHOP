@@ -1,16 +1,16 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Container, Form, Button, Card} from "react-bootstrap";
+import { Container, Form, Button, Card } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../../../../components/Message";
 import Loader from "../../../../../components/Loader";
 import constants from "../../../../../constants/category";
-import actions from "../../../../../actions/category"
+import actions from "../../../../../actions/category";
 import DropNotif from "../../../../../components/Modal/Modal";
 import MarkdownEditor from "../../../../../components/TextEditor/MarkdownEditor";
 
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 // import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const CategoryEditScreen = ({ match, history }) => {
@@ -21,7 +21,6 @@ const CategoryEditScreen = ({ match, history }) => {
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
   const [uploading, setUploading] = useState(false);
-
 
   const categoryDetail = useSelector((state) => state.categoryDetail);
   const { loading, error, category } = categoryDetail;
@@ -59,6 +58,7 @@ const CategoryEditScreen = ({ match, history }) => {
     const file = e.target.files[0];
     const formData = new FormData();
     formData.append("image", file);
+    console.log(formData);
     setUploading(true);
 
     try {
@@ -67,7 +67,7 @@ const CategoryEditScreen = ({ match, history }) => {
           "Content-Type": "multipart/form-data",
         },
       };
-      const { data } = await axios.post("/api/upload", formData, config);
+      const { data } = await axios.post("/api/file/upload", formData, config);
       setImage(data);
       setUploading(false);
     } catch (error) {
@@ -85,7 +85,11 @@ const CategoryEditScreen = ({ match, history }) => {
   return (
     <>
       <Container className="mb-5">
-        <Link to="/userProfile" className="btn btn-primary my-3" style={{ borderRadius: 30}}>
+        <Link
+          to="/userProfile"
+          className="btn btn-primary my-3"
+          style={{ borderRadius: 30 }}
+        >
           <i className="fas fa-arrow-left"></i>
           &nbsp; Go Back
         </Link>
@@ -117,33 +121,38 @@ const CategoryEditScreen = ({ match, history }) => {
               ></Form.Control>
             </Form.Group>
 
-        
             <Form.Group controlId="image" className="mb-3">
               <Form.Label>Image</Form.Label>
-           
               <Form.File
                 id="image-file"
                 custom
                 onChange={uploadFileHandler}
               ></Form.File>
             </Form.Group>
-            
-                    <Card className="text-center" style={{ width: "12rem" }} key={image?.public_id}>
-                      {uploading ? (
-                        <Loader />
-                      ) : (
-                        <Card.Img variant="top" src={image?.url} />
-                      )}
-                    </Card>
-                 
-    
+            <Card
+              className="text-center"
+              style={{ width: "12rem" }}
+              key={image?.public_id}
+            >
+              {uploading ? (
+                <Loader />
+              ) : (
+                <Card.Img variant="top" src={image?.url} />
+              )}
+            </Card>
+
             <Form.Group className="mt-3" controlId="description">
               <Form.Label>Description</Form.Label>
               <MarkdownEditor text={description} onChange={onChange} />
             </Form.Group>
 
-            <Button className="mt-3" type="submit" variant="primary" style={{ borderRadius: 30}}>
-              <FileDownloadDoneIcon/>
+            <Button
+              className="mt-3"
+              type="submit"
+              variant="primary"
+              style={{ borderRadius: 30 }}
+            >
+              <FileDownloadDoneIcon />
               &nbsp; Update
             </Button>
             {/* <Link

@@ -19,13 +19,27 @@ import {
   getOrderDetails,
   payOrder,
   deliverOrder,
+  deliveringOrder,
+  cancelOrder,
 } from "../../actions/orderAction";
 import {
   ORDER_PAY_RESET,
   ORDER_UPDATE_DELIVER_RESET,
+  ORDER_UPDATE_DELIVERING_RESET,
+  ORDER_CANCEL_RESET,
+  ORDER_CREATE_RESET,
 } from "../../constants/orderConstant";
 import DropNotif from "../../components/Modal/Modal";
-import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
+
+import Box from "@mui/material/Box";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+
+import PaidIcon from '@mui/icons-material/Paid';
+import DeliveryDiningIcon from "@mui/icons-material/DeliveryDining";
+import InventoryIcon from '@mui/icons-material/Inventory';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 const OrderScreen = ({ match, history }) => {
   const orderId = match.params.id;
@@ -44,6 +58,12 @@ const OrderScreen = ({ match, history }) => {
 
   const orderDeliver = useSelector((state) => state.orderDeliver);
   const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
+
+  const orderDelivering = useSelector((state) => state.orderDelivering);
+  const { loading: loadingDelivering, success: successDelivering } = orderDelivering;
+
+  const orderCancel = useSelector((state) => state.orderCancel);
+  const { loading: loadingCancel, success: successCancel } = orderCancel;
 
   useEffect(() => {
     if (!userInfo) {
@@ -72,9 +92,9 @@ const OrderScreen = ({ match, history }) => {
   }, [dispatch, orderId, order, sucessPay, history, userInfo]);
 
   if (!loading) {
-      const addDecimal = (num) => {
-        return (Math.round(num * 100) / 100).toFixed(2);
-      };
+    const addDecimal = (num) => {
+      return (Math.round(num * 100) / 100).toFixed(2);
+    };
     // Caculate price
     order.itemPrices = addDecimal(
       order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
@@ -87,8 +107,41 @@ const OrderScreen = ({ match, history }) => {
   const deliverHandler = () => {
     dispatch(deliverOrder(order));
   };
+
+  const deliveringHandler = () => {
+    dispatch(deliveringOrder(order));
+  };
+
+  const cancelHandler = () => {
+    dispatch(cancelOrder(order));
+  };
+
   const getDate = (date) => {
     return new Date(date).toString();
+  };
+
+  const statusPayPal = (order) => {
+    if(!order.isPaid && !order.isDelivering && !order.isDelivered) {
+      return 0;
+    } else if (order.isPaid && !order.isDelivering && !order.isDelivered) {
+      return 1;
+    } else if (order.isPaid && order.isDelivering && !order.isDelivered) {
+      return 2;
+    } else if (order.isPaid && order.isDelivering && order.isDelivered) {
+      return 3;
+    }
+  };
+
+  const statusCOD = (order) => {
+    if(!order.isPaid && !order.isDelivering && !order.isDelivered) {
+      return 0;
+    } else if (order.isPaid && !order.isDelivering && !order.isDelivered) {
+      return 1;
+    } else if (order.isPaid && order.isDelivering && !order.isDelivered) {
+      return 2;
+    } else if (order.isPaid && order.isDelivering && order.isDelivered) {
+      return 3;
+    }
   };
 
   return loading ? (
@@ -103,13 +156,44 @@ const OrderScreen = ({ match, history }) => {
             <ListGroup variant="flush">
               <ListGroup.Item>
                 <h1>Order</h1>
+                <h2>Status</h2>
+                { order.isCancel ? (
+                  <Message variant="danger">Order has been cancelled</Message>
+                ) : order.paymentMethod === "PayPal" ? (
+                  <Box sx={{ width: '100%', paddingBottom: '20px' }}>
+                    <Stepper activeStep={statusPayPal(order)} alternativeLabel>
+                        <Step>
+                          <StepLabel><PaidIcon/> Paid</StepLabel>
+                        </Step>
+                        <Step>
+                          <StepLabel><DeliveryDiningIcon/> Delivery</StepLabel>
+                        </Step>
+                        <Step>
+                          <StepLabel><InventoryIcon/> Receive</StepLabel>
+                        </Step>
+                    </Stepper>
+                  </Box>
+                ) : order.paymentMethod === "COD" ? (
+                  <Box sx={{ width: '100%', paddingBottom: '20px' }}>
+                    <Stepper activeStep={statusCOD(order)} alternativeLabel>
+                        <Step>
+                          <StepLabel><DeliveryDiningIcon/> Delivery</StepLabel>
+                        </Step>
+                        <Step>
+                          <StepLabel><InventoryIcon/> Receive and <PaidIcon/> Paid</StepLabel>
+                        </Step>
+                    </Stepper>
+                  </Box>
+                  ): <></>}
                 <h2>Information</h2>
                 <p>
                   <strong>Full Name: </strong> {order.shippingAddress.fullname}
                 </p>
                 <p>
                   <strong>Email: </strong>{" "}
-                  <a href={`mailto:${order?.user?.email}`}>{order?.user?.email}</a>
+                  <a href={`mailto:${order?.user?.email}`}>
+                    {order?.user?.email}
+                  </a>
                 </p>
                 <p>
                   <strong>Phone number: </strong>
@@ -117,16 +201,20 @@ const OrderScreen = ({ match, history }) => {
                 </p>
                 <p className="mb-3">
                   <strong>Address: </strong>
-                  {order.shippingAddress.address}, {order.shippingAddress.city},{" "}
-                  {order.shippingAddress.postalCode},{" "}
-                  {order.shippingAddress.state}
+                  {order.shippingAddress.address}, {order.shippingAddress.ward},{" "}
+                  {order.shippingAddress.district},{" "}
+                  {order.shippingAddress.province}
                 </p>
                 {order.isDelivered ? (
                   <Message variant="success">
                     Delivered on {order.deliveredAt}
                   </Message>
+                ) : order.isDelivering ? (
+                  <Message variant="primary">
+                    Delivering
+                  </Message>
                 ) : (
-                  <Message variant="danger">Not Delivered</Message>
+                  <Message variant="danger">Not Delivery</Message>
                 )}
               </ListGroup.Item>
               <ListGroup.Item>
@@ -149,68 +237,44 @@ const OrderScreen = ({ match, history }) => {
                   <Message>Your order is empty</Message>
                 ) : (
                   <Table striped="column" hover responsive>
-            <thead>
-              <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th></th>
-                <th></th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              {order.orderItems.map((item, index) => (
-                <tr key={index}>
-                  <td>
-                    <Image
-                      src={item?.image?.url}
-                      alt={item.name}
-                      fluid
-                      rounded
-                      height={40}
-                      width={40}
-                    />
-                  </td>
-                  <td>
-                    <Link to={`/product/${item.product}`}>
-                      {item.name}
-                    </Link>
-                  </td>
-                  <td> </td>
-                  <td> </td>
-                  <td>${item.price}</td>
-                  <td>{item.qty}</td>
-                  <td>${item.qty * item.price}</td>
-                </tr>
-              ))}
-            </tbody>
-            </Table>
-                  // <ListGroup variant="flush">
-                  //   {order.orderItems.map((item, index) => (
-                  //     <ListGroup.Item key={index}>
-                  //       <Row>
-                  //         <Col md={1}>
-                  //           <Image
-                  //             src={item?.image?.url}
-                  //             alt={item.name}
-                  //             fluid
-                  //             rounded
-                  //           />
-                  //         </Col>
-                  //         <Col>
-                  //           <Link to={`/product/${item.product}`}>
-                  //             {item.name}
-                  //           </Link>
-                  //         </Col>
-                  //         <Col md={4}>
-                  //           {item.qty}x ${item.price} = ${item.qty * item.price}
-                  //         </Col>
-                  //       </Row>
-                  //     </ListGroup.Item>
-                  //   ))}
-                  // </ListGroup>
+                    <thead>
+                      <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th></th>
+                        <th></th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {order.orderItems.map((item, index) => (
+                        <tr key={index}>
+                          <td>
+                            <Image
+                              src={item?.image[0].url}
+                              alt={item.name}
+                              fluid
+                              rounded
+                              height={40}
+                              width={40}
+                            />
+                          </td>
+                          <td>
+                            <Link to={`/product/${item.product}`}>
+                              {item.name}
+                            </Link>
+                          </td>
+                          <td> </td>
+                          <td> </td>
+                          <td>${item.price}</td>
+                          <td>{item.qty}</td>
+                          <td>${item.qty * item.price}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
                 )}
               </ListGroup.Item>
             </ListGroup>
@@ -250,7 +314,7 @@ const OrderScreen = ({ match, history }) => {
                   </Row>
                 </ListGroup.Item>
 
-                {!order.isPaid && (order.user._id === userInfo._id) && (
+                {!order.isPaid && order.user._id === userInfo._id && order.paymentMethod === 'PayPal' && (
                   <ListGroup.Item>
                     {loadingPay && <Loader />}
                     {!sdkReady ? (
@@ -263,6 +327,7 @@ const OrderScreen = ({ match, history }) => {
                     )}
                   </ListGroup.Item>
                 )}
+
                 {loadingDeliver && <Loader />}
                 {successDeliver && (
                   <DropNotif
@@ -271,18 +336,113 @@ const OrderScreen = ({ match, history }) => {
                     resetData={() => {
                       dispatch({ type: ORDER_UPDATE_DELIVER_RESET });
                       dispatch(getOrderDetails(orderId));
+                      dispatch({ type: ORDER_CREATE_RESET });
                     }}
                   ></DropNotif>
                 )}
-                {!userInfo.isSeller && order.isPaid && !order.isDelivered && (
-                  <ListGroup.Item style={{display: "flex", flexDirection: "column" ,alignItems: "center"}}>
+
+              {loadingDelivering && <Loader />}
+                {successDelivering && (
+                  <DropNotif
+                    heading="Mark Delivereing"
+                    text="Mark as delivereing successfully"
+                    resetData={() => {
+                      dispatch({ type: ORDER_UPDATE_DELIVERING_RESET });
+                      dispatch(getOrderDetails(orderId));
+                      dispatch({ type: ORDER_CREATE_RESET });
+                    }}
+                  ></DropNotif>
+                )}
+
+              {loadingCancel && <Loader />}
+                {successCancel && (
+                  <DropNotif
+                    heading="Cancel Oder"
+                    text="Cancel oder successfully"
+                    resetData={() => {
+                      dispatch({ type: ORDER_CANCEL_RESET });
+                      dispatch(getOrderDetails(orderId));
+                      dispatch({ type: ORDER_CREATE_RESET });
+                    }}
+                  ></DropNotif>
+                )}
+
+                {(userInfo.isSeller || userInfo.isAdmin ) && order.paymentMethod === "PayPal" && order.isPaid && !order.isDelivering && (
+                  <ListGroup.Item
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Button
+                      type="button"
+                      className="btn btn-block"
+                      onClick={deliveringHandler}
+                      style={{ borderRadius: 30 }}
+                    >
+                      <DeliveryDiningIcon />
+                      &nbsp; Mark as Delivering
+                    </Button>
+                  </ListGroup.Item>
+                )}
+
+                {!userInfo.isSeller && !userInfo.isAdmin  && order.paymentMethod === "COD" && !order.isDelivering && !order.isCancel && (
+                  <ListGroup.Item
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Button
+                      variant="danger"
+                      type="button"
+                      className="btn btn-block"
+                      onClick={cancelHandler}
+                      style={{ borderRadius: 30 }}
+                    >
+                      <CancelIcon/>
+                      &nbsp; Cancel Order
+                    </Button>
+                  </ListGroup.Item>
+                )}
+
+                {(userInfo.isSeller || userInfo.isAdmin ) && order.paymentMethod === "COD" && !order.isDelivering && !order.isCancel && (
+                  <ListGroup.Item
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Button
+                      type="button"
+                      className="btn btn-block"
+                      onClick={deliveringHandler}
+                      style={{ borderRadius: 30 }}
+                    >
+                      <DeliveryDiningIcon />
+                      &nbsp; Mark as Delivering
+                    </Button>
+                  </ListGroup.Item>
+                )}
+
+                {userInfo && order.isDelivering && !order.isDelivered && !order.Cancel && (
+                  <ListGroup.Item
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
                     <Button
                       type="button"
                       className="btn btn-block"
                       onClick={deliverHandler}
-                      style={{ borderRadius: 30}}
+                      style={{ borderRadius: 30 }}
                     >
-                      <DeliveryDiningIcon/>
+                      <InventoryIcon/>
                       &nbsp; Mark as Delivered
                     </Button>
                   </ListGroup.Item>

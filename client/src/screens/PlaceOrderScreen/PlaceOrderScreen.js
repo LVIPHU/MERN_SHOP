@@ -71,9 +71,9 @@ const PlaceOrderScreen = ({ history }) => {
                 <p>
                   <strong>Address: </strong>
                   {userInfo.shippingAddress.address},{" "}
-                  {userInfo.shippingAddress.city},{" "}
-                  {userInfo.shippingAddress.postalCode},{" "}
-                  {userInfo.shippingAddress.state}
+                  {userInfo.shippingAddress.ward},{" "}
+                  {userInfo.shippingAddress.district},{" "}
+                  {userInfo.shippingAddress.province}
                 </p>
               </ListGroup.Item>
               <ListGroup.Item>
@@ -92,7 +92,7 @@ const PlaceOrderScreen = ({ history }) => {
                         <Row>
                           <Col md={1}>
                             <Image
-                              src={item?.image?.url}
+                              src={item?.image[0].url}
                               alt={item.name}
                               fluid
                               rounded

@@ -10,14 +10,17 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import DropNotif from './../../../../../components/Modal/Modal';
 
 const UserEditScreen = ({ match, history }) => {
+  const dispatch = useDispatch();
   const userId = match.params.id;
 
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const [isSeller, setIsSeller] = useState(false);
+  const [isBlock, setIsBlock] = useState(false);
 
-  const dispatch = useDispatch();
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
 
   const userDetail = useSelector((state) => state.userDetail);
   const { loading, error, user } = userDetail;
@@ -37,12 +40,13 @@ const UserEditScreen = ({ match, history }) => {
       setEmail(user.email);
       setIsAdmin(user.isAdmin);
       setIsSeller(user.isSeller);
+      setIsBlock(user.isBlock);
     }
   }, [dispatch, user, userId, history]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(updateUser({ _id: userId, name, email, isAdmin, isSeller }));
+    dispatch(updateUser({ _id: userId, name, email, isAdmin, isSeller, isBlock }));
   };
 
   return (
@@ -90,7 +94,7 @@ const UserEditScreen = ({ match, history }) => {
                 onChange={(e) => setEmail(e.target.value)}
               ></Form.Control>
             </Form.Group>
-
+            {userInfo.isAdmin && (userInfo._id !== userId) && (<>
             <Form.Group controlId="isAdmin" className="my-3">
               <Form.Check
                 type="checkbox"
@@ -109,7 +113,17 @@ const UserEditScreen = ({ match, history }) => {
               ></Form.Check>
             </Form.Group>
 
-            <Button size="lg" type="submit" variant="primary" style={{ borderRadius: 30}}>
+            <Form.Group controlId="isBlock" className="my-3">
+              <Form.Check
+                type="checkbox"
+                label="Block user"
+                checked={isBlock}
+                onChange={(e) => setIsBlock(e.target.checked)}
+              ></Form.Check>
+            </Form.Group>
+            </>)}
+
+            <Button size="lg" type="submit" variant="primary" style={{ borderRadius: 30, marginTop: '20px'}}>
               <FileDownloadDoneIcon/>
               &nbsp; Update
             </Button>

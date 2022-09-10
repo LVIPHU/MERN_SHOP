@@ -39,16 +39,18 @@ const productSchema = mongoose.Schema(
       type: String,
       require: true,
     },
-    image: {
-      public_id: {
-        type: String,
-        require: true,
+    image: [
+      {
+        public_id: {
+          type: String,
+          require: true,
+        },
+        url: {
+          type: String,
+          require: true,
+        },
       },
-      url: {
-        type: String,
-        require: true,
-      },
-    },
+    ],
     brand: {
       type: String,
       require: true,

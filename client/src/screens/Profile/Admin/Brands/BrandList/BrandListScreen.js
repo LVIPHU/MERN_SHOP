@@ -43,8 +43,6 @@ const BrandListScreen = () => {
     }
   };
 
-  console.log(brands);
-
   return (
     <Container className="mb-5">
       <Row className="align-items-center">

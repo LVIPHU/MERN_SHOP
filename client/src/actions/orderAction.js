@@ -17,6 +17,12 @@ import {
   ORDER_UPDATE_DELIVER_REQUEST,
   ORDER_UPDATE_DELIVER_SUCCESS,
   ORDER_UPDATE_DELIVER_FAIL,
+  ORDER_UPDATE_DELIVERING_REQUEST,
+  ORDER_UPDATE_DELIVERING_SUCCESS,
+  ORDER_UPDATE_DELIVERING_FAIL,
+  ORDER_CANCEL_REQUEST,
+  ORDER_CANCEL_SUCCESS,
+  ORDER_CANCEL_FAIL,  
 } from "../constants/orderConstant";
 import axios from "axios";
 
@@ -203,7 +209,7 @@ export const deliverOrder = (order) => async (dispatch, getState) => {
     const {
       userLogin: { userInfo },
     } = getState();
-    console.log(userInfo.token);
+    console.log(order);
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -223,6 +229,80 @@ export const deliverOrder = (order) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: ORDER_UPDATE_DELIVER_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const deliveringOrder = (order) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: ORDER_UPDATE_DELIVERING_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    console.log(userInfo.token);
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.put(
+      `/api/order/${order._id}/delivering`,
+      {},
+      config
+    );
+
+    dispatch({
+      type: ORDER_UPDATE_DELIVERING_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ORDER_UPDATE_DELIVERING_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const cancelOrder = (order) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: ORDER_CANCEL_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    console.log(userInfo.token);
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.put(
+      `/api/order/${order._id}/cancel`,
+      {},
+      config
+    );
+
+    dispatch({
+      type: ORDER_CANCEL_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ORDER_CANCEL_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

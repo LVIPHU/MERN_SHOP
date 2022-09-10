@@ -1,12 +1,21 @@
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import actions from "../../actions/category";
+
+import Carousel from "react-multi-carousel";
+import Card from "../../components/Card";
+import Loader from "../../components/Loader";
+import Message from "../../components/Message";
 import Container from "../../components/Container";
-import classes from "./MainSection.module.css";
+
 import trolly from "./images/xhero-banner.png.pagespeed.ic.Da3KtaVoQv.webp";
+import classes from "./MainSection.module.css";
+import "react-multi-carousel/lib/styles.css"; 
+
 import showcase1 from "./images/xhero-slide1.png.pagespeed.ic.KZViXlyXiG.webp";
 import showcase2 from "./images/xhero-slide2.png.pagespeed.ic.je2nitqAw1.webp";
 import showcase3 from "./images/xhero-slide3.png.pagespeed.ic.jjMnTdDbyV.webp";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
-import Card from "../../components/Card";
 
 const showcases = [
   {
@@ -43,6 +52,16 @@ const responsive = {
   },
 };
 const MainSection = () => {
+  const dispatch = useDispatch();
+
+  const categoryAll = useSelector((state) => state.categoryAll);
+  const { loading, error, categories } = categoryAll;
+
+  useEffect(() => {
+    dispatch(actions.getCategories());
+  }, [dispatch]);
+
+  console.log(categories)
   return (
     <>
       <div className={classes.heroBanner}>
@@ -62,6 +81,11 @@ const MainSection = () => {
           </div>
         </Container>
       </div>
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <Message variant={"danger"}>{error}</Message>
+      ) : (
       <div className={classes.showcases}>
         <Carousel
           additionalTransfrom={0}
@@ -85,11 +109,12 @@ const MainSection = () => {
           slidesToSlide={1}
           swipeable
         >
-          {showcases.map((showcase) => (
-            <Card key={showcase.text} showcase={showcase} />
+          {categories.map((category) => (
+            <Card key={category._id} showcase={category} />
           ))}
         </Carousel>
       </div>
+      )}
     </>
   );
 };

@@ -50,6 +50,7 @@ const signup = asyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       isSeller: user.isSeller,
+      isBlock: user.isBlock,
       shippingAddress: user.shippingAddress,
       token: generateToken(user._id),
     });
@@ -75,6 +76,7 @@ const login = asyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       isSeller: user.isSeller,
+      isBlock: user.isBlock,
       shippingAddress: user.shippingAddress,
       token: generateToken(user._id),
     });
@@ -97,6 +99,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       isSeller: user.isSeller,
+      isBlock: user.isBlock,
       shippingAddress: user.shippingAddress,
     });
   } else {
@@ -110,23 +113,25 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // @access  private
 const updateUserprofile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
-
   if (user) {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
     
-    const { address, city, postalCode, state, phone, fullname } = req.body;
+    const { address, ward, wardId, district, districtId, province, provinceId, phone, fullname } = req.body;
     if (address) {
       user.shippingAddress.address = address;
     }
-    if (city) {
-      user.shippingAddress.city = city;
+    if (ward && wardId) {
+      user.shippingAddress.ward = ward;
+      user.shippingAddress.wardId = wardId;
     }
-    if (postalCode) {
-      user.shippingAddress.postalCode = postalCode;
+    if (district && districtId) {
+      user.shippingAddress.district = district;
+      user.shippingAddress.districtId = districtId;
     }
-    if (state) {
-      user.shippingAddress.state = state;
+    if (province && provinceId) {
+      user.shippingAddress.province = province;
+      user.shippingAddress.provinceId = provinceId;
     }
     if (phone) {
       user.shippingAddress.phone = phone;
@@ -142,6 +147,7 @@ const updateUserprofile = asyncHandler(async (req, res) => {
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
       isSeller: updatedUser.isSeller,
+      isBlock: user.isBlock,
       shippingAddress: updatedUser.shippingAddress,
       token: generateToken(updatedUser._id),
     });
@@ -200,6 +206,7 @@ const updateUserbyId = asyncHandler(async (req, res) => {
     user.email = req.body.email || user.email;
     user.isAdmin = req.body.isAdmin || false;
     user.isSeller = req.body.isSeller || false;
+    user.isBlock = req.body.isBlock || false;
 
     const updatedUser = await user.save();
 
@@ -209,6 +216,8 @@ const updateUserbyId = asyncHandler(async (req, res) => {
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
       isSeller: updatedUser.isSeller,
+      isBlock: updatedUser.isBlock,
+
     });
   } else {
     res.status(401);
@@ -221,7 +230,6 @@ const updateUserbyId = asyncHandler(async (req, res) => {
 // @access  Public
 const postSendVerifyCode = asyncHandler(async (req, res) => {
     const { email } = req.body;
-    console.log(email);
     //Kiểm tra tài khoản đã tồn tại hay chưa
     const account = await User.findOne({ email });
 
@@ -277,7 +285,7 @@ const postSendCodeForgotPW = asyncHandler(async (req, res) => {
     const verifyCode = helper.generateVerifyCode(config.numberVerify);
     const mail = {
       to: email,
-      subject: 'doi mat khau',
+      subject: 'Change password',
       html: mailConfig.htmlResetPassword(verifyCode),
     };
 
@@ -328,8 +336,6 @@ const postResetPassword = asyncHandler(async (req, res) => {
       return res.status(409).json({ message: 'Thay đổi mật khẩu thất bại' });
     }
   } catch (error) {
-    console.log(error);
-
     return res.status(409).json({ message: 'Thay đổi mật khẩu thất bại' });
   }
 });

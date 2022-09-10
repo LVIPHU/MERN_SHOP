@@ -19,7 +19,6 @@ const TrendingSection = () => {
   useEffect(() => {
     dispatch(trendingProducts());
   }, [dispatch]);
-
   return (
     <Container>
       <div className={classes.intro}>

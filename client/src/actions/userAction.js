@@ -44,12 +44,19 @@ export const login = (email, password) => async (dispatch) => {
       { email, password },
       config
     );
-
-    dispatch({
-      type: USER_LOGIN_SUCCESS,
-      payload: data,
-    });
-    localStorage.setItem("userInfo", JSON.stringify(data));
+    console.log(data)
+    if (data.isBlock) {
+      dispatch({
+        type: USER_LOGIN_FAIL,
+        payload: 'account has been locked'
+        });
+    } else {
+      dispatch({
+        type: USER_LOGIN_SUCCESS,
+        payload: data,
+      });
+      localStorage.setItem("userInfo", JSON.stringify(data));
+    }    
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAIL,

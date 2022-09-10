@@ -3,6 +3,7 @@ const Product = require("../model/product");
 const Brand = require("../model/brand");
 const Category = require("../model/category");
 
+
 const getProductsForSeller = asyncHandler(async (req, res) => {
   const user = req.user;
   const products = await Product.find({ seller: user.id });
@@ -343,17 +344,18 @@ const createProductReview = asyncHandler(async (req, res) => {
 // @access  Prive/admin
 const deleteProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
+  const brand = product.brand;
+  const category = product.category;
   if (product) {
-
-    const brand = await Brand.findOne(product.brand);
-    const newProducts =  brand.products.filter(item => item !== product._id);
-    brand.products = newProducts;
-    await brand.save();
+    const newBrand = await Brand.findOne({"name" : brand});
+    const newProducts =  newBrand.products.filter((x) => x._id != req.params.id);
+    newBrand.products = newProducts;
+    await newBrand.save();
     
-    const Category = await Category.findOne(product.category);
-    const newProducts1 =  Category.products.filter(item => item !== product._id);
-    Category.products = newProducts1;
-    await Category.save();
+    const newCategory = await Category.findOne({"name" : category});
+    const newProducts1 =  newCategory.products.filter((x) => x._id != req.params.id);
+    newCategory.products = newProducts1;
+    await newCategory.save();
 
     await product.remove();
     res.json({ message: "Product Remove!" });
@@ -369,28 +371,28 @@ const deleteProduct = asyncHandler(async (req, res) => {
 const updatedProduct = asyncHandler(async (req, res) => {
   const { name, price, description, image, brand, category } =
     req.body;
-
   const product = await Product.findById(req.params.id);
-
+  const temp  = product.brand;
+  const temp2 = product.category;
   if (product) {
     if (product.brand !== brand) {
-      const oldBrand = await Brand.findOne(product.brand);
-      const newProducts =  oldBrand.products.filter(item => item !== product._id);
+      const oldBrand = await Brand.findOne({"name" :temp});
+      const newProducts =  oldBrand.products.filter((x) => x._id != req.params.id);
       oldBrand.products = newProducts;
       await oldBrand.save();
 
-      const newBrand = await Brand.findOne({ brand });
+      const newBrand = await Brand.findOne({ "name" :brand });
       newBrand.products.push(product._id);
       await newBrand.save();
     }
 
     if (product.category !== category) {
-      const oldCategory = await Category.findOne(product.category);
-      const newProducts1 =  oldCategory.products.filter(item => item !== product._id);
+      const oldCategory = await Category.findOne({"name" :temp2});
+      const newProducts1 =  oldCategory.products.filter((x) => x._id != req.params.id);
       oldCategory.products = newProducts1;
       await oldCategory.save();
 
-      const newCategory = await Category.findOne({ Category });
+      const newCategory = await Category.findOne({ "name" :category });
       newCategory.products.push(product._id);
       await newCategory.save();
     }
@@ -398,8 +400,9 @@ const updatedProduct = asyncHandler(async (req, res) => {
     product.name = name;
     product.price = price;
     product.description = description;
-    product.image.public_id = image.public_id;
-    product.image.url = image.url;
+    product.image = image
+    // product.image.public_id = image.public_id;
+    // product.image.url = image.url;
     product.brand = brand;
     product.category = category;
 
@@ -417,25 +420,25 @@ const updatedProduct = asyncHandler(async (req, res) => {
 const createProduct = asyncHandler(async (req, res) => {
   const { name, price, description, image, brand, category } =
     req.body;
-  console.log(req.body);
   const product = new Product({
     name,
     price,
     seller: req.user._id,
-    image: {
-      public_id: image.public_id,
-      url: image.url,
-    },
+    image: image,
+    // image: {
+    //   public_id: image.public_id,
+    //   url: image.url,
+    // },
     brand,
     category,
     description,
   });
 
-  const tempBrand = await Brand.findOne({ brand });
+  const tempBrand = await Brand.findOne({ "name" : brand });
   tempBrand.products.push(product._id);
   await tempBrand.save();
 
-  const tempCategory = await Category.findOne({ Category });
+  const tempCategory = await Category.findOne({ "name" : category });
   tempCategory.products.push(product._id);
   await tempCategory.save();
 

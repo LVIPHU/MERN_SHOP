@@ -23,7 +23,6 @@ function checkFileType(file, cb) {
   const filetypes = /jpg|jpeg|png/;
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
   const mimetype = filetypes.test(file.mimetype);
-
   if (extname && mimetype) {
     return cb(null, true);
   } else {
@@ -51,11 +50,11 @@ router.post("/upload", upload.single("image"), (req, res) => {
 
 router.post("/destroy",(req, res) => {
   try {
-    const { public_id, path } = req.body;
+    const { public_id} = req.body;
     if (!public_id) return res.status(400).json({ msg: "No images Selected", info: false });
     cloudinary.v2.uploader.destroy(public_id, async (err, result) => {
       if (err) console.log(err);
-    fs.unlinkSync(path);
+
     res.json({ msg: "Deleted Image", info: true });
     });
   } catch (err) {

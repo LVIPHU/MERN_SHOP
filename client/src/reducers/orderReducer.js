@@ -2,6 +2,7 @@ import {
   ORDER_CREATE_FAIL,
   ORDER_CREATE_REQUEST,
   ORDER_CREATE_SUCCESS,
+  ORDER_CREATE_RESET,
   ORDER_DETAILS_REQUEST,
   ORDER_DETAILS_SUCCESS,
   ORDER_DETAILS_FAIL,
@@ -21,6 +22,14 @@ import {
   ORDER_UPDATE_DELIVER_SUCCESS,
   ORDER_UPDATE_DELIVER_FAIL,
   ORDER_UPDATE_DELIVER_RESET,
+  ORDER_UPDATE_DELIVERING_REQUEST,
+  ORDER_UPDATE_DELIVERING_SUCCESS,
+  ORDER_UPDATE_DELIVERING_FAIL,
+  ORDER_UPDATE_DELIVERING_RESET,
+  ORDER_CANCEL_REQUEST,
+  ORDER_CANCEL_SUCCESS,
+  ORDER_CANCEL_FAIL,
+  ORDER_CANCEL_RESET,
 } from "../constants/orderConstant";
 
 export const orderCreateReducer = (state = {}, action) => {
@@ -40,6 +49,12 @@ export const orderCreateReducer = (state = {}, action) => {
       return {
         loading: false,
         error: action.payload,
+      };
+    case ORDER_CREATE_RESET:
+      return {
+        loading: false,
+        success: false,
+        order: {},
       };
     default:
       return state;
@@ -164,6 +179,52 @@ export const orderDeliverReducer = (state = { orders: [] }, action) => {
         error: action.payload,
       };
     case ORDER_UPDATE_DELIVER_RESET:
+      return { success: false };
+    default:
+      return state;
+  }
+};
+
+export const orderDeliveringReducer = (state = { orders: [] }, action) => {
+  switch (action.type) {
+    case ORDER_UPDATE_DELIVERING_REQUEST:
+      return {
+        loading: true,
+      };
+    case ORDER_UPDATE_DELIVERING_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      };
+    case ORDER_UPDATE_DELIVERING_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case ORDER_UPDATE_DELIVERING_RESET:
+      return { success: false };
+    default:
+      return state;
+  }
+};
+
+export const orderCancelReducer = (state = { orders: [] }, action) => {
+  switch (action.type) {
+    case ORDER_CANCEL_REQUEST:
+      return {
+        loading: true,
+      };
+    case ORDER_CANCEL_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      };
+    case ORDER_CANCEL_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case ORDER_CANCEL_RESET:
       return { success: false };
     default:
       return state;

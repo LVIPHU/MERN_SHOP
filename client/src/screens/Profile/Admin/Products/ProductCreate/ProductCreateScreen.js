@@ -17,8 +17,6 @@ import Loader from "../../../../../components/Loader";
 import { createProduct } from "../../../../../actions/productActions";
 import { PRODUCT_CREATE_RESET } from "../../../../../constants/productConstants";
 
-// import actionBrand from "../../../../../actions/brand"
-// import actionCategory from "../../../../../actions/category"
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 
 const ProductCreateScreen = ({ match, history }) => {
@@ -26,13 +24,16 @@ const ProductCreateScreen = ({ match, history }) => {
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState([]);
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [uploading, setUploading] = useState(false);
   const [uploadingDesc, setUploadingDesc] = useState(false);
-  const [listImage, setListImage] = useState([]);
+  // const [listImage, setListImage] = useState([]);
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
 
   const brandAll = useSelector((state) => state.brandAll);
   const { brands } = brandAll;
@@ -43,13 +44,14 @@ const ProductCreateScreen = ({ match, history }) => {
   const productCreate = useSelector((state) => state.productCreate);
   const { loading, error, product, success } = productCreate;
 
-  // useEffect(() => {
-  //   dispatch(actionBrand.getBrands);
-  //   dispatch(actionCategory.getCategories);
-  // }, [dispatch])
+  useEffect(() => {
+    if (!userInfo) {
+      history.push("/login");
+    }
+  }, [history, userInfo]);
 
-  console.log(brands + "\n ======================== \n" + categories)
   const submitHandler = (e) => {
+    console.log(image);
     e.preventDefault();
     dispatch(
       createProduct({
@@ -75,13 +77,10 @@ const ProductCreateScreen = ({ match, history }) => {
         },
       };
       const { data } = await axios.post("/api/file/upload", formData, config);
-      listImage.push(data);
-      setImage(data);
+      image.push(data);
       setUploading(false);
-      console.log(listImage);
     } catch (error) {
       setUploading(false);
-      console.log(error);
     }
   };
 
@@ -94,12 +93,10 @@ const ProductCreateScreen = ({ match, history }) => {
         },
       };
       const { data } = await axios.post("/api/file/destroy", file, config);
-      listImage.pop();
+      image.pop();
       setUploading(false);
-      console.log(data);
     } catch (error) {
       setUploading(false);
-      console.log(error);
     }
   };
 
@@ -185,13 +182,6 @@ const ProductCreateScreen = ({ match, history }) => {
 
             <Form.Group controlId="image" className="mb-3">
               <Form.Label>Image</Form.Label>
-              {/* <Form.Control
-                className="mb-3"
-                type="text"
-                placeholder="Enter image URL"
-                value={image.url}
-                onChange={(e) => setImage(e.target.value)}
-              ></Form.Control> */}
               <Form.File
                 id="image-file"
                 custom
@@ -199,22 +189,13 @@ const ProductCreateScreen = ({ match, history }) => {
               ></Form.File>
             </Form.Group>
             <Row>
-              {listImage &&
-                listImage.map((item) => (
+              {image &&
+                image.map((item) => (
                   <Col xs={6} md={2} style={{ paddingBottom: "12px" }} key={item.public_id}>
                     <Card
                       className="text-center"
-                      style={{ width: "12rem" }}
-                      
-                    >
-                      {/* {uploading ? (
-                        <Loader />
-                      ) : ( */}
+                      style={{ width: "12rem" }}>
                       <Card.Img variant="top" src={item.url} />
-                      {/* )} */}
-                      {/* <Card.Body>
-                        <Button onClick={() => deleteFileHandler(item)}>Xóa</Button>
-                      </Card.Body> */}
                     </Card>
                   </Col>
                 ))}
@@ -224,9 +205,9 @@ const ProductCreateScreen = ({ match, history }) => {
                 </Card>
               )}
               {
-                (listImage.length > 0) ? (
+                (image.length > 0) ? (
                     <Card style={{ width: "12rem", alignItems: "center", flexDirection: "row" }}>
-                      <Button style={{width: "100%", borderRadius: 30}} onClick={() => deleteFileHandler(listImage[listImage.length-1])}>Xóa</Button>
+                      <Button style={{width: "100%", borderRadius: 30}} onClick={() => deleteFileHandler(image[image.length-1])}>Xóa</Button>
                     </Card>
                   ) : <></>}
             </Row>

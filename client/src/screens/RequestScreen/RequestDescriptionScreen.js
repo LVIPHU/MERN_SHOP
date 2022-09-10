@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
@@ -95,13 +95,16 @@ const RequestDescriptionScreen = ({ match, history }) => {
                       />
                     }
                   >
-                    <Carousel.Item>
-                      <img
-                        className="d-block w-100"
-                        src={request?.product?.image?.url}
-                        alt="First slide"
-                      />
-                    </Carousel.Item>
+                    {request?.product?.image &&
+                      request?.product?.image.map((item) => (
+                        <Carousel.Item key={item.public_id}>
+                          <img
+                            className="d-block w-100"
+                            src={item.url}
+                            alt="First slide"
+                          />
+                        </Carousel.Item>
+                      ))}
                   </Carousel>
                   <Card.Body>
                     <Card.Title>{request?.product?.name}</Card.Title>

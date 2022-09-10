@@ -5,10 +5,12 @@ import CheckoutSteps from "../../components/CheckoutStep/CheckoutStep";
 import { savePaymentMethod } from "../../actions/cartAction";
 import classes from "../Shipping/ShippingScreen.module.css";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import { Checkbox } from "@mui/material";
 
 const PaymentScreen = ({ history }) => {
   const dispatch = useDispatch();
-
+  const [paymentMethod, setPaymentMethod] = useState("");
+  
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
   const { shippingAddress } = userInfo;
@@ -16,16 +18,15 @@ const PaymentScreen = ({ history }) => {
   if (
     !shippingAddress.fullname ||
     !shippingAddress.phone ||
-    !shippingAddress.city ||
-    !shippingAddress.postalCode ||
     !shippingAddress.address ||
-    !shippingAddress.state
+    !shippingAddress.ward ||
+    !shippingAddress.district ||
+    !shippingAddress.province
   ) {
     history.push("/shipping");
   }
 
-  const [paymentMethod, setPaymentMethod] = useState("PalPal");
-
+  console.log(paymentMethod);
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(savePaymentMethod(paymentMethod));
@@ -40,24 +41,10 @@ const PaymentScreen = ({ history }) => {
           <Form.Group>
             <Form.Label as="legend">Select Method</Form.Label>
             <Col>
-              <Form.Check
-                type="radio"
-                label="COD"
-                id="PayPal"
-                name="paymentMethod"
-                value="Paypal"
-                checked
-                onChange={(e) => setPaymentMethod(e.target.value)}
-              ></Form.Check>
-              <Form.Check
-                type="radio"
-                label="PayPal or Credit Card"
-                id="PayPal"
-                name="paymentMethod"
-                value="Paypal"
-                checked
-                onChange={(e) => setPaymentMethod(e.target.value)}
-              ></Form.Check>
+              <input type="radio" id="cod" name="paymentMethod" value="COD" onChange={(e) => setPaymentMethod(e.target.value)}/>
+              <label for="cod"> &nbsp; &nbsp; COD</label><br/>
+              <input type="radio" id="paypal" name="paymentMethod" value="PayPal" onChange={(e) => setPaymentMethod(e.target.value)}/>
+              <label for="paypal"> &nbsp; &nbsp; PayPal or Credit Card</label><br/>
             </Col>
           </Form.Group>
 

@@ -104,6 +104,19 @@ const htmlWarningLogin = () => {
   </div>`;
 };
 
+const htmlCancelOrder = (fullname) => {
+  return `<div>
+   ${headerHtmlMail}
+    <h2 style="padding: 10px 0; margin-bottom: 10px;">
+        Xin Chào ${fullname},<br />
+        Đơn hàng của anh chị đã được hủy thành công.<br />
+        Anh chị vui lòng vào trang thông tin cá nhân => đơn hàng, để xem lại trạng thái đơn hàng.<br/>
+    </h2>
+    <h1>Cảm ơn.</h1>
+  </div>`;
+};
+
+
 const htmlBill = (order, email) => {
   const addDecimal = (num) => {
     return Math.round(num * 100) / 100;
@@ -222,8 +235,7 @@ const htmlBill = (order, email) => {
                 </tbody>
             </table>
             <br>
-            <h3 style="font-size: 20px; margin-bottom: 08px;">Payment Status: Paid</h3>
-            <h3 style="font-size: 20px; margin-bottom: 08px;">Payment Mode: ${
+            <h3 style="font-size: 20px; margin-bottom: 08px;">Payment Method: ${
               order.paymentMethod
             }</h3>
         </div>
@@ -243,4 +255,5 @@ module.exports = {
   htmlResetPassword,
   htmlWarningLogin,
   htmlBill,
+  htmlCancelOrder,
 };

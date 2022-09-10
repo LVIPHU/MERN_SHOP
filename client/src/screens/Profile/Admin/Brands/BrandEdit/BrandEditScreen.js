@@ -67,7 +67,7 @@ const BrandEditScreen = ({ match, history }) => {
           "Content-Type": "multipart/form-data",
         },
       };
-      const { data } = await axios.post("/api/upload", formData, config);
+      const { data } = await axios.post("/api/file/upload", formData, config);
       setImage(data);
       setUploading(false);
     } catch (error) {

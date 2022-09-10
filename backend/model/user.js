@@ -31,10 +31,18 @@ const userSchema = mongoose.Schema(
     shippingAddress: {
       fullname: { type: String },
       address: { type: String },
-      city: { type: String },
-      postalCode: { type: String },
-      state: { type: String },
+      ward: { type: String },
+      wardId: { type: Number },
+      district: { type: String },
+      districtId: { type: Number },
+      province: { type: String },
+      provinceId: { type: Number },
       phone: { type: String },
+    },
+    isBlock: {
+      type: Boolean,
+      require: true,
+      default: false,
     },
   },
   {

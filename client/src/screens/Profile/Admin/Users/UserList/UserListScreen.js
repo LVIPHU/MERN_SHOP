@@ -27,12 +27,6 @@ const UserListScreen = ({ history }) => {
     }
   }, [dispatch, history, userInfo]);
 
-  const deleteHandler = (id) => {
-    if (window.confirm("Are you sure")) {
-      dispatch(deleteUser(id));
-    }
-  };
-
   return (
     <>
       {loading ? (
@@ -58,8 +52,7 @@ const UserListScreen = ({ history }) => {
                 {/* <th>ID</th> */}
                 <th>NAME</th>
                 <th>EMAIL</th>
-                <th>ROLE</th>
-                <th></th>
+                <th>STATUS</th>
                 <th></th>
               </tr>
             </thead>
@@ -72,7 +65,16 @@ const UserListScreen = ({ history }) => {
                     <a href={`mailto:${user.email}`}>{user.email}</a>
                   </td>
                   <td>
-                    {user.isAdmin ? (
+                    {user.isBlock ? (
+                      <Button
+                        variant="danger"
+                        disabled
+                        className="btn-sm"
+                        style={{ borderRadius: 30, width: "50%", opacity: 1 }}
+                      >
+                        Block
+                      </Button>
+                    ) : user.isAdmin ? (
                       <Button
                         variant="warning"
                         disabled
@@ -101,33 +103,18 @@ const UserListScreen = ({ history }) => {
                       </Button>
                     )}
                   </td>
-                  {userInfo.isAdmin ? (
-                    <>
-                      <td>
-                        <LinkContainer
-                          to={`/admin/user/${user._id}/edit`}
-                          style={{ borderRadius: 30, width: "70%" }}
-                        >
-                          <Button variant="outline-primary">
-                            <i className="fas fa-edit"></i>
-                            &nbsp; Edit
-                          </Button>
-                        </LinkContainer>
-                      </td>
-                      <td>
-                        <Button
-                          style={{ borderRadius: 30, width: "70%" }}
-                          variant="outline-danger"
-                          onClick={() => deleteHandler(user._id)}
-                        >
-                          <i className="fas fa-trash"></i>
-                          &nbsp; Delete
-                        </Button>
-                      </td>
-                    </>
-                  ) : (
-                    <></>
-                  )}
+
+                  <td>
+                    <LinkContainer
+                      to={`/admin/user/${user._id}/edit`}
+                      style={{ borderRadius: 30, width: "70%" }}
+                    >
+                      <Button variant="outline-primary">
+                        <i className="fas fa-edit"></i>
+                        &nbsp; Edit
+                      </Button>
+                    </LinkContainer>
+                  </td>
                 </tr>
               ))}
             </tbody>

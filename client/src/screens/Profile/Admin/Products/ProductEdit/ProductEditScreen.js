@@ -9,6 +9,8 @@ import {
   getProductDetail,
   updateProduct,
 } from "../../../../../actions/productActions";
+import actionBrand from "../../../../../actions/brand"
+import actionCategory from "../../../../../actions/category"
 import { PRODUCT_UPDATE_RESET } from "../../../../../constants/productConstants";
 import DropNotif from "../../../../../components/Modal/Modal";
 import MarkdownEditor from "../../../../../components/TextEditor/MarkdownEditor";
@@ -22,13 +24,21 @@ const ProductEditScreen = ({ match, history }) => {
   
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState([]);
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [uploading, setUploading] = useState(false);
   const [uploadingDesc, setUploadingDesc] = useState(false);
 
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const brandAll = useSelector((state) => state.brandAll);
+  const { brands } = brandAll;
+
+  const categoryAll = useSelector((state) => state.categoryAll);
+  const { categories } = categoryAll;
 
   const productDetail = useSelector((state) => state.productDetail);
   const { loading, error, product } = productDetail;
@@ -42,7 +52,12 @@ const ProductEditScreen = ({ match, history }) => {
   } = productUpdate;
 
   useEffect(() => {
+    if (!userInfo) {
+      history.push("/login");
+    }
     if (!product.name || currentId !== productId) {
+      dispatch(actionBrand.getBrands);
+      dispatch(actionCategory.getCategories);
       dispatch(getProductDetail(productId));
     } else {
       setName(product.name);
@@ -52,7 +67,7 @@ const ProductEditScreen = ({ match, history }) => {
       setCategory(product.category);
       setDescription(product.description);
     }
-  }, [dispatch, productId, currentId]);
+  }, [dispatch, productId, currentId, history]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -71,20 +86,37 @@ const ProductEditScreen = ({ match, history }) => {
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
     const formData = new FormData();
-    formData.append("image", file);
     setUploading(true);
-
+    formData.append("image", file, file.name);
     try {
       const config = {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       };
-      const { data } = await axios.post("/api/upload", formData, config);
-      setImage(data);
+      const { data } = await axios.post("/api/file/upload", formData, config);
+      image.push(data);
       setUploading(false);
     } catch (error) {
       console.error(error);
+      setUploading(false);
+    }
+  };
+
+  const deleteFileHandler = async (file) => {
+    console.log(file);
+    setUploading(true);
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const { data } = await axios.post("/api/file/destroy", file, config);
+    console.log(data);
+      image.pop();
+      setUploading(false);
+    } catch (error) {
       setUploading(false);
     }
   };
@@ -170,39 +202,51 @@ const ProductEditScreen = ({ match, history }) => {
                 className="mb-3"
                 type="text"
                 placeholder="Enter image URL"
-                value={image.urlurl}
+                value={image.url}
                 onChange={(e) => setImage(e.target.value)}
               ></Form.Control> */}
               <Form.File
+                type="file"
                 id="image-file"
                 custom
-                onChange={uploadFileHandler}
+                onChange={(e) => uploadFileHandler(e)}
               ></Form.File>
             </Form.Group>
             <Row>
-                  <Col xs={6} md={2} style={{ paddingBottom: "12px" }}>
-                    <Card className="text-center" style={{ width: "12rem" }} key={image?.public_id}>
-                      {uploading ? (
-                        <Loader />
-                      ) : (
-                        <Card.Img variant="top" src={image?.url} />
-                      )}
+            {image &&
+                image.map((item) => (
+                  <Col xs={6} md={2} style={{ paddingBottom: "12px" }} key={item.public_id}>
+                    <Card
+                      className="text-center"
+                      style={{ width: "12rem" }}>
+                      <Card.Img variant="top" src={item.url} />
                     </Card>
                   </Col>
-              {/* {uploading && (
+                ))}
+              {uploading && (
                 <Card style={{ width: "12rem" }}>
                   <Loader />
                 </Card>
-              )} */}
+              )}
+              {
+                (image.length > 0) ? (
+                    <Card style={{ width: "12rem", alignItems: "center", flexDirection: "row" }}>
+                      <Button style={{width: "100%", borderRadius: 30}} onClick={() => deleteFileHandler(image[image.length-1])}>Xóa</Button>
+                    </Card>
+                  ) : <></>}
             </Row>
             <Form.Group controlId="brand">
               <Form.Label>Brand</Form.Label>
               <Form.Control
-                type="text"
+                as="select"
                 placeholder="Enter brand"
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
-              ></Form.Control>
+              >
+                {brands && brands.map((item) => (
+                    <option key={item._id} value={item.name}>{item.name}</option>
+                ))}
+              </Form.Control>
             </Form.Group>
 
             <Form.Group controlId="selection">
@@ -213,18 +257,13 @@ const ProductEditScreen = ({ match, history }) => {
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
               >
-                <option value="Tank Top">Tank Top</option>
-                <option value="Shirts">Shirts</option>
-                <option value="Polos">Polos</option>
-                <option value="T-Shirts">T-Shirts</option>
-                <option value="Shorts">Shorts</option>
-                <option value="Jeans">Jeans</option>
-                <option value="Kaki">Kaki</option>
-                <option value="Sport">Sport</option>
+                {categories && categories.map((item) => (
+                    <option key={item._id} value={item.name}>{item.name}</option>
+                ))}
               </Form.Control>
             </Form.Group>
 
-            <Form.Group className="mt-3" controlId="description">
+            <Form.Group className="mt-3" controlId="description" >
               <Form.Label>Description</Form.Label>
               <Form.File
                 className="mb-3"

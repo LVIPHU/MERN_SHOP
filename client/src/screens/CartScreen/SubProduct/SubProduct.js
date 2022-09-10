@@ -1,4 +1,4 @@
-import { Row, Col, ListGroup, Image, Form, Button } from "react-bootstrap";
+import { Row, Carousel, Col, ListGroup, Image, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { addToCart, removeFromCart } from "../../../actions/cartAction";
 import { useDispatch } from "react-redux";
@@ -25,7 +25,42 @@ const SubProduct = ({ item }) => {
       <ListGroup.Item key={item.product}>
         <Row>
           <Col md={2}>
-            <Image src={item?.image?.url} alt={item.name} fluid rounded />
+            <Carousel
+                    fade
+                    prevIcon={
+                      <span
+                        aria-hidden="true"
+                        className="carousel-control-prev-icon"
+                        style={{
+                          backgroundColor: "#384aeb",
+                          borderRadius: "30px",
+                          margin: "10px",
+                        }}
+                      />
+                    }
+                    nextIcon={
+                      <span
+                        aria-hidden="true"
+                        className="carousel-control-next-icon"
+                        style={{
+                          backgroundColor: "#384aeb",
+                          borderRadius: "30px",
+                          margin: "10px",
+                        }}
+                      />
+                    }
+                  >
+                    {item.image &&
+                      item.image.map((item) => (
+                        <Carousel.Item key={item.public_id}>
+                          <img
+                            className="d-block w-100"
+                            src={item.url}
+                            alt="First slide"
+                          />
+                        </Carousel.Item>
+                      ))}
+                  </Carousel>
           </Col>
           <Col md={3}>
             <Link to={`/product/${item.product}`}>{item.name}</Link>

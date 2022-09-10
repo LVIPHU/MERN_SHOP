@@ -15,7 +15,6 @@ import Loader from "../../../../../components/Loader";
 import constants from "../../../../../constants/category";
 import actions from "../../../../../actions/category";
 import DropNotif from "../../../../../components/Modal/Modal";
-import MoveToInboxOutlinedIcon from '@mui/icons-material/MoveToInboxOutlined';
 
 const CategoryListScreen = () => {
   const dispatch = useDispatch();
@@ -102,7 +101,6 @@ const CategoryListScreen = () => {
                       </ListGroup.Item>
                     </ListGroup>
                     <Card.Body className="d-flex flex-column">
-                       
                           <LinkContainer
                             to={`/admin/category/${category._id}/edit`}
                             style={{ borderRadius: 30 }}
@@ -122,7 +120,6 @@ const CategoryListScreen = () => {
                             &nbsp; Delete
                           </Button>
                            )}
-                       
                     </Card.Body>
                   </Card>
                 </Col>

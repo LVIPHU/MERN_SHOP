@@ -133,14 +133,12 @@ const OrderScreen = ({ match, history }) => {
   };
 
   const statusCOD = (order) => {
-    if(!order.isPaid && !order.isDelivering && !order.isDelivered) {
+    if(!order.isDelivering && !order.isPaid && !order.isDelivered) {
       return 0;
-    } else if (order.isPaid && !order.isDelivering && !order.isDelivered) {
+    } else if (order.isDelivering && !order.isPaid && !order.isDelivered) {
       return 1;
-    } else if (order.isPaid && order.isDelivering && !order.isDelivered) {
-      return 2;
-    } else if (order.isPaid && order.isDelivering && order.isDelivered) {
-      return 3;
+    } else if (order.isDelivering && order.isPaid && order.isDelivered) {
+      return 2; 
     }
   };
 
@@ -214,7 +212,7 @@ const OrderScreen = ({ match, history }) => {
                     Delivering
                   </Message>
                 ) : (
-                  <Message variant="danger">Not Delivery</Message>
+                  <Message variant="warning">Not Delivery</Message>
                 )}
               </ListGroup.Item>
               <ListGroup.Item>
@@ -228,7 +226,7 @@ const OrderScreen = ({ match, history }) => {
                     Paid on {getDate(order.paidAt)}
                   </Message>
                 ) : (
-                  <Message variant="danger">Not Paid</Message>
+                  <Message variant="warning">Not Paid</Message>
                 )}
               </ListGroup.Item>
               <ListGroup.Item>
@@ -257,8 +255,8 @@ const OrderScreen = ({ match, history }) => {
                               alt={item.name}
                               fluid
                               rounded
-                              height={40}
-                              width={40}
+                              height={120}
+                              width={60}
                             />
                           </td>
                           <td>

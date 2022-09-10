@@ -55,16 +55,22 @@ const Orders = () => {
                      <Button variant="success" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>
                     {order.paidAt.substring(0, 10)}</Button>
                   ) : (
-                    <Button variant="danger" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>Not paid</Button>
+                    <Button variant="warning" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>Not paid</Button>
                   )}
                 </td>
 
                 <td>
-                  {order.isDelivered ? (
+                  {order.isCancel ? (
+                    <Button variant="danger" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>
+                    Cancelled </Button>
+                  ) : order.isDelivering && !order.isDelivered ? (
+                    <Button variant="primary" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>
+                    isDelivering </Button>
+                  ) : order.isDelivering && order.isDelivered ? (
                     <Button variant="success" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>
                     {order.deliveredAt.substring(0, 10)}</Button>
                   ) : (
-                    <Button variant="danger" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>Not delivered</Button>
+                    <Button variant="warning" disabled className="btn-sm" style={{ borderRadius: 30, width: "50%", opacity: 1}}>Not delivered</Button>
                   )}
                 </td>
                   <td>

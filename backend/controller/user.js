@@ -274,6 +274,10 @@ const postSendVerifyCode = asyncHandler(async (req, res) => {
 const postSendCodeForgotPW = asyncHandler(async (req, res) => {
   try {
     const { email } = req.body;
+    if (!validator.isEmail(email)) {
+      res.status(400);
+      throw new Error("Please provide valid email");
+    }
     //Kiểm tra tài khoản đã tồn tại hay chưa
     const account = await User.findOne({ email });
 
@@ -319,6 +323,16 @@ const postResetPassword = asyncHandler(async (req, res) => {
   try {
     const { email, password, verifyCode } = req.body;
     // kiểm tra mã xác thực
+    if (!validator.isEmail(email)) {
+      res.status(400);
+      throw new Error("Please provide valid email");
+    }
+    if (!validator.isStrongPassword(password)) {
+      res.status(400);
+      throw new Error(
+        "At least 8 characters—the more characters, the better. \nA mixture of both uppercase and lowercase letters. A mixture of letters and numbers. Inclusion of at least one special character, e.g., ! @ # ? ]"
+      );
+    }
     const isVerify = await helper.isVerifyEmail(email, verifyCode);
 
     if (!isVerify) {

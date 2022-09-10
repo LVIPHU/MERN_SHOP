@@ -149,6 +149,14 @@ const updateOrderToDeliver = asyncHandler(async (req, res) => {
       order.paidAt = Date.now();
       order.isDelivered = true;
       order.deliveredAt = Date.now();
+      const user = await User.findById(req.user._id);
+      const email = user.email;
+      const mail = {
+        to: email,
+        subject: 'Send Invoice',
+        html: mailConfig.htmlBill(order, email),
+      };
+      await mailConfig.sendEmail(mail);
     }
     if (order.paymentMethod === "PayPal") {
       order.isDelivered = true;

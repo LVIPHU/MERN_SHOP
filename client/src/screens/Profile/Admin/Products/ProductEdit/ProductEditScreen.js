@@ -104,7 +104,6 @@ const ProductEditScreen = ({ match, history }) => {
   };
 
   const deleteFileHandler = async (file) => {
-    console.log(file);
     setUploading(true);
     try {
       const config = {
@@ -113,7 +112,6 @@ const ProductEditScreen = ({ match, history }) => {
         },
       };
       const { data } = await axios.post("/api/file/destroy", file, config);
-    console.log(data);
       image.pop();
       setUploading(false);
     } catch (error) {

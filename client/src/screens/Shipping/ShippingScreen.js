@@ -197,7 +197,12 @@ const ShippingScreen = ({ history }) => {
                   autoWidth
                   value={province}
                   label="Province"
-                  onChange={(e) => get_province(e.target.value)}
+                  onChange={(e) => {get_province(e.target.value);
+                  setDistrict("");
+                  setDistrictId("");
+                  setWard("");
+                  setWardId("");
+                  }}
                 >
                   {provinceList &&
                     provinceList?.map((item) => (
@@ -225,7 +230,10 @@ const ShippingScreen = ({ history }) => {
                   autoWidth
                   value={district}
                   label="District"
-                  onChange={(e) => get_district(e.target.value)}
+                  onChange={(e) => {get_district(e.target.value);
+                    setWard("");
+                  setWardId("");
+                  }}
                 >
                   {districtList &&
                     districtList?.map((item) => (

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Button, Row, Col, ListGroup, Image, Card } from "react-bootstrap";
+import { Button, Row, Col, ListGroup, Image, Card, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../components/Message";
@@ -87,28 +87,45 @@ const PlaceOrderScreen = ({ history }) => {
                   <Message>Your cart is empty</Message>
                 ) : (
                   <ListGroup variant="flush">
-                    {cart.cartItems.map((item, index) => (
-                      <ListGroup.Item key={index}>
-                        <Row>
-                          <Col md={1}>
+                    <Table striped="column" hover responsive>
+                    <thead>
+                      <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th></th>
+                        <th></th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {cart.cartItems.map((item, index) => (
+                        <tr key={index}>
+                          <td>
                             <Image
                               src={item?.image[0].url}
                               alt={item.name}
                               fluid
                               rounded
+                              height={120}
+                              width={60}
                             />
-                          </Col>
-                          <Col>
+                          </td>
+                          <td>
                             <Link to={`/product/${item.product}`}>
                               {item.name}
                             </Link>
-                          </Col>
-                          <Col md={4}>
-                            {item.qty}x ${item.price} = ${item.qty * item.price}
-                          </Col>
-                        </Row>
-                      </ListGroup.Item>
-                    ))}
+                          </td>
+                          <td> </td>
+                          <td> </td>
+                          <td>${item.price}</td>
+                          <td>{item.qty}</td>
+                          <td>${item.qty * item.price}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
                   </ListGroup>
                 )}
               </ListGroup.Item>

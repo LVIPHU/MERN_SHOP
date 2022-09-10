@@ -163,16 +163,15 @@ const htmlBill = (order, email) => {
                     } </p>
                     <p style="color: #262626; margin-bottom: 05px;">Address: ${
                       order.shippingAddress.address +
-                      ", Ward " +
-                      order.shippingAddress.city +
-                      ", District " +
-                      order.shippingAddress.postalCode
+                      ", " +
+                      order.shippingAddress.ward +
+                      ", " +
+                      order.shippingAddress.district + 
+                      ", " +
+                      order.shippingAddress.province
                     } </p>
                     <p style="color: #262626; margin-bottom: 05px;">Phone Number: ${
                       order.shippingAddress.phone
-                    } </p>
-                    <p style="color: #262626; margin-bottom: 05px;">City: ${
-                      order.shippingAddress.state
                     } </p>
                 </div>
             </div>

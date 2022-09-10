@@ -15,7 +15,7 @@ const Hit = ({ hit }) => {
               style={{
                 backgroundColor: "#384aeb",
                 borderRadius: "30px",
-                margin: "10px",
+                margin: "5px",
               }}
             />
           }
@@ -26,7 +26,7 @@ const Hit = ({ hit }) => {
               style={{
                 backgroundColor: "#384aeb",
                 borderRadius: "30px",
-                margin: "10px",
+                margin: "5px",
               }}
             />
           }

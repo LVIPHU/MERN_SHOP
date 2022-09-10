@@ -7,28 +7,6 @@ const SmallCard = ({ product }) => {
       <Link to={`/product/${product._id}`}>
         <Carousel
           fade
-          prevIcon={
-            <span
-              aria-hidden="true"
-              className="carousel-control-prev-icon"
-              style={{
-                backgroundColor: "#384aeb",
-                borderRadius: "30px",
-                margin: "10px",
-              }}
-            />
-          }
-          nextIcon={
-            <span
-              aria-hidden="true"
-              className="carousel-control-next-icon"
-              style={{
-                backgroundColor: "#384aeb",
-                borderRadius: "30px",
-                margin: "10px",
-              }}
-            />
-          }
         > {product.image && product.image.map((item) => (
             <Carousel.Item key={item.public_id}>
               <img

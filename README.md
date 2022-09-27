@@ -37,10 +37,6 @@
 ## Purpose
 The purpose of the application is to provide an e-commerce platform for consumers and vendors to buy & sell products. It takes inspiration on modern applications like eBay or Amazon. Data sources are self-generated, but they conform to some schema from Amazon products datasets [[1](https://data.world/promptcloud/fashion-products-on-amazon-com.)], [[2](https://data.world/promptcloud/amazon-product-listing)], [[3](https://jmcauley.ucsd.edu/data/amazon/)].
 
-
-
-
-
 ## Project URL:
 https://comp3120-shopology.herokuapp.com
 ## Features
@@ -195,11 +191,12 @@ You can open the file _coverage/lcov-report/index.html_ to have better visualiza
 
 
 ## Future implementations
+
 1. Recommendation system for shoppers
 2. Social login using third-party vendors like Google, Facebook
 
-
 ## Roles
+
 <!-- 1. Van Nguyen Nguyen - front end developer
 2. Sujith Bellam - front end developer
 3. Sepehr Torfeh Nejad - back end developer
@@ -207,14 +204,16 @@ You can open the file _coverage/lcov-report/index.html_ to have better visualiza
 5. Communications and collaboration:\
    i. The team had weekly meetings to discuss features to implement, and go over presentation for sprints\
    ii. Pull requests are reviewed by at least 1 other team member. Merge conflicts are promptly resolved. -->
+   
 ## Deployment
-- [Deployment document](https://github.com/MQCOMP3120-2021/group-web-project-group-a/blob/development/DEPLOYMENT.md)
+
+// - [Deployment document](https://github.com/MQCOMP3120-2021/group-web-project-group-a/blob/development/DEPLOYMENT.md)
 
 ## License
 
 MIT License
 
-Copyright (c) 2021
+Copyright (c) 2022
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

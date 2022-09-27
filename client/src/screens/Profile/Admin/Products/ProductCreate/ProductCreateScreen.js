@@ -67,6 +67,7 @@ const ProductCreateScreen = ({ match, history }) => {
 
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
+    console.log(file);
     const formData = new FormData();
     setUploading(true);
     formData.append("image", file);

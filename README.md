@@ -207,7 +207,7 @@ You can open the file _coverage/lcov-report/index.html_ to have better visualiza
    
 ## Deployment
 
-// - [Deployment document](https://github.com/MQCOMP3120-2021/group-web-project-group-a/blob/development/DEPLOYMENT.md)
+<!--  - [Deployment document](https://github.com/MQCOMP3120-2021/group-web-project-group-a/blob/development/DEPLOYMENT.md) -->
 
 ## License
 

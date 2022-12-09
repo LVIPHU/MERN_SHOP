@@ -218,7 +218,8 @@ const Details = ({ history }) => {
                 autoWidth
                 value={province}
                 label="Province"
-                onChange={(e) => {get_province(e.target.value);
+                onChange={(e) => {
+                  get_province(e.target.value);
                   setDistrict("");
                   setDistrictId("");
                   setWard("");
@@ -251,7 +252,8 @@ const Details = ({ history }) => {
                 autoWidth
                 value={district}
                 label="District"
-                onChange={(e) => {get_district(e.target.value)
+                onChange={(e) => {
+                  get_district(e.target.value)
                   setWard("");
                   setWardId("");
                 }}

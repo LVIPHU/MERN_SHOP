@@ -13,27 +13,6 @@ import trolly from "./images/xhero-banner.png.pagespeed.ic.Da3KtaVoQv.webp";
 import classes from "./MainSection.module.css";
 import "react-multi-carousel/lib/styles.css"; 
 
-import showcase1 from "./images/xhero-slide1.png.pagespeed.ic.KZViXlyXiG.webp";
-import showcase2 from "./images/xhero-slide2.png.pagespeed.ic.je2nitqAw1.webp";
-import showcase3 from "./images/xhero-slide3.png.pagespeed.ic.jjMnTdDbyV.webp";
-
-const showcases = [
-  {
-    image: showcase1,
-    text: "That Bring The Style",
-    category: "Shirts",
-  },
-  {
-    image: showcase2,
-    text: "Just Right Fit",
-    category: "Pants",
-  },
-  {
-    image: showcase3,
-    text: "Move With You",
-    category: "Jeans",
-  },
-];
 const responsive = {
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
